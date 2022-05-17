@@ -43,16 +43,22 @@ class KommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.btn_Cancel_CP.clicked.connect(self.btn_cancel_cp)
 
         self.pay_power = Widget_Payment("Электричество")
-        self.g_layout_pay_group.addWidget(self.pay_power, 1, 0, 1, 1)
+        self.v_layout_scrollArea.addWidget(self.pay_power)
 
         self.pay_water = Widget_Payment("Вода")
-        self.g_layout_pay_group.addWidget(self.pay_water, 2, 0, 1, 1)
+        self.v_layout_scrollArea.addWidget(self.pay_water)
 
         self.pay_gaz = Widget_Payment("Газ")
-        self.g_layout_pay_group.addWidget(self.pay_gaz, 3, 0, 1, 1)
+        self.v_layout_scrollArea.addWidget(self.pay_gaz)
 
         self.pay_apartment = Widget_Payment("Квартира")
-        self.g_layout_pay_group.addWidget(self.pay_apartment, 4, 0, 1, 1)
+        self.v_layout_scrollArea.addWidget(self.pay_apartment)
+
+        self.pay_apartment = Widget_Payment("Интернет")
+        self.v_layout_scrollArea.addWidget(self.pay_apartment)
+
+        self.pay_apartment = Widget_Payment("Телефон")
+        self.v_layout_scrollArea.addWidget(self.pay_apartment)
 
         # ЧИТАЕМ показания из базы данных
         # self.read_pokaz_schet()

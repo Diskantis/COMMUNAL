@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPalette
 
 from res.UIC_CLASS_KOMM_ED import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f
 
@@ -17,7 +17,7 @@ class UiWinPayment(object):
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
-        self.WinPayment.setWindowIcon(QIcon('res/img/dollar.png'))
+        self.WinPayment.setWindowIcon(QIcon('res/img/payment-icon.png'))
         self.WinPayment.setStyleSheet("background-color: rgb(78, 79, 84);")
 
         self.ui_head_foot = UiWinHeaderFooter()
@@ -46,7 +46,7 @@ class UiWinPayment(object):
         self.payments_group = QtWidgets.QGroupBox("Коммунальные платежи", self.centralwidget)
         # self.payments_group.setMinimumSize(QtCore.QSize(780, 30))
         # self.payments_group.setMaximumSize(QtCore.QSize(780, 205))
-        self.payments_group.setFixedSize(QtCore.QSize(780, 205))
+        self.payments_group.setFixedSize(QtCore.QSize(780, 195))
         font = QtGui.QFont("Times", 14, 75)
         self.payments_group.setFont(font)
         self.payments_group.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
@@ -55,30 +55,30 @@ class UiWinPayment(object):
         self.payments_group.setAlignment(QtCore.Qt.AlignCenter)
         self.payments_group.setObjectName("payments_group")
 
-        self.g_layout_pay_group = QtWidgets.QGridLayout(self.payments_group)
-        self.g_layout_pay_group.setContentsMargins(0, 25, 0, 0)
-        self.g_layout_pay_group.setSpacing(5)
-        self.g_layout_pay_group.setObjectName("v_layout_group_box")
+        self.v_layout_pay_group = QtWidgets.QVBoxLayout(self.payments_group)
+        self.v_layout_pay_group.setContentsMargins(0, 25, 0, 0)
+        self.v_layout_pay_group.setSpacing(5)
+        self.v_layout_pay_group.setObjectName("v_layout_group_box")
 
         self.v_Layout_centralwidget.addWidget(self.payments_group)
 
         self.frame_title = QtWidgets.QFrame(self.centralwidget)
         self.frame_title.setMinimumSize(QtCore.QSize(0, 0))
-        self.frame_title.setMaximumSize(QtCore.QSize(780, 30))
+        self.frame_title.setMaximumSize(QtCore.QSize(750, 30))
         self.frame_title.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_title.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frame_title.setStyleSheet("QFrame {border: 0px solid; padding: 0px;};")
         self.frame_title.setObjectName("frame_title")
 
         self.h_layout_frame_title = QtWidgets.QHBoxLayout(self.frame_title)
-        self.h_layout_frame_title.setContentsMargins(8, 0, 8, 0)
+        self.h_layout_frame_title.setContentsMargins(8, 0, 0, 0)
         self.h_layout_frame_title.setSpacing(8)
         self.h_layout_frame_title.setObjectName("h_layout_frame_title")
 
-        self.g_layout_pay_group.addWidget(self.frame_title, 0, 0, 1, 1)
+        self.v_layout_pay_group.addWidget(self.frame_title)
 
         self.label_pust = label_titul_f("", self.frame_title)
-        self.label_pust.setFixedSize(QtCore.QSize(234, 18))
+        self.label_pust.setFixedSize(QtCore.QSize(238, 18))
         self.h_layout_frame_title.addWidget(self.label_pust)
 
         self.label_sum = label_titul_f("сумма", self.frame_title)
@@ -93,6 +93,40 @@ class UiWinPayment(object):
         self.label_tariff.setMinimumSize(QtCore.QSize(50, 18))
         self.h_layout_frame_title.addWidget(self.label_tariff)
 
+        style = """
+            QScrollBar:vertical {
+            border: 2px solid grey;
+            background: #32CC99;
+            width: 20px;
+            margin: 0 0 0 0;}
+            """
+
+        self.scrollArea = QtWidgets.QScrollArea(self.payments_group)
+        self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollArea.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.scrollArea.setLineWidth(0)
+        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        # self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrollArea.setStyleSheet("border: 1px solid rgba(209, 209, 217, 240);")
+        self.scrollArea.setStyleSheet(style)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+
+        # self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        # self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
+        # self.scrollAreaWidgetContents.setMaximumSize(QtCore.QSize(760, 500))
+        # self.scrollAreaWidgetContents.setStyleSheet("border: 0px solid rgba(209, 209, 217, 240);")
+        # self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+
+        # self.v_layout_scrollArea = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.v_layout_scrollArea = QtWidgets.QVBoxLayout(self.scrollArea)
+        self.v_layout_scrollArea.setContentsMargins(0, 0, 0, 5)
+        self.v_layout_scrollArea.setObjectName("v_layout_scrollArea")
+
+        # self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.v_layout_pay_group.addWidget(self.scrollArea)
+
         # # РАЗДЕЛИТЕЛЬ между основными и дополнительными платежами
         # self.LINE_RAZDEL = QtWidgets.QFrame(self.centralwidget)
         # self.LINE_RAZDEL.setGeometry(QtCore.QRect(10, 190, 760, 10))
@@ -106,9 +140,6 @@ class UiWinPayment(object):
         # self.LINE_RAZDEL.setObjectName("LINE_RAZDEL")
         # self.g_layout_group_box.addWidget(self.LINE_RAZDEL, 9, 0, 1, 1)
 
-        self.spacerItem = QtWidgets.QSpacerItem(20, 200, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.g_layout_pay_group.addItem(self.spacerItem, 10, 0, 1, 1)
-
         # Button Add Payment
 
         self.btn_add_payment = btn_f("Добавить платеж", self.WinPayment, 780, 35, 11)
@@ -117,7 +148,7 @@ class UiWinPayment(object):
         # Frame Result
 
         self.frame_result = QtWidgets.QFrame(self.centralwidget)
-        self.frame_result.setFixedSize(QtCore.QSize(780, 40))
+        self.frame_result.setFixedSize(QtCore.QSize(780, 50))
         self.frame_result.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_result.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frame_result.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
