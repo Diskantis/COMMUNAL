@@ -255,14 +255,14 @@ class Ui_Widget_Payment(object):
         self.label_payment.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.h_Layout_widget_Team.addWidget(self.label_payment)
 
-        self.l_edit_sum = lineEdit_pokaz_f("", Widget_Pay, color, grad_1, grad_2)
-        self.h_Layout_widget_Team.addWidget(self.l_edit_sum)
+        self.line_edit_sum = lineEdit_pokaz_f("", Widget_Pay, color, grad_1, grad_2)
+        self.h_Layout_widget_Team.addWidget(self.line_edit_sum)
 
-        self.l_edit_quantity = lineEdit_pokaz_f("", Widget_Pay, color, grad_1, grad_2)
-        self.h_Layout_widget_Team.addWidget(self.l_edit_quantity)
+        self.line_edit_quantity = lineEdit_pokaz_f("", Widget_Pay, color, grad_1, grad_2)
+        self.h_Layout_widget_Team.addWidget(self.line_edit_quantity)
 
-        self.l_edit_tariff = lineEdit_pokaz_f("", Widget_Pay, color, grad_2, grad_1)
-        self.h_Layout_widget_Team.addWidget(self.l_edit_tariff)
+        self.line_edit_tariff = lineEdit_pokaz_f("", Widget_Pay, color, grad_2, grad_1)
+        self.h_Layout_widget_Team.addWidget(self.line_edit_tariff)
 
 
 class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛЬНЫХ ПЛАТЕЖЕЙ
