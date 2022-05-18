@@ -24,10 +24,8 @@ def btn_check_payment(group, xl, yl):
     btn_check.setMaximumSize(QtCore.QSize(xl, yl))
     btn_check.setStyleSheet("border: 0px solid;")
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap("E:/6_PROGRAMING/1_PROJECT/1_WORK PROJECT/HOME_KOMMUNAL"
-                                 "/res/img/icon_checked_n.png"), QIcon.Normal, QIcon.Off)
-    icon.addPixmap(QtGui.QPixmap("E:/6_PROGRAMING/1_PROJECT/1_WORK PROJECT/HOME_KOMMUNAL"
-                                 "/res/img/icon_checked_o.png"), QIcon.Active, QIcon.On)
+    icon.addPixmap(QtGui.QPixmap("img/icon_checked_n.png"), QIcon.Normal, QIcon.Off)
+    icon.addPixmap(QtGui.QPixmap("img/icon_checked_o.png"), QIcon.Active, QIcon.On)
     btn_check.setIcon(icon)
     btn_check.setIconSize(QtCore.QSize(30, 30))
     btn_check.setCheckable(True)
@@ -235,14 +233,13 @@ class UiWinGrouper(object):
 
 
 class Ui_Widget_Payment(object):
-    def setupUi(self, Widget_Pay):
+    def setupUi(self, Widget_Pay, color):
         # слой вертикального выравнивания виджета
         self.h_Layout_widget_Team = QtWidgets.QHBoxLayout(Widget_Pay)
         self.h_Layout_widget_Team.setContentsMargins(8, 0, 8, 0)
         self.h_Layout_widget_Team.setSpacing(8)
         self.h_Layout_widget_Team.setObjectName("v_Layout_widget_Team")
 
-        color = "(209, 209, 217)"
         grad_1 = "(91, 92, 96, 255)"
         grad_2 = "(108, 109, 114, 255)"
 

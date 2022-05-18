@@ -4,25 +4,25 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
-from res.UIC_CLASS_KOMM_ED import label_titul_f, lineEdit_pokaz_f, UiWinHeaderFooter, UiWinGrouper
+from res.UIC_CLASS_COMM import label_titul_f, lineEdit_pokaz_f, UiWinHeaderFooter, UiWinGrouper
 
 
-class UiWinPokazanya(object):
-    def setupUi_PS(self, WinPokazanya):
-        self.WinPokazanya = WinPokazanya  # окно
-        self.WinPokazanya.setObjectName("PokazanyaSchet")
-        self.WinPokazanya.setWindowModality(Qt.ApplicationModal)
-        self.WinPokazanya.resize(800, 400)
-        self.WinPokazanya.setGeometry(QtCore.QRect(560 + 1920, 300, 800, 400))
-        self.WinPokazanya.setMinimumSize(QtCore.QSize(800, 400))
-        self.WinPokazanya.setMaximumSize(QtCore.QSize(800, 400))
-        self.WinPokazanya.setWindowTitle('ПОКАЗАНИЯ СЧЕТЧИКОВ')
-        self.WinPokazanya.setWindowIcon(QIcon('res/img/schet_100.png'))
-        self.WinPokazanya.setStyleSheet("background-color: rgb(78, 79, 84);")
+class UiWinCounters(object):
+    def setupUi_COU(self, WinCounters):
+        self.WinCounters = WinCounters  # окно
+        self.WinCounters.setObjectName("PokazanyaSchet")
+        self.WinCounters.setWindowModality(Qt.ApplicationModal)
+        self.WinCounters.resize(800, 400)
+        self.WinCounters.setGeometry(QtCore.QRect(560 + 1920, 300, 800, 400))
+        self.WinCounters.setMinimumSize(QtCore.QSize(800, 400))
+        self.WinCounters.setMaximumSize(QtCore.QSize(800, 400))
+        self.WinCounters.setWindowTitle('ПОКАЗАНИЯ СЧЕТЧИКОВ')
+        self.WinCounters.setWindowIcon(QIcon('res/img/Counters-icon.png'))
+        self.WinCounters.setStyleSheet("background-color: rgb(78, 79, 84);")
 
         self.ui_head_foot = UiWinHeaderFooter()
 
-        self.centralwidget = QtWidgets.QWidget(self.WinPokazanya)
+        self.centralwidget = QtWidgets.QWidget(self.WinCounters)
         self.centralwidget.setObjectName("centralwidget")
 
         self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -30,8 +30,8 @@ class UiWinPokazanya(object):
         self.v_Layout_centralwidget.setSpacing(10)
         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
 
-        (self.frame_ui_header, self.btn_Left_PS, self.label_month_year_PS, self.btn_Right_PS,
-         self.label_GL_V_1_PS, self.label_GL_V_2_PS) = self.ui_head_foot.ui_win_header(self.centralwidget)
+        (self.frame_ui_header, self.btn_Left_COU, self.label_month_year_COU, self.btn_Right_COU,
+         self.label_GL_V_1_COU, self.label_GL_V_2_COU) = self.ui_head_foot.ui_win_header(self.centralwidget)
         self.v_Layout_centralwidget.addWidget(self.frame_ui_header)
 
         self.frame_group = QtWidgets.QFrame(self.centralwidget)
@@ -45,8 +45,8 @@ class UiWinPokazanya(object):
 
         self.v_Layout_centralwidget.addWidget(self.frame_group)
 
-        (self.frame_ui_footer, self.comboBox_month_PS, self.comboBox_year_PS, self.label_error_PS,
-         self.btn_Save_PS, self.btn_Cancel_PS) = self.ui_head_foot.ui_win_footer(self.centralwidget)
+        (self.frame_ui_footer, self.comboBox_month_COU, self.comboBox_year_COU, self.label_error_COU,
+         self.btn_Save_COU, self.btn_Cancel_COU) = self.ui_head_foot.ui_win_footer(self.centralwidget)
         self.v_Layout_centralwidget.addWidget(self.frame_ui_footer)
 
         color_p = "(0, 160, 0)"
@@ -60,8 +60,8 @@ class UiWinPokazanya(object):
 
         # POWER
 
-        self.grPowerBox = UiWinGrouper("Электроэнергия", self.WinPokazanya.frame_group)
-        self.WinPokazanya.h_Layout_frame_group.addWidget(self.grPowerBox.group_box)
+        self.grPowerBox = UiWinGrouper("Электроэнергия", self.WinCounters.frame_group)
+        self.WinCounters.h_Layout_frame_group.addWidget(self.grPowerBox.group_box)
 
         self.label_sche_P = label_titul_f("Р/С 181 820 562", self.grPowerBox.fr_line_ed, 12)
         self.label_sche_P.setFixedSize(QtCore.QSize(215, 30))
@@ -100,9 +100,9 @@ class UiWinPokazanya(object):
 
         # WATER
 
-        self.grWaterBox = UiWinGrouper("Вода", self.WinPokazanya.frame_group)
+        self.grWaterBox = UiWinGrouper("Вода", self.WinCounters.frame_group)
         self.grWaterBox.group_box.setMinimumSize(QtCore.QSize(300, 300))
-        self.WinPokazanya.h_Layout_frame_group.addWidget(self.grWaterBox.group_box)
+        self.WinCounters.h_Layout_frame_group.addWidget(self.grWaterBox.group_box)
 
         self.label_sche_W = label_titul_f("Р/С 300 046 056 19", self.grWaterBox.fr_line_ed, 12)
         self.label_sche_W.setMinimumSize(QtCore.QSize(100, 30))
@@ -223,8 +223,8 @@ class UiWinPokazanya(object):
 
         # GAZ
 
-        self.grGazBox = UiWinGrouper("Газ", self.WinPokazanya.frame_group)
-        self.WinPokazanya.h_Layout_frame_group.addWidget(self.grGazBox.group_box)
+        self.grGazBox = UiWinGrouper("Газ", self.WinCounters.frame_group)
+        self.WinCounters.h_Layout_frame_group.addWidget(self.grGazBox.group_box)
 
         self.label_sche_G = label_titul_f("Р/С 171 269 - 5", self.grGazBox.fr_line_ed, 12)
         self.label_sche_G.setFixedSize(QtCore.QSize(215, 30))
@@ -261,29 +261,29 @@ class UiWinPokazanya(object):
         self.label_month_ras_G.setReadOnly(True)
         self.grGazBox.h_layout_fr_month_ras.addWidget(self.label_month_ras_G)
 
-        QtCore.QMetaObject.connectSlotsByName(self.WinPokazanya)
-        self.WinPokazanya.setTabOrder(self.comboBox_month_PS, self.comboBox_year_PS)
-        self.WinPokazanya.setTabOrder(self.comboBox_year_PS, self.btn_Left_PS)
-        self.WinPokazanya.setTabOrder(self.btn_Left_PS, self.btn_Right_PS)
-        self.WinPokazanya.setTabOrder(self.btn_Right_PS, self.lineEdit_post_P)
-        self.WinPokazanya.setTabOrder(self.lineEdit_post_P, self.lineEdit_post_W1)
-        self.WinPokazanya.setTabOrder(self.lineEdit_post_W1, self.lineEdit_post_W2)
-        self.WinPokazanya.setTabOrder(self.lineEdit_post_W2, self.lineEdit_post_W3)
-        self.WinPokazanya.setTabOrder(self.lineEdit_post_W3, self.lineEdit_post_W4)
-        self.WinPokazanya.setTabOrder(self.lineEdit_post_W4, self.lineEdit_post_G)
-        self.WinPokazanya.setTabOrder(self.lineEdit_post_G, self.btn_Save_PS)
-        self.WinPokazanya.setTabOrder(self.btn_Save_PS, self.btn_Cancel_PS)
-        self.WinPokazanya.setTabOrder(self.btn_Cancel_PS, self.lineEdit_pred_P)
-        self.WinPokazanya.setTabOrder(self.lineEdit_pred_P, self.lineEdit_pred_W1)
-        self.WinPokazanya.setTabOrder(self.lineEdit_pred_W1, self.lineEdit_pred_W2)
-        self.WinPokazanya.setTabOrder(self.lineEdit_pred_W2, self.lineEdit_pred_W3)
-        self.WinPokazanya.setTabOrder(self.lineEdit_pred_W3, self.lineEdit_pred_W4)
-        self.WinPokazanya.setTabOrder(self.lineEdit_pred_W4, self.lineEdit_pred_G)
-        self.WinPokazanya.setTabOrder(self.lineEdit_pred_G, self.label_month_ras_P)
-        self.WinPokazanya.setTabOrder(self.label_month_ras_P, self.label_month_ras_WC)
-        self.WinPokazanya.setTabOrder(self.label_month_ras_WC, self.label_month_ras_WH)
-        self.WinPokazanya.setTabOrder(self.label_month_ras_WH, self.label_month_ras_W)
-        self.WinPokazanya.setTabOrder(self.label_month_ras_W, self.label_month_ras_G)
-        self.WinPokazanya.setTabOrder(self.label_month_ras_G, self.comboBox_month_PS)
+        QtCore.QMetaObject.connectSlotsByName(self.WinCounters)
+        self.WinCounters.setTabOrder(self.comboBox_month_COU, self.comboBox_year_COU)
+        self.WinCounters.setTabOrder(self.comboBox_year_COU, self.btn_Left_COU)
+        self.WinCounters.setTabOrder(self.btn_Left_COU, self.btn_Right_COU)
+        self.WinCounters.setTabOrder(self.btn_Right_COU, self.lineEdit_post_P)
+        self.WinCounters.setTabOrder(self.lineEdit_post_P, self.lineEdit_post_W1)
+        self.WinCounters.setTabOrder(self.lineEdit_post_W1, self.lineEdit_post_W2)
+        self.WinCounters.setTabOrder(self.lineEdit_post_W2, self.lineEdit_post_W3)
+        self.WinCounters.setTabOrder(self.lineEdit_post_W3, self.lineEdit_post_W4)
+        self.WinCounters.setTabOrder(self.lineEdit_post_W4, self.lineEdit_post_G)
+        self.WinCounters.setTabOrder(self.lineEdit_post_G, self.btn_Save_COU)
+        self.WinCounters.setTabOrder(self.btn_Save_COU, self.btn_Cancel_COU)
+        self.WinCounters.setTabOrder(self.btn_Cancel_COU, self.lineEdit_pred_P)
+        self.WinCounters.setTabOrder(self.lineEdit_pred_P, self.lineEdit_pred_W1)
+        self.WinCounters.setTabOrder(self.lineEdit_pred_W1, self.lineEdit_pred_W2)
+        self.WinCounters.setTabOrder(self.lineEdit_pred_W2, self.lineEdit_pred_W3)
+        self.WinCounters.setTabOrder(self.lineEdit_pred_W3, self.lineEdit_pred_W4)
+        self.WinCounters.setTabOrder(self.lineEdit_pred_W4, self.lineEdit_pred_G)
+        self.WinCounters.setTabOrder(self.lineEdit_pred_G, self.label_month_ras_P)
+        self.WinCounters.setTabOrder(self.label_month_ras_P, self.label_month_ras_WC)
+        self.WinCounters.setTabOrder(self.label_month_ras_WC, self.label_month_ras_WH)
+        self.WinCounters.setTabOrder(self.label_month_ras_WH, self.label_month_ras_W)
+        self.WinCounters.setTabOrder(self.label_month_ras_W, self.label_month_ras_G)
+        self.WinCounters.setTabOrder(self.label_month_ras_G, self.comboBox_month_COU)
 
         # self.WinPayment.setTabOrder(self.comboBox_year_CP, self.label_error_CP)

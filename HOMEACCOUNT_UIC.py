@@ -32,19 +32,19 @@ class Ui_MainWindow(object):
 
         self.action_PokazSchet = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("res/img/Schetchiki.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("LAST/IMG/Schetchiki.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_PokazSchet.setIcon(icon)
         self.action_PokazSchet.setObjectName("action_PokazSchet")
 
         self.action_KomunPlateg = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("res/img/euro.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("LAST/IMG/euro.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_KomunPlateg.setIcon(icon)
         self.action_KomunPlateg.setObjectName("action_KomunPlateg")
 
         self.action_DebitKredit = QtWidgets.QAction(MainWindow)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("res/img/dollar.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("LAST/IMG/dollar.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.action_DebitKredit.setIcon(icon)
         self.action_DebitKredit.setObjectName("action_DebitKredit")
 

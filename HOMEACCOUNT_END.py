@@ -6,8 +6,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow
 
 from HOMEACCOUNT_UIC import Ui_MainWindow
-from res.DLL_CLASS_KOMM_ED import dt_day, dt_month, dt_year, convert_month
-from COUNTERS_END_ED import PokazSchet
+from res.DLL_CLASS_COMM import dt_day, dt_month, dt_year, convert_month
+from COUNTERS_END import Counters
 # from END_KommPlateg import KommunalPlateg
 # from END_DebitKredit import DebitKredit
 
@@ -16,7 +16,7 @@ from COUNTERS_END_ED import PokazSchet
 class KOMUNAL(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(KOMUNAL, self).__init__(parent)
-        self.PokazSchet = PokazSchet()
+        self.PokazSchet = Counters()
         # self.KommunalPlateg = KommunalPlateg()
         # self.DebitKredit = DebitKredit()
 

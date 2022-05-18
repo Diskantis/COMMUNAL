@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtGui import QIcon, QPalette
+from PyQt5.QtGui import QIcon
 
-from res.UIC_CLASS_KOMM_ED import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f
+from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f
 
 
 # окно приложения "ПЛАТЕЖИ"
 class UiWinPayment(object):
-    def setupUi_CP(self, WinPayment):
+    def setupUi_PAY(self, WinPayment):
         self.WinPayment = WinPayment  # окно
         self.WinPayment.setObjectName("CommunalPayment")
         self.WinPayment.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinPayment.resize(800, 400)  # 365
-        self.WinPayment.setGeometry(QtCore.QRect(560 + 1960, 200 + 395, 800, 400))
+        self.WinPayment.setGeometry(QtCore.QRect(560 + 1960, 200 - 40, 800, 400))
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
-        self.WinPayment.setWindowIcon(QIcon('res/img/payment-icon.png'))
+        self.WinPayment.setWindowIcon(QIcon('res/img/Payments-icon.png'))
         self.WinPayment.setStyleSheet("background-color: rgb(78, 79, 84);")
 
         self.ui_head_foot = UiWinHeaderFooter()
@@ -37,15 +37,13 @@ class UiWinPayment(object):
 
         # Frame Header
 
-        (self.frame_ui_header, self.btn_Left_CP, self.label_month_year_CP, self.btn_Right_CP,
-         self.label_GL_V_1_CP, self.label_GL_V_2_CP) = self.ui_head_foot.ui_win_header(self.centralwidget)
+        (self.frame_ui_header, self.btn_Left_PAY, self.label_month_year_PAY, self.btn_Right_PAY,
+         self.label_GL_V_1_PAY, self.label_GL_V_2_PAY) = self.ui_head_foot.ui_win_header(self.centralwidget)
         self.v_Layout_centralwidget.addWidget(self.frame_ui_header)
 
         # Group Payment
 
         self.payments_group = QtWidgets.QGroupBox("Коммунальные платежи", self.centralwidget)
-        # self.payments_group.setMinimumSize(QtCore.QSize(780, 30))
-        # self.payments_group.setMaximumSize(QtCore.QSize(780, 205))
         self.payments_group.setFixedSize(QtCore.QSize(780, 195))
         font = QtGui.QFont("Times", 14, 75)
         self.payments_group.setFont(font)
@@ -93,13 +91,13 @@ class UiWinPayment(object):
         self.label_tariff.setMinimumSize(QtCore.QSize(50, 18))
         self.h_layout_frame_title.addWidget(self.label_tariff)
 
-        style = """
-            QScrollBar:vertical {
-            border: 2px solid grey;
-            background: #32CC99;
-            width: 20px;
-            margin: 0 0 0 0;}
-            """
+        # style = """
+        #     QScrollBar:vertical {
+        #     border: 2px solid grey;
+        #     background: #32CC99;
+        #     width: 20px;
+        #     margin: 0 0 0 0;}
+        #     """
 
         self.scrollArea = QtWidgets.QScrollArea(self.payments_group)
         self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -179,16 +177,16 @@ class UiWinPayment(object):
 
         # Frame Footer
 
-        (self.frame_ui_footer, self.comboBox_month_CP, self.comboBox_year_CP, self.label_error_CP,
-         self.btn_Save_CP, self.btn_Cancel_CP) = self.ui_head_foot.ui_win_footer(self.centralwidget)
+        (self.frame_ui_footer, self.comboBox_month_PAY, self.comboBox_year_PAY, self.label_error_PAY,
+         self.btn_Save_PAY, self.btn_Cancel_PAY) = self.ui_head_foot.ui_win_footer(self.centralwidget)
         self.v_Layout_centralwidget.addWidget(self.frame_ui_footer)
 
         QtCore.QMetaObject.connectSlotsByName(self.WinPayment)
-        self.WinPayment.setTabOrder(self.btn_Right_CP, self.btn_add_payment)
-        self.WinPayment.setTabOrder(self.btn_add_payment, self.comboBox_month_CP)
-        self.WinPayment.setTabOrder(self.comboBox_month_CP, self.comboBox_year_CP)
-        self.WinPayment.setTabOrder(self.comboBox_year_CP, self.btn_Save_CP)
-        # self.WinPayment.setTabOrder(self.comboBox_year_CP, self.label_error_CP)
-        self.WinPayment.setTabOrder(self.btn_Save_CP, self.btn_Cancel_CP)
-        self.WinPayment.setTabOrder(self.btn_Cancel_CP, self.btn_Left_CP)
-        self.WinPayment.setTabOrder(self.btn_Left_CP, self.btn_Right_CP)
+        self.WinPayment.setTabOrder(self.btn_Right_PAY, self.btn_add_payment)
+        self.WinPayment.setTabOrder(self.btn_add_payment, self.comboBox_month_PAY)
+        self.WinPayment.setTabOrder(self.comboBox_month_PAY, self.comboBox_year_PAY)
+        self.WinPayment.setTabOrder(self.comboBox_year_PAY, self.btn_Save_PAY)
+        # self.WinPayment.setTabOrder(self.comboBox_year_PAY, self.label_error_PAY)
+        self.WinPayment.setTabOrder(self.btn_Save_PAY, self.btn_Cancel_PAY)
+        self.WinPayment.setTabOrder(self.btn_Cancel_PAY, self.btn_Left_PAY)
+        self.WinPayment.setTabOrder(self.btn_Left_PAY, self.btn_Right_PAY)

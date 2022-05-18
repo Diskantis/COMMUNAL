@@ -7,7 +7,7 @@ import datetime
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDesktopWidget
 
-from res.UIC_CLASS_KOMM_ED import UiWinAdd, Ui_Widget_Payment
+from res.UIC_CLASS_COMM import UiWinAdd, Ui_Widget_Payment
 
 
 dt_day = datetime.datetime.now().strftime("%d")  # Текущий день (str "30")
@@ -97,10 +97,10 @@ def data_convert(data):
 
 # НОВЫЙ ПЛАТЕЖ
 class Widget_Payment(QtWidgets.QWidget, Ui_Widget_Payment):
-    def __init__(self, name):
+    def __init__(self, name, color):
         super(Widget_Payment, self).__init__()
 
-        self.setupUi(self)
+        self.setupUi(self, color)
 
         self.label_payment.setText(name)
 
