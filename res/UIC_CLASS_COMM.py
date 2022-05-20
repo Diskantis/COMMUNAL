@@ -6,6 +6,73 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCompleter
 
 
+style_1 = "/* VERTICAL SCROLLBAR */ " \
+        "QScrollBar:vertical {border: none; background: rgb(45, 45, 68); width: 14px; " \
+        "margin: 15px 0 15px 0; border-radius: 0px;} " \
+        \
+        "/*  HANDLE BAR VERTICAL */" \
+        "QScrollBar::handle:vertical {background-color: rgb(80, 80, 122); min-height: 30px; border-radius: 7px;}" \
+        "QScrollBar::handle:vertical:hover{background-color: rgb(255, 0, 127);}" \
+        "QScrollBar::handle:vertical:pressed {background-color: rgb(185, 0, 92);}" \
+        \
+        "/* BTN TOP - SCROLLBAR */" \
+        "QScrollBar::sub-line:vertical {border: none; background-color: rgb(59, 59, 90); height: 15px; " \
+        "border-top-left-radius: 7px; border-top-right-radius: 7px; subcontrol-position: top; " \
+        "subcontrol-origin: margin;} " \
+        \
+        "QScrollBar::sub-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
+        "QScrollBar::sub-line:vertical:pressed {background-color: rgb(185, 0, 92);}" \
+        \
+        "/* BTN BOTTOM - SCROLLBAR */" \
+        "QScrollBar::add-line:vertical {border: none; background-color: rgb(59, 59, 90); height: 15px; " \
+        "border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; subcontrol-position: bottom; " \
+        "subcontrol-origin: margin;}" \
+        \
+        "QScrollBar::add-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
+        "QScrollBar::add-line:vertical:pressed {background-color: rgb(185, 0, 92);}" \
+        \
+        "/* RESET ARROW */" \
+        "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {background: none;}" \
+        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: none;}" \
+        \
+        "/* HORIZONTAL SCROLLBAR - HOMEWORK */" \
+        "QScrollBar:horizontal {}" \
+        "QScrollBar::handle:horizontal {}" \
+        "QScrollBar::add-line:horizontal {}" \
+        "QScrollBar::sub-line:horizontal {}" \
+        "QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {}" \
+        "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {}"
+style_2 = "/* VERTICAL SCROLLBAR */ " \
+        "QScrollBar:vertical {border: none; background: rgb(78, 79, 84); width: 14px; max-height: 210px;" \
+          "margin: 0; border-radius: 7px;} " \
+        \
+        "/*  HANDLE BAR VERTICAL */" \
+        "QScrollBar::handle:vertical {background-color: rgb(163, 163, 163); min-height: 10px; border-radius: 5px; " \
+          "margin: 2px 2px 2px 2px;}" \
+        "QScrollBar::handle:vertical:hover{background-color: rgb(209, 209, 217);}" \
+        "QScrollBar::handle:vertical:pressed {background-color: rgb(209, 209, 217);}" \
+        \
+        "/* BTN TOP - SCROLLBAR */" \
+        "QScrollBar::sub-line:vertical {border: none; background-color: rgb(78, 79, 84); height: 15px; " \
+        "border-top-left-radius: 7px; border-top-right-radius: 7px; subcontrol-position: top; " \
+        "subcontrol-origin: margin;} " \
+        \
+        "QScrollBar::sub-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
+        "QScrollBar::sub-line:vertical:pressed {background-color: rgb(255, 0, 127);}" \
+        \
+        "/* BTN BOTTOM - SCROLLBAR */" \
+        "QScrollBar::add-line:vertical {border: none; background-color: rgb(78, 79, 84); height: 15px; " \
+        "border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; subcontrol-position: bottom; " \
+        "subcontrol-origin: margin;}" \
+        \
+        "QScrollBar::add-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
+        "QScrollBar::add-line:vertical:pressed {background-color: rgb(255, 0, 127);}" \
+        \
+        "/* RESET ARROW */" \
+        "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {background: none;}" \
+        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: none;}"
+
+
 def btn_f(name, group, xl, yl, font_s):  # кнопки
     btn = QtWidgets.QPushButton(name, group)
     btn.setMinimumSize(QtCore.QSize(xl, yl))

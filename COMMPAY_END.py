@@ -90,8 +90,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.pay_apartment = Widget_Payment("Интернет", "(209, 209, 217)")
         self.v_layout_scrollArea.addWidget(self.pay_apartment)
 
-        # self.pay_apartment = Widget_Payment("Телефон", "(209, 209, 217)")
-        # self.v_layout_scrollArea.addWidget(self.pay_apartment)
+        self.pay_apartment = Widget_Payment("Телефон", "(209, 209, 217)")
+        self.v_layout_scrollArea.addWidget(self.pay_apartment)
 
         # ЧИТАЕМ показания из базы данных
         self.read_pokaz()

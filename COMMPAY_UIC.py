@@ -3,7 +3,7 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QIcon
 
-from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f
+from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f, style_1, style_2
 
 
 # окно приложения "ПЛАТЕЖИ"
@@ -23,7 +23,8 @@ class UiWinPayment(object):
         self.ui_head_foot = UiWinHeaderFooter()
 
         self.centralwidget = QtWidgets.QWidget(self.WinPayment)
-        self.centralwidget.setStyleSheet("width: 20px;")
+        # self.centralwidget.setStyleSheet("width: 20")
+        self.centralwidget.setStyleSheet(style_2)
         self.centralwidget.setObjectName("centralwidget")
 
         self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.centralwidget)
