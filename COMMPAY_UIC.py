@@ -105,8 +105,7 @@ class UiWinPayment(object):
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(750, 0))
         self.scrollAreaWidgetContents.setMaximumSize(QtCore.QSize(750, 500))
-        # self.scrollAreaWidgetContents.setStyleSheet("padding: 0;")
-        # self.scrollAreaWidgetContents.setStyleSheet("border: 0px solid rgba(209, 209, 217, 240); padding: 0;")
+        # self.scrollAreaWidgetContents.setStyleSheet("border: 1px solid rgba(209, 209, 217, 240);")
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
 
         self.v_layout_scrollArea = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)

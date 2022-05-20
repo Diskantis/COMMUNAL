@@ -74,7 +74,7 @@ def lineEdit_pokaz_f(name, group, color, grad_1, grad_2):  # значения с
         "border-radius: 2px; color: rgb" + color + "; border: 1px solid rgba(50, 50, 50, 240); "
         "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
         "stop:0 rgba(125, 126, 131, 255), stop:0.02 rgba" + grad_1 + ", stop:0.98 rgba" + grad_2 + ","
-        "stop:1 rgba(125, 126, 131, 255));")
+        "stop:1 rgba(125, 126, 131, 255));padding: 1, 1, 1, 1;")
     lineEdit_pokaz.setObjectName("lineEdit_post_pokaz")
     lineEdit_pokaz.setAlignment(QtCore.Qt.AlignCenter)
     lineEdit_pokaz.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -248,8 +248,7 @@ class Ui_Widget_Payment(object):
 
         self.label_payment = label_titul_f("", Widget_Pay, 12)
         self.label_payment.setMinimumSize(QtCore.QSize(200, 25))
-        self.label_payment.setStyleSheet("color: rgb(209, 209, 217); border: 0px solid rgba(209, 209, 217, 240); "
-                                         "padding: 0;")
+        # self.label_payment.setStyleSheet("color: rgb(209, 209, 217); border: 0px solid rgba(209, 209, 217, 240);")
         self.label_payment.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.h_Layout_widget_Team.addWidget(self.label_payment)
 

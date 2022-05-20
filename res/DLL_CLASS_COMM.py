@@ -5,7 +5,7 @@ import sqlite3
 import datetime
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QDesktopWidget, QFrame
+from PyQt5.QtWidgets import QDesktopWidget
 
 from res.UIC_CLASS_COMM import UiWinAdd, Ui_Widget_Payment
 
@@ -93,13 +93,6 @@ def data_convert(data):
     b = a.split()
     c = b[1]
     return c
-
-
-class QVLine(QFrame):
-    def __init__(self):
-        super(QVLine, self).__init__()
-        self.setFrameShape(QFrame.VLine)
-        self.setFrameShadow(QFrame.Sunken)
 
 
 # НОВЫЙ ПЛАТЕЖ

@@ -72,7 +72,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         # self.win_pole.insert(-3, self.pay_apartment.line_edit_tariff)
         self.v_layout_scrollArea.addWidget(self.pay_apartment)
 
-        # # РАЗДЕЛИТЕЛЬ между основными и дополнительными платежами
+        # РАЗДЕЛИТЕЛЬ между основными и дополнительными платежами
         self.Line_razdel = QtWidgets.QFrame()
         self.Line_razdel.setFixedSize(QtCore.QSize(740, 5))
         self.Line_razdel.setAutoFillBackground(False)
@@ -87,13 +87,11 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.btn_Save_PAY.clicked.connect(self.btn_save_PAY)
         self.btn_Cancel_PAY.clicked.connect(self.btn_cancel_PAY)
 
-        # self.pay_apartment = Widget_Payment("Интернет", "(209, 209, 217)")
-        # self.v_layout_scrollArea.addWidget(self.pay_apartment)
+        self.pay_apartment = Widget_Payment("Интернет", "(209, 209, 217)")
+        self.v_layout_scrollArea.addWidget(self.pay_apartment)
 
         # self.pay_apartment = Widget_Payment("Телефон", "(209, 209, 217)")
         # self.v_layout_scrollArea.addWidget(self.pay_apartment)
-
-        print(self.win_pole)
 
         # ЧИТАЕМ показания из базы данных
         self.read_pokaz()
