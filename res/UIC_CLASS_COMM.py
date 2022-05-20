@@ -22,10 +22,10 @@ def btn_check_payment(group, xl, yl):
     btn_check = QtWidgets.QPushButton(group)
     btn_check.setMinimumSize(QtCore.QSize(xl, yl))
     btn_check.setMaximumSize(QtCore.QSize(xl, yl))
-    btn_check.setStyleSheet("border: 0px solid;")
+    btn_check.setStyleSheet("border: 0px solid; padding: 0px;")
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap("img/icon_checked_n.png"), QIcon.Normal, QIcon.Off)
-    icon.addPixmap(QtGui.QPixmap("img/icon_checked_o.png"), QIcon.Active, QIcon.On)
+    icon.addPixmap(QtGui.QPixmap("res/img/icon_checked_n.png"), QIcon.Normal, QIcon.Off)
+    icon.addPixmap(QtGui.QPixmap("res/img/icon_checked_o.png"), QIcon.Active, QIcon.On)
     btn_check.setIcon(icon)
     btn_check.setIconSize(QtCore.QSize(30, 30))
     btn_check.setCheckable(True)
@@ -52,13 +52,13 @@ def label_titul_f(name, group, font_s=None):
     sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
     label_titul.setSizePolicy(sizePolicy)
     label_titul.setMinimumSize(QtCore.QSize(100, 25))
-    label_titul.setMaximumSize(QtCore.QSize(780, 25))
+    label_titul.setMaximumSize(QtCore.QSize(780, 50))
     if font_s is not None:
         font = QtGui.QFont("Times", font_s, 75)
     else:
         font = QtGui.QFont("Times", 10, 75)
     label_titul.setFont(font)
-    label_titul.setStyleSheet("color: rgb(209, 209, 217); padding: 0px; border: 0px solid rgba(50, 50, 50, 240);")
+    label_titul.setStyleSheet("border: 0px solid rgba(50, 50, 50, 240); color: rgb(209, 209, 217); padding: 0px;")
     label_titul.setAlignment(QtCore.Qt.AlignCenter)
     label_titul.setObjectName("label_pred")
     return label_titul
@@ -234,31 +234,42 @@ class UiWinGrouper(object):
 
 class Ui_Widget_Payment(object):
     def setupUi(self, Widget_Pay, color):
-        # слой вертикального выравнивания виджета
         self.h_Layout_widget_Team = QtWidgets.QHBoxLayout(Widget_Pay)
-        self.h_Layout_widget_Team.setContentsMargins(8, 0, 8, 0)
+        self.h_Layout_widget_Team.setContentsMargins(5, 0, 8, 0)
         self.h_Layout_widget_Team.setSpacing(8)
         self.h_Layout_widget_Team.setObjectName("v_Layout_widget_Team")
 
-        grad_1 = "(91, 92, 96, 255)"
-        grad_2 = "(108, 109, 114, 255)"
+        self.color = color
+        self.grad_1 = "(91, 92, 96, 255)"
+        self.grad_2 = "(108, 109, 114, 255)"
 
         self.btn_check = btn_check_payment(Widget_Pay, 30, 30)
         self.h_Layout_widget_Team.addWidget(self.btn_check)
 
         self.label_payment = label_titul_f("", Widget_Pay, 12)
         self.label_payment.setMinimumSize(QtCore.QSize(200, 25))
-        self.label_payment.setStyleSheet("border: 0px solid rgba(209, 209, 217, 240); padding: 0;")
+        self.label_payment.setStyleSheet("color: rgb(209, 209, 217); border: 0px solid rgba(209, 209, 217, 240); "
+                                         "padding: 0;")
         self.label_payment.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.h_Layout_widget_Team.addWidget(self.label_payment)
 
-        self.line_edit_sum = lineEdit_pokaz_f("", Widget_Pay, color, grad_1, grad_2)
+        self.line_edit_sum = lineEdit_pokaz_f("", Widget_Pay, color, self.grad_2, self.grad_1)
+        self.line_edit_sum.setReadOnly(False)
         self.h_Layout_widget_Team.addWidget(self.line_edit_sum)
 
-        self.line_edit_quantity = lineEdit_pokaz_f("", Widget_Pay, color, grad_1, grad_2)
+    def commpay(self):
+        self.line_edit_sum.setStyleSheet(
+            "border-radius: 2px; color: rgb" + self.color + "; border: 1px solid rgba(50, 50, 50, 240); "
+            "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+            "stop:0 rgba(125, 126, 131, 255), stop:0.02 rgba" + self.grad_1 + ", stop:0.98 rgba" + self.grad_2 + ","
+            "stop:1 rgba(125, 126, 131, 255));")
+        self.line_edit_sum.setReadOnly(True)
+
+        self.line_edit_quantity = lineEdit_pokaz_f("", self, self.color, self.grad_1, self.grad_2)
         self.h_Layout_widget_Team.addWidget(self.line_edit_quantity)
 
-        self.line_edit_tariff = lineEdit_pokaz_f("", Widget_Pay, color, grad_2, grad_1)
+        self.line_edit_tariff = lineEdit_pokaz_f("", self, self.color, self.grad_2, self.grad_1)
+        self.line_edit_tariff.setReadOnly(False)
         self.h_Layout_widget_Team.addWidget(self.line_edit_tariff)
 
 

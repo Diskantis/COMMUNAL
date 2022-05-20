@@ -40,24 +40,30 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.btn_Left_PAY.clicked.connect(self.btn_period_left)  # прокрутка в лево
         self.btn_Right_PAY.clicked.connect(self.btn_period_right)  # прокрутка в право
 
-        self.win_pole = [self.label_error_PAY, self.label_GL_V_1_PAY, self.label_GL_V_2_PAY]
+        self.win_pole = [self.label_GL_V_1_PAY, self.label_GL_V_2_PAY, self.label_error_PAY]
 
         self.pay_power = Widget_Payment("Электричество", "(0, 160, 0)")
-        self.win_pole.insert(-3, self.pay_power.line_edit_sum)
-        self.win_pole.insert(-3, self.pay_power.line_edit_quantity)
-        self.win_pole.insert(-3, self.pay_power.line_edit_tariff)
+        self.pay_power.commpay()
+        self.win_pole.append(self.pay_power.line_edit_sum)
+        # self.win_pole.insert(-3, self.pay_power.line_edit_sum)
+        # self.win_pole.insert(-3, self.pay_power.line_edit_quantity)
+        # self.win_pole.insert(-3, self.pay_power.line_edit_tariff)
         self.v_layout_scrollArea.addWidget(self.pay_power)
 
         self.pay_water = Widget_Payment("Вода", "(0, 170, 255)")
-        self.win_pole.insert(-3, self.pay_water.line_edit_sum)
-        self.win_pole.insert(-3, self.pay_water.line_edit_quantity)
-        self.win_pole.insert(-3, self.pay_water.line_edit_tariff)
+        self.pay_water.commpay()
+        self.win_pole.append(self.pay_water.line_edit_sum)
+        # self.win_pole.insert(-3, self.pay_water.line_edit_sum)
+        # self.win_pole.insert(-3, self.pay_water.line_edit_quantity)
+        # self.win_pole.insert(-3, self.pay_water.line_edit_tariff)
         self.v_layout_scrollArea.addWidget(self.pay_water)
 
         self.pay_gaz = Widget_Payment("Газ", "(150, 0, 150)")
-        self.win_pole.insert(-3, self.pay_gaz.line_edit_sum)
-        self.win_pole.insert(-3, self.pay_gaz.line_edit_quantity)
-        self.win_pole.insert(-3, self.pay_gaz.line_edit_tariff)
+        self.pay_gaz.commpay()
+        self.win_pole.append(self.pay_gaz.line_edit_sum)
+        # self.win_pole.insert(-3, self.pay_gaz.line_edit_sum)
+        # self.win_pole.insert(-3, self.pay_gaz.line_edit_quantity)
+        # self.win_pole.insert(-3, self.pay_gaz.line_edit_tariff)
         self.v_layout_scrollArea.addWidget(self.pay_gaz)
 
         self.pay_apartment = Widget_Payment("Квартира", "(209, 209, 217)")
@@ -66,14 +72,28 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         # self.win_pole.insert(-3, self.pay_apartment.line_edit_tariff)
         self.v_layout_scrollArea.addWidget(self.pay_apartment)
 
+        # # РАЗДЕЛИТЕЛЬ между основными и дополнительными платежами
+        self.Line_razdel = QtWidgets.QFrame()
+        self.Line_razdel.setFixedSize(QtCore.QSize(740, 5))
+        self.Line_razdel.setAutoFillBackground(False)
+        self.Line_razdel.setContentsMargins(5, 0, 0, 0)
+        self.Line_razdel.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.Line_razdel.setLineWidth(1)
+        self.Line_razdel.setMidLineWidth(1)
+        self.Line_razdel.setFrameShape(QtWidgets.QFrame.HLine)
+        self.Line_razdel.setObjectName("LINE_RAZDEL")
+        self.v_layout_scrollArea.addWidget(self.Line_razdel)
+
         self.btn_Save_PAY.clicked.connect(self.btn_save_PAY)
         self.btn_Cancel_PAY.clicked.connect(self.btn_cancel_PAY)
 
-        # self.pay_apartment = Widget_Payment("Интернет")
+        # self.pay_apartment = Widget_Payment("Интернет", "(209, 209, 217)")
         # self.v_layout_scrollArea.addWidget(self.pay_apartment)
-        #
-        # self.pay_apartment = Widget_Payment("Телефон")
+
+        # self.pay_apartment = Widget_Payment("Телефон", "(209, 209, 217)")
         # self.v_layout_scrollArea.addWidget(self.pay_apartment)
+
+        print(self.win_pole)
 
         # ЧИТАЕМ показания из базы данных
         self.read_pokaz()
