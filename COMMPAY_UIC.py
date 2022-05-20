@@ -23,7 +23,6 @@ class UiWinPayment(object):
         self.ui_head_foot = UiWinHeaderFooter()
 
         self.centralwidget = QtWidgets.QWidget(self.WinPayment)
-        # self.centralwidget.setStyleSheet("width: 20")
         self.centralwidget.setStyleSheet(style_2)
         self.centralwidget.setObjectName("centralwidget")
 

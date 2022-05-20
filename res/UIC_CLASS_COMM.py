@@ -57,16 +57,16 @@ style_2 = "/* VERTICAL SCROLLBAR */ " \
         "border-top-left-radius: 7px; border-top-right-radius: 7px; subcontrol-position: top; " \
         "subcontrol-origin: margin;} " \
         \
-        "QScrollBar::sub-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
-        "QScrollBar::sub-line:vertical:pressed {background-color: rgb(255, 0, 127);}" \
+        "QScrollBar::sub-line:vertical:hover {background-color: rgb(163, 163, 163);}" \
+        "QScrollBar::sub-line:vertical:pressed {background-color: rgb(78, 79, 84);}" \
         \
         "/* BTN BOTTOM - SCROLLBAR */" \
         "QScrollBar::add-line:vertical {border: none; background-color: rgb(78, 79, 84); height: 15px; " \
         "border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; subcontrol-position: bottom; " \
         "subcontrol-origin: margin;}" \
         \
-        "QScrollBar::add-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
-        "QScrollBar::add-line:vertical:pressed {background-color: rgb(255, 0, 127);}" \
+        "QScrollBar::add-line:vertical:hover {background-color: rgb(163, 163, 163);}" \
+        "QScrollBar::add-line:vertical:pressed {background-color: rgb(78, 79, 84);}" \
         \
         "/* RESET ARROW */" \
         "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {background: none;}" \
