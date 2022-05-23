@@ -6,7 +6,7 @@ import win32api
 from PyQt5.QtWidgets import QApplication
 
 from res.DLL_CLASS_COMM import *
-from res.UIC_CLASS_COMM import UiWinAdd  # NewPlateg
+from res.UIC_CLASS_COMM import UiWinAdd
 
 from COMMPAY_UIC import UiWinPayment
 
@@ -16,9 +16,10 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
     def __init__(self):
         super(CommunalPayment, self).__init__()
 
-        self.save_yn = UiWinAdd()
-
         self.setupUi_PAY(self)
+        self.save_yn = UiWinAdd()
+        self.btn_Add_Pay = self.btn_Add_Pay
+
         self.data_base = 'COMMPAY_DAT.db'  # имя базы данных
 
         self.period_PAY = Period(self.comboBox_month_PAY, self.comboBox_year_PAY, self.label_month_year_PAY)
@@ -39,6 +40,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         self.btn_Left_PAY.clicked.connect(self.btn_period_left)  # прокрутка в лево
         self.btn_Right_PAY.clicked.connect(self.btn_period_right)  # прокрутка в право
+        self.btn_Add_Pay.clicked.connect(self.win_add_name_pay)
 
         self.win_pole = [self.label_GL_V_1_PAY, self.label_GL_V_2_PAY, self.label_error_PAY]
 
@@ -74,7 +76,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         # РАЗДЕЛИТЕЛЬ между основными и дополнительными платежами
         self.Line_razdel = QtWidgets.QFrame()
-        self.Line_razdel.setFixedSize(QtCore.QSize(740, 5))
+        self.Line_razdel.setFixedSize(QtCore.QSize(742, 5))
         self.Line_razdel.setAutoFillBackground(False)
         self.Line_razdel.setContentsMargins(5, 0, 0, 0)
         self.Line_razdel.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -86,12 +88,6 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         self.btn_Save_PAY.clicked.connect(self.btn_save_PAY)
         self.btn_Cancel_PAY.clicked.connect(self.btn_cancel_PAY)
-
-        self.pay_apartment = Widget_Payment("Интернет", "(209, 209, 217)")
-        self.v_layout_scrollArea.addWidget(self.pay_apartment)
-
-        self.pay_apartment = Widget_Payment("Телефон", "(209, 209, 217)")
-        self.v_layout_scrollArea.addWidget(self.pay_apartment)
 
         # ЧИТАЕМ показания из базы данных
         self.read_pokaz()
@@ -130,7 +126,59 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.current_month_index = self.period_PAY.click_btn_right(self.current_month_index)
             self.read_pokaz()
 
-    # читает сохраненные данные из базы данных
+    # добавление нового платежа
+    def win_add_name_pay(self):
+        self.win_name_pay = UiWinAdd()
+        self.win_name_pay.name_payment()
+
+        if win32api.GetKeyboardLayout() == 67699721:  # 67699721 - английский 00000409
+            win32api.LoadKeyboardLayout("00000419", 1)  # 68748313 - русский  00000419
+
+        # КНОПКИ окна ДОБАВЛЕНИЕ ПЛАТЕЖА
+        self.win_name_pay.add_pay_btn_OK.clicked.connect(self.win_add_summa_pay)  # OK
+        self.win_name_pay.add_pay_btn_OK.setAutoDefault(True)
+        self.win_name_pay.lineEdit.returnPressed.connect(self.win_name_pay.add_pay_btn_OK.click)
+
+        self.win_name_pay.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_name_pay))  # CANCEL
+
+    def win_add_summa_pay(self):
+        self.name_pay = self.win_name_pay.lineEdit.text()
+        self.win_name_pay.lineEdit.clear()
+        self.win_name_pay.close()
+
+        self.win_summa_pay = UiWinAdd()
+        self.win_summa_pay.name_payment()
+        self.win_summa_pay.label.setText("Сумма платежа")
+
+        if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
+            win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
+
+        self.win_summa_pay.add_pay_btn_OK.clicked.connect(self.add_payment)  # кнопка OK окна СУММА
+        self.win_summa_pay.add_pay_btn_OK.setAutoDefault(True)
+        self.win_summa_pay.lineEdit.returnPressed.connect(self.win_summa_pay.add_pay_btn_OK.click)
+
+        self.win_summa_pay.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_summa_pay))
+
+    def add_payment(self):
+        self.summa_pay = self.win_summa_pay.lineEdit.text()
+        self.summa_pay_text = text_convert(self.summa_pay)
+
+        self.payment = Widget_Payment(self.name_pay, "(209, 209, 217)")
+        self.payment.line_edit_sum.setText(self.summa_pay_text + " руб")
+        self.v_layout_scrollArea.addWidget(self.payment)
+
+        # # возможно удаление после того как был создан доп. плат.
+        # self.new_p.btn_del_Plat.clicked.connect(self.new_p.deleteLater)
+        # self.new_p.btn_del_Plat.clicked.connect(self.btn_del_plateg)
+
+        self.win_summa_pay.lineEdit.clear()
+        self.win_summa_pay.close()
+
+    @staticmethod
+    def win_add_cancel(app_win):
+        app_win.lineEdit.clear()
+        app_win.close()
+
     def read_pokaz(self):
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419

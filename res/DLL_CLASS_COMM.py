@@ -102,6 +102,7 @@ class Widget_Payment(QtWidgets.QWidget, Ui_Widget_Payment):
 
         self.setupUi(self, color)
         self.label_payment.setText(name)
+        self.line_edit_sum.setText("")
 
 
 # ВЫБОР ПЕРИОДА
@@ -157,9 +158,9 @@ class Save_OR:
         self.save_yn.label_f.setGeometry(QtCore.QRect(10, 0, 270, 70))
         self.save_yn.label_f.setText("Вы действительно хотите \n перезаписать показания?")
 
-        self.save_yn.btn_OK.clicked.connect(self.save_yn_btn_ok)
-        self.save_yn.btn_OK.setAutoDefault(True)
-        self.save_yn.btn_Cancel.clicked.connect(self.save_yn_btn_cancel)
+        self.save_yn.add_pay_btn_OK.clicked.connect(self.save_yn_btn_ok)
+        self.save_yn.add_pay_btn_OK.setAutoDefault(True)
+        self.save_yn.add_pay_btn_Cancel.clicked.connect(self.save_yn_btn_cancel)
 
     def save_yn_btn_ok(self, data_base):
         data = self.create_list_pokaz_schet()  # список данных для записи

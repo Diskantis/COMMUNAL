@@ -27,7 +27,7 @@ class UiWinCounters(object):
 
         self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.centralwidget)
         self.v_Layout_centralwidget.setContentsMargins(10, 10, 10, 10)
-        self.v_Layout_centralwidget.setSpacing(10)
+        self.v_Layout_centralwidget.setSpacing(8)
         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
 
         (self.frame_ui_header, self.btn_Left_COU, self.label_month_year_COU, self.btn_Right_COU,
@@ -35,7 +35,7 @@ class UiWinCounters(object):
         self.v_Layout_centralwidget.addWidget(self.frame_ui_header)
 
         self.frame_group = QtWidgets.QFrame(self.centralwidget)
-        self.frame_group.setMaximumSize(QtCore.QSize(780, 300))
+        self.frame_group.setMaximumSize(QtCore.QSize(780, 302))
         self.frame_group.setObjectName("frame_group")
 
         self.h_Layout_frame_group = QtWidgets.QHBoxLayout(self.frame_group)

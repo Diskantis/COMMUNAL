@@ -278,9 +278,9 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         self.save_yn.label.setGeometry(QtCore.QRect(10, 0, 270, 70))
         self.save_yn.label.setText("Вы действительно хотите \n перезаписать показания?")
 
-        self.save_yn.btn_OK.clicked.connect(self.save_yn_btn_ok)
-        self.save_yn.btn_OK.setAutoDefault(True)
-        self.save_yn.btn_Cancel.clicked.connect(self.save_yn_btn_cancel)
+        self.save_yn.add_pay_btn_OK.clicked.connect(self.save_yn_btn_ok)
+        self.save_yn.add_pay_btn_OK.setAutoDefault(True)
+        self.save_yn.add_pay_btn_Cancel.clicked.connect(self.save_yn_btn_cancel)
 
     def save_yn_btn_ok(self):
         table = 'Counters_year_' + self.data[1].split()[1]  # имя таблицы (период)

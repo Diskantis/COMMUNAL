@@ -6,49 +6,13 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCompleter
 
 
-style_1 = "/* VERTICAL SCROLLBAR */ " \
-        "QScrollBar:vertical {border: none; background: rgb(45, 45, 68); width: 14px; " \
-        "margin: 15px 0 15px 0; border-radius: 0px;} " \
-        \
-        "/*  HANDLE BAR VERTICAL */" \
-        "QScrollBar::handle:vertical {background-color: rgb(80, 80, 122); min-height: 30px; border-radius: 7px;}" \
-        "QScrollBar::handle:vertical:hover{background-color: rgb(255, 0, 127);}" \
-        "QScrollBar::handle:vertical:pressed {background-color: rgb(185, 0, 92);}" \
-        \
-        "/* BTN TOP - SCROLLBAR */" \
-        "QScrollBar::sub-line:vertical {border: none; background-color: rgb(59, 59, 90); height: 15px; " \
-        "border-top-left-radius: 7px; border-top-right-radius: 7px; subcontrol-position: top; " \
-        "subcontrol-origin: margin;} " \
-        \
-        "QScrollBar::sub-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
-        "QScrollBar::sub-line:vertical:pressed {background-color: rgb(185, 0, 92);}" \
-        \
-        "/* BTN BOTTOM - SCROLLBAR */" \
-        "QScrollBar::add-line:vertical {border: none; background-color: rgb(59, 59, 90); height: 15px; " \
-        "border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; subcontrol-position: bottom; " \
-        "subcontrol-origin: margin;}" \
-        \
-        "QScrollBar::add-line:vertical:hover {background-color: rgb(255, 0, 127);}" \
-        "QScrollBar::add-line:vertical:pressed {background-color: rgb(185, 0, 92);}" \
-        \
-        "/* RESET ARROW */" \
-        "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {background: none;}" \
-        "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: none;}" \
-        \
-        "/* HORIZONTAL SCROLLBAR - HOMEWORK */" \
-        "QScrollBar:horizontal {}" \
-        "QScrollBar::handle:horizontal {}" \
-        "QScrollBar::add-line:horizontal {}" \
-        "QScrollBar::sub-line:horizontal {}" \
-        "QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {}" \
-        "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {}"
-style_2 = "/* VERTICAL SCROLLBAR */ " \
+style_scrollbar = "/* VERTICAL SCROLLBAR */ " \
         "QScrollBar:vertical {border: none; background: rgb(78, 79, 84); width: 14px; max-height: 210px;" \
-          "margin: 0; border-radius: 7px;} " \
+        "margin: 0; border-radius: 7px;} " \
         \
         "/*  HANDLE BAR VERTICAL */" \
         "QScrollBar::handle:vertical {background-color: rgb(163, 163, 163); min-height: 10px; border-radius: 5px; " \
-          "margin: 2px 2px 2px 2px;}" \
+        "margin: 2px 2px 2px 2px;}" \
         "QScrollBar::handle:vertical:hover{background-color: rgb(209, 209, 217);}" \
         "QScrollBar::handle:vertical:pressed {background-color: rgb(209, 209, 217);}" \
         \
@@ -57,7 +21,7 @@ style_2 = "/* VERTICAL SCROLLBAR */ " \
         "border-top-left-radius: 7px; border-top-right-radius: 7px; subcontrol-position: top; " \
         "subcontrol-origin: margin;} " \
         \
-        "QScrollBar::sub-line:vertical:hover {background-color: rgb(163, 163, 163);}" \
+        "QScrollBar::sub-line:vertical:hover {background-color: rgb(78, 79, 84);}" \
         "QScrollBar::sub-line:vertical:pressed {background-color: rgb(78, 79, 84);}" \
         \
         "/* BTN BOTTOM - SCROLLBAR */" \
@@ -65,7 +29,7 @@ style_2 = "/* VERTICAL SCROLLBAR */ " \
         "border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; subcontrol-position: bottom; " \
         "subcontrol-origin: margin;}" \
         \
-        "QScrollBar::add-line:vertical:hover {background-color: rgb(163, 163, 163);}" \
+        "QScrollBar::add-line:vertical:hover {background-color: rgb(78, 79, 84);}" \
         "QScrollBar::add-line:vertical:pressed {background-color: rgb(78, 79, 84);}" \
         \
         "/* RESET ARROW */" \
@@ -343,18 +307,24 @@ class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛ
     def __init__(self):
         super().__init__()
 
-    def name_platega(self):
+    def name_payment(self):
         self.setWindowModality(Qt.ApplicationModal)
         self.setWindowTitle("Добавление платежа")
         self.resize(300, 120)
         self.setStyleSheet("background-color: rgb(78, 79, 84);")
         self.setObjectName("Form")
 
-        self.label = label_f("Имя платежа", self, 270, 30, 12)
-        self.label.setGeometry(QtCore.QRect(10, 5, 270, 30))
-        self.label.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); padding: .1em; border: 1px;")
+        self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self)
+        self.v_Layout_centralwidget.setContentsMargins(10, 10, 10, 10)
+        self.v_Layout_centralwidget.setSpacing(8)
+        self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
+
+        self.label = label_titul_f("Имя платежа", self, 12)
+        self.v_Layout_centralwidget.addWidget(self.label)
 
         self.lineEdit = lineEdit_pokaz_f("", self, "(209, 209, 217)", "(108, 109, 114, 255)", "(91, 92, 96, 255)")
+        self.lineEdit.setReadOnly(False)
+        self.v_Layout_centralwidget.addWidget(self.lineEdit)
 
         strList = ['Квартира', 'Телефон', 'Интернет', 'Гимназия пит.', 'Гимназия кру.', 'R-ED.', 'Зарплата МИША (ОНТ)',
                    'Зарплата ОЛЯ (ОНТ)']
@@ -366,11 +336,25 @@ class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛ
         completer.popup().setFont(font)
         completer.popup().setStyleSheet("font-weight: 600; color:rgb(209, 209, 217); background-color:rgb(78, 79, 84);")
 
-        self.btn_OK = btn_f("OK", self, 110, 30, 10)
-        self.btn_OK.setGeometry(QtCore.QRect(30, 80, 110, 30))
+        self.frame_btn = QtWidgets.QFrame(self)
+        self.frame_btn.setMinimumSize(QtCore.QSize(0, 0))
+        self.frame_btn.setMaximumSize(QtCore.QSize(300, 30))
+        self.frame_btn.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_btn.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.frame_btn.setObjectName("frame_title")
 
-        self.btn_Cancel = btn_f("Отмена", self, 110, 30, 10)
-        self.btn_Cancel.setGeometry(QtCore.QRect(150, 80, 110, 30))
+        self.h_layout_btn = QtWidgets.QHBoxLayout(self.frame_btn)
+        self.h_layout_btn.setContentsMargins(8, 0, 0, 0)
+        self.h_layout_btn.setSpacing(5)
+        self.h_layout_btn.setObjectName("h_layout_btn")
+
+        self.add_pay_btn_OK = btn_f("OK", self, 110, 30, 10)
+        self.h_layout_btn.addWidget(self.add_pay_btn_OK)
+
+        self.add_pay_btn_Cancel = btn_f("Отмена", self, 110, 30, 10)
+        self.h_layout_btn.addWidget(self.add_pay_btn_Cancel)
+
+        self.v_Layout_centralwidget.addWidget(self.frame_btn)
 
         self.show()
 
@@ -471,67 +455,46 @@ class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛ
 #         self.show()
 
 
-def label_plateg(label_name, group, x, y, xl, yl):
-    label_plat = QtWidgets.QLabel(label_name, group)
-    label_plat.setGeometry(QtCore.QRect(x, y, xl, yl))
-    font = QtGui.QFont()
-    font.setPointSize(12)
-    font.setBold(True)
-    font.setWeight(87)
-    label_plat.setFont(font)
-    label_plat.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .0em;\n border: 0px solid;")
-    label_plat.setObjectName("label_plat")
-    return label_plat
-
-
-def line_edit_pokaz(group, x, y, xl, yl, color, grad_1, grad_2):
-    lineEdit_pokaz = QtWidgets.QLineEdit(group)
-    lineEdit_pokaz.setGeometry(QtCore.QRect(x, y, xl, yl))
-    font = QtGui.QFont()
-    font.setPointSize(12)
-    font.setWeight(75)
-    lineEdit_pokaz.setFont(font)
-    lineEdit_pokaz.setStyleSheet("border-radius: 4px; \n color: rgb" + color
-                                 + "; \n border: 1px solid rgba(50, 50, 50, 240); \n "
-                                   "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-                                   "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba" + grad_1 + ", stop:0.99 rgba"
-                                 + grad_2 + ", stop:1 rgba(125, 126, 131, 255));")
-    lineEdit_pokaz.setAlignment(QtCore.Qt.AlignCenter)
-    lineEdit_pokaz.setReadOnly(True)
-    lineEdit_pokaz.setObjectName("lineEdit_pokaz")
-    return lineEdit_pokaz
-
-
-def btn_check_plateg(name, group, x, y, xl, yl):
-    btn_check = QtWidgets.QPushButton(name, group)
-    btn_check.setGeometry(QtCore.QRect(x, y, xl, yl))
-    btn_check.setStyleSheet("border: 0px solid;")
-    icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_n.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-    icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_o.png"), QtGui.QIcon.Active, QtGui.QIcon.On)
-    btn_check.setIcon(icon)
-    btn_check.setIconSize(QtCore.QSize(30, 30))
-    btn_check.setCheckable(True)
-    btn_check.setObjectName("btn_check")
-    return btn_check
-
-
-class NewPlateg(QtWidgets.QWidget):
-    def __init__(self, name, summ):
-        super(NewPlateg, self).__init__()
-
-        self.label_Plat = label_plateg(name, self, 40, 1, 130, 30)
-        self.btn_check_Plat = btn_check_plateg(self, 0, 1, 30, 30)
-
-        color = "(209, 209, 217)"
-        grad_1 = "(91, 92, 96, 255)"
-        grad_2 = "(108, 109, 114, 255)"
-
-        self.lineEdit_sum_Plat = line_edit_pokaz(self, 180, 1, 190, 30, color, grad_2, grad_1)
-        self.lineEdit_sum_Plat.setText(summ + " руб")
-        self.lineEdit_sum_Plat.setReadOnly(False)
-
-        self.btn_del_Plat = btn_check_plateg(self, 720, 2, 30, 30)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_delete.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_del_Plat.setIcon(icon)
+# def label_plateg(label_name, group, x, y, xl, yl):
+#     label_plat = QtWidgets.QLabel(label_name, group)
+#     label_plat.setGeometry(QtCore.QRect(x, y, xl, yl))
+#     font = QtGui.QFont()
+#     font.setPointSize(12)
+#     font.setBold(True)
+#     font.setWeight(87)
+#     label_plat.setFont(font)
+#     label_plat.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .0em;\n border: 0px solid;")
+#     label_plat.setObjectName("label_plat")
+#     return label_plat
+#
+#
+# def line_edit_pokaz(group, x, y, xl, yl, color, grad_1, grad_2):
+#     lineEdit_pokaz = QtWidgets.QLineEdit(group)
+#     lineEdit_pokaz.setGeometry(QtCore.QRect(x, y, xl, yl))
+#     font = QtGui.QFont()
+#     font.setPointSize(12)
+#     font.setWeight(75)
+#     lineEdit_pokaz.setFont(font)
+#     lineEdit_pokaz.setStyleSheet("border-radius: 4px; \n color: rgb" + color
+#                                  + "; \n border: 1px solid rgba(50, 50, 50, 240); \n "
+#                                    "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+#                                    "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba" + grad_1 + ", stop:0.99 rgba"
+#                                  + grad_2 + ", stop:1 rgba(125, 126, 131, 255));")
+#     lineEdit_pokaz.setAlignment(QtCore.Qt.AlignCenter)
+#     lineEdit_pokaz.setReadOnly(True)
+#     lineEdit_pokaz.setObjectName("lineEdit_pokaz")
+#     return lineEdit_pokaz
+#
+#
+# def btn_check_plateg(name, group, x, y, xl, yl):
+#     btn_check = QtWidgets.QPushButton(name, group)
+#     btn_check.setGeometry(QtCore.QRect(x, y, xl, yl))
+#     btn_check.setStyleSheet("border: 0px solid;")
+#     icon = QtGui.QIcon()
+#     icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_n.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+#     icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_o.png"), QtGui.QIcon.Active, QtGui.QIcon.On)
+#     btn_check.setIcon(icon)
+#     btn_check.setIconSize(QtCore.QSize(30, 30))
+#     btn_check.setCheckable(True)
+#     btn_check.setObjectName("btn_check")
+#     return btn_check

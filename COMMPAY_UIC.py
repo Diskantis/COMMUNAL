@@ -3,7 +3,7 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import QIcon
 
-from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f, style_1, style_2
+from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f, style_scrollbar
 
 
 # окно приложения "ПЛАТЕЖИ"
@@ -13,7 +13,7 @@ class UiWinPayment(object):
         self.WinPayment.setObjectName("CommunalPayment")
         self.WinPayment.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinPayment.resize(800, 400)  # 365
-        self.WinPayment.setGeometry(QtCore.QRect(560 + 1960, 200 - 40, 800, 400))
+        self.WinPayment.setGeometry(QtCore.QRect(560 + 1920, 300, 800, 400))
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
@@ -23,12 +23,12 @@ class UiWinPayment(object):
         self.ui_head_foot = UiWinHeaderFooter()
 
         self.centralwidget = QtWidgets.QWidget(self.WinPayment)
-        self.centralwidget.setStyleSheet(style_2)
+        self.centralwidget.setStyleSheet(style_scrollbar)
         self.centralwidget.setObjectName("centralwidget")
 
         self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.centralwidget)
         self.v_Layout_centralwidget.setContentsMargins(10, 10, 10, 10)
-        self.v_Layout_centralwidget.setSpacing(10)
+        self.v_Layout_centralwidget.setSpacing(8)
         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
 
         grad_1 = "(91, 92, 96, 255)"
@@ -53,7 +53,7 @@ class UiWinPayment(object):
         self.payments_group.setObjectName("payments_group")
 
         self.v_layout_pay_group = QtWidgets.QVBoxLayout(self.payments_group)
-        self.v_layout_pay_group.setContentsMargins(0, 25, 0, 0)
+        self.v_layout_pay_group.setContentsMargins(3, 25, 8, 0)
         self.v_layout_pay_group.setSpacing(0)
         self.v_layout_pay_group.setObjectName("v_layout_group_box")
 
@@ -91,20 +91,19 @@ class UiWinPayment(object):
         self.h_layout_frame_title.addWidget(self.label_tariff)
 
         self.scrollArea = QtWidgets.QScrollArea(self.payments_group)
-        self.scrollArea.setMaximumSize(QtCore.QSize(770, 170))
+        self.scrollArea.setMaximumSize(QtCore.QSize(780, 170))
         self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.scrollArea.setFrameShadow(QtWidgets.QFrame.Plain)
         self.scrollArea.setLineWidth(0)
         self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scrollArea.setStyleSheet("background-color: rgb(100, 100, 100); padding: 0, 8, 0, 0;")
-        # self.scrollArea.setStyleSheet("border: 1px solid rgba(209, 209, 217, 240); padding: 6, 2, 0, 0;")
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
 
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(750, 0))
-        self.scrollAreaWidgetContents.setMaximumSize(QtCore.QSize(750, 500))
+        self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(752, 0))
+        self.scrollAreaWidgetContents.setMaximumSize(QtCore.QSize(752, 500))
         # self.scrollAreaWidgetContents.setStyleSheet("border: 1px solid rgba(209, 209, 217, 240);")
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
 
@@ -121,8 +120,8 @@ class UiWinPayment(object):
 
         # Button Add Payment
 
-        self.btn_add_payment = btn_f("Добавить платеж", self.WinPayment, 780, 30, 11)
-        self.v_Layout_centralwidget.addWidget(self.btn_add_payment)
+        self.btn_Add_Pay = btn_f("Добавить платеж", self.WinPayment, 780, 37, 11)
+        self.v_Layout_centralwidget.addWidget(self.btn_Add_Pay)
 
         # Frame Result
 
@@ -164,8 +163,8 @@ class UiWinPayment(object):
         self.v_Layout_centralwidget.addWidget(self.frame_ui_footer)
 
         QtCore.QMetaObject.connectSlotsByName(self.WinPayment)
-        self.WinPayment.setTabOrder(self.btn_Right_PAY, self.btn_add_payment)
-        self.WinPayment.setTabOrder(self.btn_add_payment, self.comboBox_month_PAY)
+        self.WinPayment.setTabOrder(self.btn_Right_PAY, self.btn_Add_Pay)
+        self.WinPayment.setTabOrder(self.btn_Add_Pay, self.comboBox_month_PAY)
         self.WinPayment.setTabOrder(self.comboBox_month_PAY, self.comboBox_year_PAY)
         self.WinPayment.setTabOrder(self.comboBox_year_PAY, self.btn_Save_PAY)
         # self.WinPayment.setTabOrder(self.comboBox_year_PAY, self.label_error_PAY)
