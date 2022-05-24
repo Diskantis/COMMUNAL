@@ -97,7 +97,7 @@ def label_titul_f(name, group, font_s=None):
 
 def lineEdit_pokaz_f(name, group, color, grad_1, grad_2):  # значения счетчиков
     lineEdit_pokaz = QtWidgets.QLineEdit(name, group)
-    lineEdit_pokaz.setMinimumSize(QtCore.QSize(80, 30))
+    lineEdit_pokaz.setMinimumSize(QtCore.QSize(80, 25))
     lineEdit_pokaz.setMaximumSize(QtCore.QSize(780, 30))
     font = QtGui.QFont("Times", 12, 75)
     lineEdit_pokaz.setFont(font)
@@ -209,8 +209,8 @@ class UiWinHeaderFooter(object):
 class UiWinGrouper(object):
     def __init__(self, name, Win_app):
         self.group_box = QtWidgets.QGroupBox(name, Win_app)
-        self.group_box.setMinimumSize(QtCore.QSize(230, 300))
-        self.group_box.setMaximumSize(QtCore.QSize(780, 300))
+        self.group_box.setMinimumSize(QtCore.QSize(230, 304))
+        self.group_box.setMaximumSize(QtCore.QSize(780, 304))
         font = QtGui.QFont("Times", 14, 75)
         self.group_box.setFont(font)
         self.group_box.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
@@ -266,7 +266,7 @@ class UiWinGrouper(object):
 class Ui_Widget_Payment(object):
     def setupUi(self, Widget_Pay, color):
         self.h_Layout_widget_Team = QtWidgets.QHBoxLayout(Widget_Pay)
-        self.h_Layout_widget_Team.setContentsMargins(5, 0, 8, 0)
+        self.h_Layout_widget_Team.setContentsMargins(0, 0, 0, 0)
         self.h_Layout_widget_Team.setSpacing(8)
         self.h_Layout_widget_Team.setObjectName("v_Layout_widget_Team")
 
@@ -274,12 +274,14 @@ class Ui_Widget_Payment(object):
         self.grad_1 = "(91, 92, 96, 255)"
         self.grad_2 = "(108, 109, 114, 255)"
 
-        self.btn_check = btn_check_payment(Widget_Pay, 30, 30)
+        self.btn_check = btn_check_payment(Widget_Pay, 28, 28)
+        self.btn_check.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: 0px solid; padding: 0px;")
         self.h_Layout_widget_Team.addWidget(self.btn_check)
 
         self.label_payment = label_titul_f("", Widget_Pay, 12)
-        self.label_payment.setMinimumSize(QtCore.QSize(200, 25))
-        # self.label_payment.setStyleSheet("color: rgb(209, 209, 217); border: 0px solid rgba(209, 209, 217, 240);")
+        self.label_payment.setMinimumSize(QtCore.QSize(150, 25))
+        self.label_payment.setStyleSheet("color: rgb(209, 209, 217); border: 0px solid rgba(50, 50, 50, 240); "
+                                         "background-color: rgba(255, 255, 255, 0); padding: 0px;")
         self.label_payment.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.h_Layout_widget_Team.addWidget(self.label_payment)
 

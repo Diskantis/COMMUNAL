@@ -13,7 +13,7 @@ class UiWinCounters(object):
         self.WinCounters.setObjectName("PokazanyaSchet")
         self.WinCounters.setWindowModality(Qt.ApplicationModal)
         self.WinCounters.resize(800, 400)
-        self.WinCounters.setGeometry(QtCore.QRect(560 + 1920, 300, 800, 400))
+        self.WinCounters.setGeometry(QtCore.QRect(560 + 1920+50, 300, 800, 400))
         self.WinCounters.setMinimumSize(QtCore.QSize(800, 400))
         self.WinCounters.setMaximumSize(QtCore.QSize(800, 400))
         self.WinCounters.setWindowTitle('ПОКАЗАНИЯ СЧЕТЧИКОВ')
@@ -35,7 +35,8 @@ class UiWinCounters(object):
         self.v_Layout_centralwidget.addWidget(self.frame_ui_header)
 
         self.frame_group = QtWidgets.QFrame(self.centralwidget)
-        self.frame_group.setMaximumSize(QtCore.QSize(780, 302))
+        self.frame_group.setMinimumSize(QtCore.QSize(780, 304))
+        self.frame_group.setMaximumSize(QtCore.QSize(780, 310))
         self.frame_group.setObjectName("frame_group")
 
         self.h_Layout_frame_group = QtWidgets.QHBoxLayout(self.frame_group)

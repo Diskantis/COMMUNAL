@@ -66,7 +66,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         self.btn_Cancel_COU.clicked.connect(self.btn_cancel_COU)
 
         # ЧИТАЕМ показания из базы данных
-        self.read_counters()
+        self.read_data_counters()
 
         self.show()
 
@@ -96,7 +96,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
     def label_period(self):
         self.start_period()
         self.current_month_index = self.period_COU.label_sel_period()
-        self.read_counters()
+        self.read_data_counters()
 
     def btn_period_left(self):
         self.start_period()
@@ -104,14 +104,14 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             self.btn_Left_COU.setEnabled(False)
         else:
             self.current_month_index = self.period_COU.click_btn_left(self.current_month_index)
-            self.read_counters()
+            self.read_data_counters()
 
     def btn_period_right(self):
         self.start_period()
         if self.label_month_year_COU.text() != "Май 2006":
             self.btn_Left_COU.setEnabled(True)
             self.current_month_index = self.period_COU.click_btn_right(self.current_month_index)
-            self.read_counters()
+            self.read_data_counters()
 
     def keyPressEvent(self, event):  # отключает режим редактирования по нажатию клавиши Esc
         if event.key() == Qt.Key_Escape:
@@ -126,7 +126,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         event.accept()
 
     # читает сохраненные данные из базы данных
-    def read_counters(self):
+    def read_data_counters(self):
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
 
@@ -203,7 +203,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         self.lineEdit_post_W4.textEdited[str].connect(lambda: self.summa_month_ras(14))
         self.lineEdit_post_G.textEdited[str].connect(lambda: self.summa_month_ras(16))
 
-        self.data = self.create_list_pokaz_schet()  # создает список значений
+        self.data = self.create_list_date_counters()  # создает список значений
 
     def summa_month_ras(self, n):
         try:
@@ -230,7 +230,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             self.label_error_COU.setText('Должно быть значение!')
 
     # создает список значений полей для записи в таблицу
-    def create_list_pokaz_schet(self):  # список показаний за месяц
+    def create_list_date_counters(self):  # список показаний за месяц
         data = [self.comboBox_month_COU.currentIndex() + 1,
                 self.comboBox_month_COU.currentText() + " " + self.comboBox_year_COU.currentText()]
         try:
@@ -242,7 +242,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         return data
 
     def btn_save_COU(self):
-        self.data = self.create_list_pokaz_schet()  # создает список значений
+        self.data = self.create_list_date_counters()  # создает список значений
         table = 'Counters_year_' + self.data[1].split()[1]  # Имя таблицы ("1")
         col_name = 'id'  # Имя колонки
         row_record = self.data[0]  # Имя записи ("1")
@@ -255,7 +255,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             self.save_yes_or_not()
         else:
             SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, self.data)
-            self.read_counters()
+            self.read_data_counters()
 
             # if self.comboBox_month_COU.currentIndex() + 2 != 13:
             #     b = month[self.comboBox_month_COU.currentIndex() + 1]
@@ -290,7 +290,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         SQLite3_Data_Base.sqlite3_delete_record(self.data_base, table, col_name, str(row_record))  # удаляем запись
         SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, self.data)  # вставляем изменённую запись
 
-        self.read_counters()
+        self.read_data_counters()
         self.label_error_COU.hide()
         self.save_yn.close()
 

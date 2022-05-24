@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
-from res.DLL_CLASS_COMM import Widget_Payment
-from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, lineEdit_pokaz_f, style_scrollbar
+from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f, style_scrollbar
 
 
 # окно приложения "ПЛАТЕЖИ"
@@ -45,7 +43,7 @@ class UiWinPayment(object):
         # Group Payment
 
         self.payments_group = QtWidgets.QGroupBox("Коммунальные платежи", self.centralwidget)
-        self.payments_group.setFixedSize(QtCore.QSize(780, 255))
+        self.payments_group.setFixedSize(QtCore.QSize(780, 210))
         font = QtGui.QFont("Times", 14, 75)
         self.payments_group.setFont(font)
         self.payments_group.setStyleSheet("QGroupBox{font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
@@ -55,30 +53,29 @@ class UiWinPayment(object):
         self.payments_group.setObjectName("payments_group")
 
         self.v_layout_pay_group = QtWidgets.QVBoxLayout(self.payments_group)
-        self.v_layout_pay_group.setContentsMargins(6, 28, 8, 0)
-        self.v_layout_pay_group.setSpacing(5)
-        self.v_layout_pay_group.setAlignment(Qt.AlignTop)
+        self.v_layout_pay_group.setContentsMargins(3, 25, 8, 0)
+        self.v_layout_pay_group.setSpacing(0)
         self.v_layout_pay_group.setObjectName("v_layout_group_box")
 
         self.v_Layout_centralwidget.addWidget(self.payments_group)
 
         self.frame_title = QtWidgets.QFrame(self.centralwidget)
         self.frame_title.setMinimumSize(QtCore.QSize(0, 0))
-        self.frame_title.setMaximumSize(QtCore.QSize(780, 30))
+        self.frame_title.setMaximumSize(QtCore.QSize(740, 30))
         self.frame_title.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_title.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frame_title.setStyleSheet("background-color: rgb(100, 100, 100); border: 0px solid; padding: 0px;")
         self.frame_title.setObjectName("frame_title")
 
         self.h_layout_frame_title = QtWidgets.QHBoxLayout(self.frame_title)
-        self.h_layout_frame_title.setContentsMargins(0, 0, 0, 0)
+        self.h_layout_frame_title.setContentsMargins(8, 0, 0, 0)
         self.h_layout_frame_title.setSpacing(8)
         self.h_layout_frame_title.setObjectName("h_layout_frame_title")
 
         self.v_layout_pay_group.addWidget(self.frame_title)
 
         self.label_pust = label_titul_f("", self.frame_title)
-        self.label_pust.setFixedSize(QtCore.QSize(185, 18))
+        self.label_pust.setFixedSize(QtCore.QSize(238, 18))
         self.h_layout_frame_title.addWidget(self.label_pust)
 
         self.label_sum = label_titul_f("сумма", self.frame_title)
@@ -93,26 +90,38 @@ class UiWinPayment(object):
         self.label_tariff.setMinimumSize(QtCore.QSize(50, 18))
         self.h_layout_frame_title.addWidget(self.label_tariff)
 
-        self.pay_power = Widget_Payment("Электричество", "(0, 160, 0)")
-        self.pay_power.commpay()
-        self.v_layout_pay_group.addWidget(self.pay_power)
+        self.scrollArea = QtWidgets.QScrollArea(self.payments_group)
+        self.scrollArea.setMaximumSize(QtCore.QSize(780, 170))
+        self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollArea.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.scrollArea.setLineWidth(0)
+        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrollArea.setStyleSheet("background-color: rgb(100, 100, 100); padding: 0, 8, 0, 0;")
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
 
-        self.pay_water = Widget_Payment("Вода", "(0, 170, 255)")
-        self.pay_water.commpay()
-        self.v_layout_pay_group.addWidget(self.pay_water)
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(752, 0))
+        self.scrollAreaWidgetContents.setMaximumSize(QtCore.QSize(752, 500))
+        # self.scrollAreaWidgetContents.setStyleSheet("border: 1px solid rgba(209, 209, 217, 240);")
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
 
-        self.pay_gaz = Widget_Payment("Газ", "(150, 0, 150)")
-        self.pay_gaz.commpay()
-        self.v_layout_pay_group.addWidget(self.pay_gaz)
+        self.v_layout_scrollArea = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.v_layout_scrollArea.setContentsMargins(0, 4, 0, 4)
+        self.v_layout_scrollArea.setSpacing(5)
+        self.v_layout_scrollArea.setObjectName("v_layout_scrollArea")
 
-        self.pay_apartment = Widget_Payment("Квартира", "(209, 209, 217)")
-        self.v_layout_pay_group.addWidget(self.pay_apartment)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.v_layout_pay_group.addWidget(self.scrollArea)
 
-        self.pay_internet = Widget_Payment("Интернет", "(209, 209, 217)")
-        self.v_layout_pay_group.addWidget(self.pay_internet)
+        self.spacerItem = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.v_layout_pay_group.addItem(self.spacerItem)
 
-        self.pay_phone = Widget_Payment("Телефон", "(209, 209, 217)")
-        self.v_layout_pay_group.addWidget(self.pay_phone)
+        # Button Add Payment
+
+        self.btn_Add_Pay = btn_f("Добавить платеж", self.WinPayment, 780, 37, 11)
+        self.v_Layout_centralwidget.addWidget(self.btn_Add_Pay)
 
         # Frame Result
 
@@ -154,7 +163,8 @@ class UiWinPayment(object):
         self.v_Layout_centralwidget.addWidget(self.frame_ui_footer)
 
         QtCore.QMetaObject.connectSlotsByName(self.WinPayment)
-        self.WinPayment.setTabOrder(self.btn_Right_PAY, self.comboBox_month_PAY)
+        self.WinPayment.setTabOrder(self.btn_Right_PAY, self.btn_Add_Pay)
+        self.WinPayment.setTabOrder(self.btn_Add_Pay, self.comboBox_month_PAY)
         self.WinPayment.setTabOrder(self.comboBox_month_PAY, self.comboBox_year_PAY)
         self.WinPayment.setTabOrder(self.comboBox_year_PAY, self.btn_Save_PAY)
         # self.WinPayment.setTabOrder(self.comboBox_year_PAY, self.label_error_PAY)
