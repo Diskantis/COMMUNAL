@@ -55,7 +55,7 @@ class UiWinPayment(object):
         self.payments_group.setObjectName("payments_group")
 
         self.v_layout_pay_group = QtWidgets.QVBoxLayout(self.payments_group)
-        self.v_layout_pay_group.setContentsMargins(6, 28, 8, 0)
+        self.v_layout_pay_group.setContentsMargins(6, 25, 8, 0)
         self.v_layout_pay_group.setSpacing(5)
         self.v_layout_pay_group.setAlignment(Qt.AlignTop)
         self.v_layout_pay_group.setObjectName("v_layout_group_box")
@@ -105,7 +105,42 @@ class UiWinPayment(object):
         self.pay_gaz.commpay()
         self.v_layout_pay_group.addWidget(self.pay_gaz)
 
+        # РАЗДЕЛИТЕЛЬ между основными и дополнительными платежами
+        self.Line_razdel = QtWidgets.QFrame()
+        self.Line_razdel.setMinimumSize(QtCore.QSize(750, 2))
+        self.Line_razdel.setMaximumSize(QtCore.QSize(780, 2))
+
+        self.Line_razdel.setAutoFillBackground(False)
+        self.Line_razdel.setContentsMargins(0, 0, 0, 0)
+        self.Line_razdel.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.Line_razdel.setLineWidth(1)
+        self.Line_razdel.setMidLineWidth(1)
+        self.Line_razdel.setFrameShape(QtWidgets.QFrame.HLine)
+        self.Line_razdel.setObjectName("LINE_RAZDEL")
+        self.v_layout_pay_group.addWidget(self.Line_razdel)
+
         self.pay_apartment = Widget_Payment("Квартира", "(209, 209, 217)")
+        self.pay_apartment.commpay()
+        self.pay_apartment.line_edit_sum.setStyleSheet(
+            "border-radius: 2px; color: rgb(209, 209, 217); border: 1px solid rgba(50, 50, 50, 240); "
+            "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+            "stop:0 rgba(125, 126, 131, 255), stop:0.02 rgba(108, 109, 114, 255), stop:0.98 rgba(91, 92, 96, 255),"
+            "stop:1 rgba(125, 126, 131, 255));")
+        self.pay_apartment.line_edit_sum.setReadOnly(False)
+        self.pay_apartment.line_edit_ostat_sum = self.pay_apartment.line_edit_quantity
+        self.pay_apartment.line_edit_ostat_sum.setStyleSheet(
+            "border-radius: 2px; color: rgb(255, 163, 24); border: 1px solid rgba(50, 50, 50, 240); "
+            "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+            "stop:0 rgba(125, 126, 131, 255), stop:0.02 rgba(91, 92, 96, 255), stop:0.98 rgba(108, 109, 114, 255),"
+            "stop:1 rgba(125, 126, 131, 255));")
+        self.pay_apartment.line_edit_minus_water = self.pay_apartment.line_edit_tariff
+        self.pay_apartment.line_edit_minus_water.setStyleSheet(
+            "border-radius: 2px; color: rgb(0, 170, 255); border: 1px solid rgba(50, 50, 50, 240); "
+            "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+            "stop:0 rgba(125, 126, 131, 255), stop:0.02 rgba(91, 92, 96, 255), stop:0.98 rgba(108, 109, 114, 255),"
+            "stop:1 rgba(125, 126, 131, 255));")
+        self.pay_apartment.line_edit_minus_water.setReadOnly(True)
+
         self.v_layout_pay_group.addWidget(self.pay_apartment)
 
         self.pay_internet = Widget_Payment("Интернет", "(209, 209, 217)")

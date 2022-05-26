@@ -208,12 +208,12 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
                 if int(self.win_pole[1].text()) != 0:
                     self.win_pole[n].setText(str(int(self.win_pole[1].text()) - int(self.win_pole[0].text())))
             elif self.win_pole[n] == self.label_month_ras_WC:
-                if int(self.win_pole[3].text()) and int(self.win_pole[7].text()) != 0:
+                if int(self.win_pole[3].text()) or int(self.win_pole[7].text()) != 0:
                     self.win_pole[n].setText(str((int(self.win_pole[3].text()) - int(self.win_pole[2].text())) +
                                                  (int(self.win_pole[7].text()) - int(self.win_pole[6].text()))))
                     self.win_pole[15].setText(str(int(self.win_pole[13].text()) + int(self.win_pole[14].text())))
             elif self.win_pole[n] == self.label_month_ras_WH:
-                if int(self.win_pole[5].text()) and int(self.win_pole[9].text()) != 0:
+                if int(self.win_pole[5].text()) or int(self.win_pole[9].text()) != 0:
                     self.win_pole[n].setText(str((int(self.win_pole[5].text()) - int(self.win_pole[4].text())) +
                                                  (int(self.win_pole[9].text()) - int(self.win_pole[8].text()))))
                     self.win_pole[15].setText(str(int(self.win_pole[13].text()) + int(self.win_pole[14].text())))
