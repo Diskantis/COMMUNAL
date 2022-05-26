@@ -3,13 +3,12 @@
 import sys
 import win32api
 
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QAction
 
-from res.UIC_CLASS_COMM import UiWinAdd
 from res.DLL_CLASS_COMM import dt_month, dt_year, month, convert_month, selected_period, \
-                                  Period, Save_OR, SQLite3_Data_Base
+                               Period, Save_OR, SQLite3_Data_Base
 from COUNTERS_UIC import UiWinCounters
 
 
@@ -21,10 +20,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         self.setupUi_COU(self)
         self.data_base = 'COMMPAY_DAT.db'  # имя базы данных
 
-        self.save_yn = UiWinAdd()
-
         self.period_COU = Period(self.comboBox_month_COU, self.comboBox_year_COU, self.label_month_year_COU)
-        self.save_or_COU = Save_OR()
 
         # ВЫБОР ПЕРИОДА
         selected_period(self.comboBox_month_COU, self.comboBox_year_COU)
@@ -57,8 +53,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             a.customContextMenuRequested.connect(self.context_menu)
 
         self.menuLine = QAction("Редактирование", self)
-        font = QtGui.QFont()
-        font.setPointSize(10)
+        font = QtGui.QFont("Times", 10, 75)
         self.menuLine.setFont(font)
         self.menuLine.triggered.connect(self.editable)
 
@@ -242,7 +237,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         return data
 
     def btn_save_COU(self):
-        self.data = self.create_list_date_counters()  # создает список значений
+        data = self.create_list_date_counters()  # создает список значений
         table = 'Counters_year_' + self.data[1].split()[1]  # Имя таблицы ("1")
         col_name = 'id'  # Имя колонки
         row_record = self.data[0]  # Имя записи ("1")
@@ -252,9 +247,9 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         if row_record in col_id:
             self.label_error_COU.show()
             self.label_error_COU.setText('Такая запись уже существует!')
-            self.save_yes_or_not()
+            self.save_yes_or_not("Counters", self.data_base, data, self.label_error_COU)
         else:
-            SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, self.data)
+            SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, data)
             self.read_data_counters()
 
             # if self.comboBox_month_COU.currentIndex() + 2 != 13:
@@ -270,33 +265,9 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             #
             # self.read_pokaz_schet()
 
-    def save_yes_or_not(self):
-        self.save_yn.name_platega()
-        self.save_yn.setWindowTitle("Сохранение")
-
-        self.save_yn.lineEdit.close()
-        self.save_yn.label.setGeometry(QtCore.QRect(10, 0, 270, 70))
-        self.save_yn.label.setText("Вы действительно хотите \n перезаписать показания?")
-
-        self.save_yn.add_pay_btn_OK.clicked.connect(self.save_yn_btn_ok)
-        self.save_yn.add_pay_btn_OK.setAutoDefault(True)
-        self.save_yn.add_pay_btn_Cancel.clicked.connect(self.save_yn_btn_cancel)
-
-    def save_yn_btn_ok(self):
-        table = 'Counters_year_' + self.data[1].split()[1]  # имя таблицы (период)
-        col_name = 'id'  # имя колонки
-        row_record = self.data[0]  # имя записи
-
-        SQLite3_Data_Base.sqlite3_delete_record(self.data_base, table, col_name, str(row_record))  # удаляем запись
-        SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, self.data)  # вставляем изменённую запись
-
-        self.read_data_counters()
-        self.label_error_COU.hide()
-        self.save_yn.close()
-
-    def save_yn_btn_cancel(self):
-        self.label_error_COU.hide()
-        self.save_yn.close()
+    def save_yes_or_not(self, name_table, data_base, date, label_error):
+        self.save_or_COU = Save_OR()
+        self.save_or_COU.save_yes_or_not(name_table, data_base, date, label_error)
 
     def btn_cancel_COU(self):
         self.close()

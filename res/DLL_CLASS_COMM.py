@@ -150,31 +150,34 @@ class Period:
 
 
 class Save_OR:
-    def save_yes_or_not(self):
+    def save_yes_or_not(self, name_table, data_base, data, label_error):
         self.save_yn = UiWinAdd()
-        self.save_yn.name_platega()
-        self.save_yn.setWindowTitle("Сохранение")
+        self.save_yn.name_payment()
+        self.save_yn.setWindowTitle("Перезапись")
+
         self.save_yn.lineEdit.close()
-        self.save_yn.label_f.setGeometry(QtCore.QRect(10, 0, 270, 70))
-        self.save_yn.label_f.setText("Вы действительно хотите \n перезаписать показания?")
+        self.save_yn.label.setText("Вы действительно хотите \n перезаписать?")
 
-        self.save_yn.add_pay_btn_OK.clicked.connect(self.save_yn_btn_ok)
+        self.save_yn.add_pay_btn_OK.clicked.connect(lambda: self.save_yn_btn_ok(name_table, data_base,
+                                                                                data, label_error))
         self.save_yn.add_pay_btn_OK.setAutoDefault(True)
-        self.save_yn.add_pay_btn_Cancel.clicked.connect(self.save_yn_btn_cancel)
+        self.save_yn.add_pay_btn_Cancel.clicked.connect(lambda: self.save_yn_btn_cancel(label_error))
 
-    def save_yn_btn_ok(self, data_base):
-        data = self.create_list_pokaz_schet()  # список данных для записи
+    def save_yn_btn_ok(self, name_table, data_base, data, label_error):
+        data = data  # список данных для записи
 
-        table = 'Pokazanya_year_' + data[1].split()[1]  # имя таблицы (период)
+        table = name_table + '_year_' + data[1].split()[1]  # имя таблицы (период)
         col_name = 'id'  # имя колонки
         row_record = str(data[0])  # имя записи
 
         SQLite3_Data_Base.sqlite3_delete_record(data_base, table, col_name, row_record)
         SQLite3_Data_Base.sqlite3_insert_data(data_base, table, data)
 
+        label_error.hide()
         self.save_yn.close()
 
-    def save_yn_btn_cancel(self):
+    def save_yn_btn_cancel(self, label_error):
+        label_error.hide()
         self.save_yn.close()
 
 
