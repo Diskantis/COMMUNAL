@@ -4,7 +4,7 @@ import re
 import sqlite3
 import datetime
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QDesktopWidget
 
 from res.UIC_CLASS_COMM import UiWinAdd, Ui_Widget_Payment
@@ -155,8 +155,15 @@ class Save_OR:
         self.save_yn.name_payment()
         self.save_yn.setWindowTitle("Перезапись")
 
-        self.save_yn.lineEdit.close()
-        self.save_yn.label.setText("Вы действительно хотите \n перезаписать?")
+        self.save_yn.lineEdit.deleteLater()
+        if data[2] == "Tariff":
+            self.name_table = "Тарифами"
+        elif data[2] == "Payments":
+            self.name_table = "Платежами"
+
+        font = QtGui.QFont("Times", 10, 75)
+        self.save_yn.label.setFont(font)
+        self.save_yn.label.setText("Вы действительно хотите \n перезаписать таблицу \n с " + self.name_table + " ?")
 
         self.save_yn.add_pay_btn_OK.clicked.connect(lambda: self.save_yn_btn_ok(name_table, data_base,
                                                                                 data, label_error))

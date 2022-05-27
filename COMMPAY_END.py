@@ -240,7 +240,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
     def final_summa(self):
         try:
-            self.label_error_PAY.clear()
+            # self.label_error_PAY.clear()
             self.lineEdit_result.clear()
             final_summa = 0
             if self.pay_power.line_edit_quantity.text():
@@ -254,11 +254,11 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         except ValueError:
             self.label_error_PAY.show()
-            self.label_error_PAY.setText('Должно быть')
+            self.label_error_PAY.setText('Должно быть значение')
 
-    def list_date(self, win_pole):  # список показаний за месяц
+    def list_date(self, name_table, win_pole):  # список показаний за месяц
         data = [self.comboBox_month_PAY.currentIndex() + 1,
-                self.comboBox_month_PAY.currentText() + " " + self.comboBox_year_PAY.currentText()]
+                self.comboBox_month_PAY.currentText() + " " + self.comboBox_year_PAY.currentText(), name_table]
         try:
             if win_pole == self.win_pole[9:12]:
                 if self.pay_apartment.line_edit_sum.text():
@@ -274,46 +274,43 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         return data
 
     def btn_save_PAY(self):
-        list_data_tariff = self.list_date(self.win_pole[2:9:3])
-        list_data_payments = self.list_date(self.win_pole[9:12])
-        print(list_data_tariff)
-        print(list_data_payments)
-
-        self.save_payment("Tariff", list_data_tariff, "Payments", list_data_payments)
-        # self.save_payment("Payments", list_data_payments)
+        list_data_tariff = self.list_date("Tariff", self.win_pole[2:9:3])
+        list_data_payments = self.list_date("Payments", self.win_pole[9:12])
+        # print(list_data_tariff)
+        # print(list_data_payments)
+        self.save_payment(list_data_tariff, list_data_payments)
         self.read_data_pay()
 
     def save_payment(self, *args):
-        for list_data in args[1:5:2]:
-            if len(list_data) > 2:
-                print("ura")
-                # data = list_data  # создает список значений
-                # table = name_table + '_year_' + data[1].split()[1]  # Имя таблицы ("1")
-                # col_name = 'id'  # Имя колонки
-                # row_record = data[0]  # Имя записи ("1")
-                #
-                # col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table, col_name)[0]
-                # self.label_error_PAY.show()
-                # self.label_error_PAY.clear()
-                # self.label_error_PAY.setText('Такая запись уже существует!')
-                #
-                # if row_record in col_id:
-                #     # self.label_error_PAY.show()
-                #     # self.label_error_PAY.setText('Такая запись уже существует!')
-                #     self.save_yes_or_not(name_table, self.data_base, data, self.label_error_PAY)
-                # # else:
-                #     # SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, data)
+        for list_data in args:
+            if len(list_data) > 3:
+                data = list_data  # создает список значений
+                name_table = data[2] + '_year_' + data[1].split()[1]  # Имя таблицы ("1")
+                col_name = 'id'  # Имя колонки
+                row_record = data[0]  # Имя записи ("1")
+                data.remove(data[2])  # Удаляем имя таблицы из списка "Tariff"
 
-                # if self.comboBox_month_PAY.currentIndex() + 2 != 13:
-                #     b = month[self.comboBox_month_PAY.currentIndex() + 1]
-                #     c = self.comboBox_year_PAY.currentText()
-                # else:
-                #     b = month[self.comboBox_month_PAY.currentIndex() - 11]
-                #     c = str(int(self.comboBox_year_PAY.currentText()) + 1)
-                #
-                # self.label_month_year_PAY.setText(b + " " + c)  # устанавливает заголовок ("Месяц Год")
-                # self.comboBox_month_PAY.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
-                # self.comboBox_year_PAY.setCurrentText(c)  # устанавливает текущий год ("Год")
+                col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)[0]
+
+                if row_record in col_id:
+                    self.label_error_PAY.show()
+                    self.label_error_PAY.setText("Такая запись уже существует!")
+                    self.save_yes_or_not(name_table, self.data_base, data, self.label_error_PAY)
+                else:
+                    SQLite3_Data_Base.sqlite3_insert_data(self.data_base, name_table, data)
+                    self.next_period()
+
+    def next_period(self):
+        if self.comboBox_month_PAY.currentIndex() + 2 != 13:
+            b = month[self.comboBox_month_PAY.currentIndex() + 1]
+            c = self.comboBox_year_PAY.currentText()
+        else:
+            b = month[self.comboBox_month_PAY.currentIndex() - 11]
+            c = str(int(self.comboBox_year_PAY.currentText()) + 1)
+
+        self.label_month_year_PAY.setText(b + " " + c)  # устанавливает заголовок ("Месяц Год")
+        self.comboBox_month_PAY.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
+        self.comboBox_year_PAY.setCurrentText(c)  # устанавливает текущий год ("Год")
 
     def save_yes_or_not(self, name_table, data_base, date, label_error):
         self.save_or_PAY = Save_OR()
