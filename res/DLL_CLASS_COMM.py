@@ -54,7 +54,8 @@ def denomination(year, cash):
         den_cash = str(int(round(cash, 0)))
         den_cash = text_convert(den_cash)
     else:
-        den_cash = str(round(cash, 2))
+        # den_cash = str(round(cash, 2))
+        den_cash = str('{:.2f}'.format(cash))
         den_cash = text_convert(den_cash)
     return den_cash
 
@@ -75,7 +76,10 @@ def center(a):
 
 
 def text_convert(string):
-    res = re.sub(r'\d(?=(?:\d{3})+(?!\d))', r'\g<0> ', string)
+    if " " in string:
+        res = re.sub(r'\s+', '', string, flags=re.UNICODE)
+    else:
+        res = re.sub(r'\d(?=(?:\d{3})+(?!\d))', r'\g<0> ', string)
     return res
 
 
@@ -150,7 +154,7 @@ class Period:
 
 
 class Save_OR:
-    def save_yes_or_not(self, name_table, data_base, data, label_error):
+    def save_yes_or_not(self, data_base, data, label_error):
         self.save_yn = UiWinAdd()
         self.save_yn.name_payment()
         self.save_yn.setWindowTitle("Перезапись")
@@ -165,17 +169,18 @@ class Save_OR:
         self.save_yn.label.setFont(font)
         self.save_yn.label.setText("Вы действительно хотите \n перезаписать таблицу \n с " + self.name_table + " ?")
 
-        self.save_yn.add_pay_btn_OK.clicked.connect(lambda: self.save_yn_btn_ok(name_table, data_base,
-                                                                                data, label_error))
+        self.save_yn.add_pay_btn_OK.clicked.connect(lambda: self.save_yn_btn_ok(data_base, data, label_error))
         self.save_yn.add_pay_btn_OK.setAutoDefault(True)
         self.save_yn.add_pay_btn_Cancel.clicked.connect(lambda: self.save_yn_btn_cancel(label_error))
 
-    def save_yn_btn_ok(self, name_table, data_base, data, label_error):
+    def save_yn_btn_ok(self, data_base, data, label_error):
         data = data  # список данных для записи
 
-        table = name_table + '_year_' + data[1].split()[1]  # имя таблицы (период)
+        table = data[2] + '_year_' + data[1].split()[1]  # имя таблицы (период)
         col_name = 'id'  # имя колонки
         row_record = str(data[0])  # имя записи
+
+        data.remove(data[2])  # Удаляем имя таблицы из списка "Tariff"
 
         SQLite3_Data_Base.sqlite3_delete_record(data_base, table, col_name, row_record)
         SQLite3_Data_Base.sqlite3_insert_data(data_base, table, data)

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication
 
 # from res.DLL_CLASS_COMM import *
 from res.DLL_CLASS_COMM import dt_month, dt_year, month, convert_month, selected_period, \
-                               Period, Save_OR, SQLite3_Data_Base
+    Period, Save_OR, SQLite3_Data_Base, text_convert, denomination  # , text_raz_to_num
 from COMMPAY_UIC import UiWinPayment
 
 
@@ -188,10 +188,13 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             # если есть сохраненные значения в таблице для данного периода
             current_month = month[self.comboBox_month_PAY.currentIndex()]
             if current_month in payment[1]:
-                self.pay_apartment.line_edit_sum.setText(str('{:.2f}'.format(payment[5])))
+                self.pay_apartment.line_edit_sum.setText(
+                    denomination(int(self.comboBox_year_PAY.currentText()), payment[5]))
                 self.apart_summa()
-                self.pay_internet.line_edit_sum.setText(str('{:.2f}'.format(payment[6])))
-                self.pay_phone.line_edit_sum.setText(str('{:.2f}'.format(payment[7])))
+                self.pay_internet.line_edit_sum.setText(
+                    denomination(int(self.comboBox_year_PAY.currentText()), payment[6]))
+                self.pay_phone.line_edit_sum.setText(
+                    denomination(int(self.comboBox_year_PAY.currentText()), payment[7]))
 
         self.pay_power.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(0))
         self.pay_water.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(3))
@@ -211,19 +214,22 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             if self.win_pole[n] == self.pay_power.line_edit_sum:
                 if float(self.win_pole[2].text()) != 0:
                     multi = float(self.win_pole[2].text()) * int(self.win_pole[1].text())
-                    self.win_pole[n].setText(str('{:.2f}'.format(multi)))
+                    multi = denomination(int(self.comboBox_year_PAY.currentText()), multi)
+                    self.win_pole[n].setText(multi)
             elif self.win_pole[n] == self.pay_water.line_edit_sum:
                 if float(self.win_pole[5].text()) != 0:
                     multi = float(self.win_pole[5].text()) * int(self.win_pole[4].text())
-                    self.win_pole[n].setText(str('{:.2f}'.format(multi)))
+                    multi = denomination(int(self.comboBox_year_PAY.currentText()), multi)
+                    self.win_pole[n].setText(multi)
             elif self.win_pole[n] == self.pay_gaz.line_edit_sum:
                 if float(self.win_pole[8].text()) != 0:
                     multi = float(self.win_pole[8].text()) * int(self.win_pole[7].text())
-                    self.win_pole[n].setText(str('{:.2f}'.format(multi)))
+                    multi = denomination(int(self.comboBox_year_PAY.currentText()), multi)
+                    self.win_pole[n].setText(multi)
 
             self.data_mult = []  # формируем список сумм за тарифные платежи
             for i in self.win_pole[0:7:3]:
-                self.data_mult.append(float(i.text()))
+                self.data_mult.append(float(text_convert(i.text())))
 
         except ValueError:
             self.label_error_PAY.show()
@@ -232,25 +238,30 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
     def apart_summa(self):
         if self.pay_apartment.line_edit_sum:
             multi = self.quantity * self.tariff_water
-            apart = float(self.win_pole[9].text()) - multi
-            self.pay_apartment.line_edit_ostat_sum.setText(str('{:.2f}'.format(apart)))
+            ap = self.win_pole[9].text()
+            ap = denomination(int(self.comboBox_year_PAY.currentText()), ap)
+            print(ap)
+            self.pay_apartment.line_edit_sum.setText(str(ap))
+            # apart = float(ap) - multi
+                      # self.pay_apartment.line_edit_ostat_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()),
+            #                                                             apart))
             self.pay_apartment.line_edit_minus_water.setText(
-                str('{:.2f}'.format(multi) + " (" + str(self.quantity) + ") " +
-                    month[self.comboBox_month_PAY.currentIndex() - 1]))
+                denomination(int(self.comboBox_year_PAY.currentText()), multi) + " (" + str(self.quantity) + ") "
+                + month[self.comboBox_month_PAY.currentIndex() - 1])
 
     def final_summa(self):
         try:
-            # self.label_error_PAY.clear()
             self.lineEdit_result.clear()
             final_summa = 0
             if self.pay_power.line_edit_quantity.text():
                 if self.pay_power.line_edit_sum.text():
                     for i in self.win_pole[0:7:6]:
-                        final_summa += float(i.text())
+                        final_summa += float(text_convert(i.text()))
                 if self.pay_apartment.line_edit_sum.text():
                     for i in self.win_pole[9:12]:
-                        final_summa += float(i.text())
-                self.lineEdit_result.setText(str('{:.2f}'.format(final_summa)))
+                        final_summa += float(text_convert(i.text()))
+                self.lineEdit_result.setText(denomination(int(self.comboBox_year_PAY.currentText()), final_summa)
+                                             + " руб.")
 
         except ValueError:
             self.label_error_PAY.show()
@@ -264,7 +275,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 if self.pay_apartment.line_edit_sum.text():
                     data.extend(self.data_mult)  # добавляем список с суммами за тарифные платежи
                     for field in win_pole:  # добавляем суммами за остальные платежи
-                        data.append(float(field.text()))
+                        data.append(float(text_convert(field.text())))
             else:
                 for field in win_pole:
                     data.append(float(field.text()))
@@ -276,8 +287,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
     def btn_save_PAY(self):
         list_data_tariff = self.list_date("Tariff", self.win_pole[2:9:3])
         list_data_payments = self.list_date("Payments", self.win_pole[9:12])
-        # print(list_data_tariff)
-        # print(list_data_payments)
+        print(list_data_tariff)
+        print(list_data_payments)
         self.save_payment(list_data_tariff, list_data_payments)
         self.read_data_pay()
 
@@ -288,14 +299,13 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 name_table = data[2] + '_year_' + data[1].split()[1]  # Имя таблицы ("1")
                 col_name = 'id'  # Имя колонки
                 row_record = data[0]  # Имя записи ("1")
-                data.remove(data[2])  # Удаляем имя таблицы из списка "Tariff"
 
                 col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)[0]
 
                 if row_record in col_id:
                     self.label_error_PAY.show()
                     self.label_error_PAY.setText("Такая запись уже существует!")
-                    self.save_yes_or_not(name_table, self.data_base, data, self.label_error_PAY)
+                    self.save_yes_or_not(self.data_base, data, self.label_error_PAY)
                 else:
                     SQLite3_Data_Base.sqlite3_insert_data(self.data_base, name_table, data)
                     self.next_period()
@@ -312,9 +322,9 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.comboBox_month_PAY.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
         self.comboBox_year_PAY.setCurrentText(c)  # устанавливает текущий год ("Год")
 
-    def save_yes_or_not(self, name_table, data_base, date, label_error):
+    def save_yes_or_not(self, data_base, date, label_error):
         self.save_or_PAY = Save_OR()
-        self.save_or_PAY.save_yes_or_not(name_table, data_base, date, label_error)
+        self.save_or_PAY.save_yes_or_not(data_base, date, label_error)
 
     def btn_cancel_PAY(self):
         self.close()
