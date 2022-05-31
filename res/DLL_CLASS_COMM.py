@@ -31,7 +31,7 @@ def selected_period(combo_m, combo_y):
     combo_m.addItems(month)  # Выбор месяц в comboBox_month_KP
 
     combo_y.clear()
-    last_year = 2030
+    last_year = 2026
     if dt_month == "12":
         last_year += 1
     for year_num in range(2006, last_year):  # Выбор года в comboBox_year_KP
@@ -51,28 +51,10 @@ def clear_layout(layout):
 def denomination(year, cash):
     year_in = int(year)
     if year_in <= 2016:  # and self.comboBox_month_KP.currentIndex() + 1 < 6:
-        den_cash = str(int(round(cash, 0)))
-        den_cash = text_convert(den_cash)
+        den_cash = text_convert(str(int(round(cash, 0))))
     else:
-        # den_cash = str(round(cash, 2))
-        den_cash = str('{:.2f}'.format(cash))
-        den_cash = text_convert(den_cash)
+        den_cash = text_convert(str('{:.2f}'.format(cash)))
     return den_cash
-
-
-def check_plateg(pressed):
-    if pressed:
-        status = 1
-    else:
-        status = 0
-    return status
-
-
-def center(a):
-    qr = a.geometry()
-    cp = QDesktopWidget().availableGeometry().center()
-    qr.moveCenter(cp)
-    a.move(qr.topLeft())
 
 
 def text_convert(string):
@@ -83,13 +65,33 @@ def text_convert(string):
     return res
 
 
-def check_pokaz(a):
-    for n in range(0, 11, 2):
-        for i in range(len(a) - 1):
-            if a[i + 1][n + 2] != a[i][n + 3]:
-                print(a[i + 1][1], a[i + 1][n + 2], end="\t ")
-                print(a[i][1], a[i][n + 3], end="\t ")
-                print('bad', "\n")
+def text_conv_to_num(string):
+    res = re.sub(r'\s+', '', string, flags=re.UNICODE)
+    return res
+
+
+# def check_payment(pressed):
+#     if pressed:
+#         status = 1
+#     else:
+#         status = 0
+#     return status
+#
+#
+# def center(a):
+#     qr = a.geometry()
+#     cp = QDesktopWidget().availableGeometry().center()
+#     qr.moveCenter(cp)
+#     a.move(qr.topLeft())
+
+
+# def check_pokaz(a):
+#     for n in range(0, 11, 2):
+#         for i in range(len(a) - 1):
+#             if a[i + 1][n + 2] != a[i][n + 3]:
+#                 print(a[i + 1][1], a[i + 1][n + 2], end="\t ")
+#                 print(a[i][1], a[i][n + 3], end="\t ")
+#                 print('bad', "\n")
 
 
 def data_convert(data):

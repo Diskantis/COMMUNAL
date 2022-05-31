@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QAction
 
 from res.DLL_CLASS_COMM import dt_month, dt_year, month, convert_month, selected_period, \
-                               Period, Save_OR, SQLite3_Data_Base
+    Period, Save_OR, SQLite3_Data_Base
 from COUNTERS_UIC import UiWinCounters
 
 
@@ -125,7 +125,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
 
-        file_db = open('COMMPAY_DAT.db', 'a')  # открывает файл базы данных
+        file_db = open('LAST/COMMPAY_DAT_2.db', 'a')  # открывает файл базы данных
         file_db.close()  # закрывает файл базы данных
         table = 'Counters_year_' + str(self.comboBox_year_COU.currentText())  # имя таблицы
         col_name = 'id'  # Имя колонки
@@ -247,7 +247,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         if row_record in col_id:
             self.label_error_COU.show()
             self.label_error_COU.setText('Такая запись уже существует!')
-            self.save_yes_or_not("Counters", self.data_base, data, self.label_error_COU)
+            self.save_yes_or_not(self.data_base, data, self.label_error_COU)
         else:
             SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, data)
             self.read_data_counters()
@@ -265,9 +265,9 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             #
             # self.read_pokaz_schet()
 
-    def save_yes_or_not(self, name_table, data_base, date, label_error):
+    def save_yes_or_not(self, data_base, date, label_error):
         self.save_or_COU = Save_OR()
-        self.save_or_COU.save_yes_or_not(name_table, data_base, date, label_error)
+        self.save_or_COU.save_yes_or_not(data_base, date, label_error)
 
     def btn_cancel_COU(self):
         self.close()

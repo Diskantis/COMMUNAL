@@ -20,7 +20,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.save_yn = UiWinAdd()
         self.btn_Add_Pay = self.btn_Add_Pay
 
-        self.data_base = 'COMMPAY_DAT.db'  # имя базы данных
+        self.data_base = 'COMMPAY_DAT_2.db'  # имя базы данных
 
         self.period_PAY = Period(self.comboBox_month_PAY, self.comboBox_year_PAY, self.label_month_year_PAY)
         self.save_or_PAY = Save_OR()
@@ -176,7 +176,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
 
-        file_db = open('COMMPAY_DAT.db', 'a')  # открывает файл базы данных
+        file_db = open('LAST/COMMPAY_DAT_2.db', 'a')  # открывает файл базы данных
         file_db.close()  # закрывает файл базы данных
 
         table_count = 'Counters_year_' + str(self.comboBox_year_PAY.currentText())  # имя таблицы
