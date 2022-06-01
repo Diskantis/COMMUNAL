@@ -6,9 +6,8 @@ import win32api
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication
 
-# from res.DLL_CLASS_COMM import *
 from res.DLL_CLASS_COMM import dt_month, dt_year, month, convert_month, selected_period, \
-    Period, Save_OR, SQLite3_Data_Base, text_convert, denomination, text_conv_to_num  # , text_raz_to_num
+    Period, Save_OR, SQLite3_Data_Base, text_convert, denomination, text_conv_to_num
 from COMMPAY_UIC import UiWinPayment
 
 

@@ -201,4 +201,3 @@ class UiWinPayment(object):
         self.WinPayment.setTabOrder(self.comboBox_month_PAY, self.comboBox_year_PAY)
         self.WinPayment.setTabOrder(self.comboBox_year_PAY, self.btn_Left_PAY)
         self.WinPayment.setTabOrder(self.btn_Left_PAY, self.btn_Right_PAY)
-
