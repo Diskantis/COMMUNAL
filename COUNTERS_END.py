@@ -250,20 +250,21 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             self.save_yes_or_not(self.data_base, data, self.label_error_COU)
         else:
             SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, data)
-            self.read_data_counters()
+            self.next_period()
 
-            # if self.comboBox_month_COU.currentIndex() + 2 != 13:
-            #     b = month[self.comboBox_month_COU.currentIndex() + 1]
-            #     c = self.comboBox_year_COU.currentText()
-            # else:
-            #     b = month[self.comboBox_month_COU.currentIndex() - 11]
-            #     c = str(int(self.comboBox_year_COU.currentText()) + 1)
-            #
-            # self.label_month_year_COU.setText(b + " " + c)  # устанавливает заголовок ("Месяц Год")
-            # self.comboBox_month_COU.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
-            # self.comboBox_year_COU.setCurrentText(c)  # устанавливает текущий год ("Год")
-            #
-            # self.read_pokaz_schet()
+    def next_period(self):
+        if self.comboBox_month_COU.currentIndex() + 2 != 13:
+            b = month[self.comboBox_month_COU.currentIndex() + 1]
+            c = self.comboBox_year_COU.currentText()
+        else:
+            b = month[self.comboBox_month_COU.currentIndex() - 11]
+            c = str(int(self.comboBox_year_COU.currentText()) + 1)
+
+        self.label_month_year_COU.setText(b + " " + c)  # устанавливает заголовок ("Месяц Год")
+        self.comboBox_month_COU.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
+        self.comboBox_year_COY.setCurrentText(c)  # устанавливает текущий год ("Год")
+
+        self.read_data_counters()
 
     def save_yes_or_not(self, data_base, date, label_error):
         self.save_or_COU = Save_OR()

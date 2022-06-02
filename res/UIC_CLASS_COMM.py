@@ -53,7 +53,8 @@ def btn_check_payment(group, xl, yl):
     btn_check = QtWidgets.QPushButton(group)
     btn_check.setMinimumSize(QtCore.QSize(xl, yl))
     btn_check.setMaximumSize(QtCore.QSize(xl, yl))
-    btn_check.setStyleSheet("border: 0px solid; padding: 0px;")
+    font = QtGui.QFont("Times", 12, 75)
+    btn_check.setFont(font)
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap("res/img/icon_checked_n.png"), QIcon.Normal, QIcon.Off)
     icon.addPixmap(QtGui.QPixmap("res/img/icon_checked_o.png"), QIcon.Active, QIcon.On)
@@ -274,16 +275,10 @@ class Ui_Widget_Payment(object):
         self.grad_1 = "(91, 92, 96, 255)"
         self.grad_2 = "(108, 109, 114, 255)"
 
-        self.btn_check = btn_check_payment(Widget_Pay, 28, 28)
-        self.btn_check.setStyleSheet("background-color: rgba(255, 255, 255, 0); border: 0px solid; padding: 0px;")
+        self.btn_check = btn_check_payment(Widget_Pay, 186, 28)
+        self.btn_check.setStyleSheet("color: rgb(209, 209, 217); background-color: rgba(255, 255, 255, 0); "
+                                     "border: 0px solid rgba(50, 50, 50, 240); padding: 0px; text-align: left;")
         self.h_Layout_widget_Team.addWidget(self.btn_check)
-
-        self.label_payment = label_titul_f("", Widget_Pay, 12)
-        self.label_payment.setMinimumSize(QtCore.QSize(150, 25))
-        self.label_payment.setStyleSheet("color: rgb(209, 209, 217); border: 0px solid rgba(50, 50, 50, 240); "
-                                         "background-color: rgba(255, 255, 255, 0); padding: 0px;")
-        self.label_payment.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.h_Layout_widget_Team.addWidget(self.label_payment)
 
         self.line_edit_sum = lineEdit_pokaz_f("", Widget_Pay, color, self.grad_2, self.grad_1)
         self.line_edit_sum.setReadOnly(False)

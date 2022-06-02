@@ -4,11 +4,9 @@ import re
 import sqlite3
 import datetime
 
-from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QDesktopWidget
+from PyQt5 import QtWidgets, QtGui
 
 from res.UIC_CLASS_COMM import UiWinAdd, Ui_Widget_Payment
-
 
 dt_day = datetime.datetime.now().strftime("%d")  # Текущий день (str "30")
 dt_month = datetime.datetime.now().strftime("%m")  # Текущий месяц (str "01")
@@ -70,28 +68,19 @@ def text_conv_to_num(string):
     return res
 
 
-# def check_payment(pressed):
-#     if pressed:
-#         status = 1
-#     else:
-#         status = 0
-#     return status
-#
-#
+def str_list(val):
+    if isinstance(val, str):
+        val = list(map(int, list(val.split())))
+    elif isinstance(val, list):
+        val = " ".join(map(str, val))
+    return val
+
+
 # def center(a):
 #     qr = a.geometry()
 #     cp = QDesktopWidget().availableGeometry().center()
 #     qr.moveCenter(cp)
 #     a.move(qr.topLeft())
-
-
-# def check_pokaz(a):
-#     for n in range(0, 11, 2):
-#         for i in range(len(a) - 1):
-#             if a[i + 1][n + 2] != a[i][n + 3]:
-#                 print(a[i + 1][1], a[i + 1][n + 2], end="\t ")
-#                 print(a[i][1], a[i][n + 3], end="\t ")
-#                 print('bad', "\n")
 
 
 def data_convert(data):
@@ -107,8 +96,7 @@ class Widget_Payment(QtWidgets.QWidget, Ui_Widget_Payment):
         super(Widget_Payment, self).__init__()
 
         self.setupUi(self, color)
-        self.label_payment.setText(name)
-        self.line_edit_sum.setText("")
+        self.btn_check.setText(name)
 
 
 # ВЫБОР ПЕРИОДА
@@ -202,7 +190,7 @@ class SQLite3_Data_Base:
            data_base - имя базы данных
            table - имя таблицы
            heading - () кортеж заголовков столбцов: heading = ('ID integer primary key , Month_year text,
-                                                                Pred_PW integer)
+                                                                Pre_PW integer)
         """
 
         con = sqlite3.connect(data_base)  # подключаемся к базе данных
@@ -361,10 +349,10 @@ class SQLite3_Data_Base:
 
         if cols_out is None:
             sql = 'SELECT * FROM ' + table_1 + ' INNER JOIN ' + table_2 + \
-                ' ON ' + col_name_tb_1 + ' = ' + col_name_tb_2 + "'"
+                  ' ON ' + col_name_tb_1 + ' = ' + col_name_tb_2 + "'"
         else:
             sql = 'SELECT ' + cols_out + ' FROM ' + table_1 + ' INNER JOIN ' + table_2 + \
-                ' ON ' + col_name_tb_1 + ' = ' + col_name_tb_2 + "'"
+                  ' ON ' + col_name_tb_1 + ' = ' + col_name_tb_2 + "'"
 
         cur.execute(sql)
         data = cur.fetchall()

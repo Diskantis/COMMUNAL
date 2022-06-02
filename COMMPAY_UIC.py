@@ -15,7 +15,7 @@ class UiWinPayment(object):
         self.WinPayment.setObjectName("CommunalPayment")
         self.WinPayment.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinPayment.resize(800, 400)  # 365
-        self.WinPayment.setGeometry(QtCore.QRect(560, 300, 800, 400))
+        self.WinPayment.setGeometry(QtCore.QRect(560+1920+450, 300, 800, 400))
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
@@ -93,15 +93,24 @@ class UiWinPayment(object):
         self.label_tariff.setMinimumSize(QtCore.QSize(50, 18))
         self.h_layout_frame_title.addWidget(self.label_tariff)
 
+        self.list_payments = []
+        self.list_payments_name = []
+
         self.pay_power = Widget_Payment("Электричество", "(0, 160, 0)")
+        self.list_payments.append(self.pay_power.btn_check)
+        self.list_payments_name.append(self.pay_power.btn_check.text())
         self.pay_power.commpay()
         self.v_layout_pay_group.addWidget(self.pay_power)
 
         self.pay_water = Widget_Payment("Вода", "(0, 170, 255)")
+        self.list_payments.append(self.pay_water.btn_check)
+        self.list_payments_name.append(self.pay_water.btn_check.text())
         self.pay_water.commpay()
         self.v_layout_pay_group.addWidget(self.pay_water)
 
         self.pay_gaz = Widget_Payment("Газ", "(150, 0, 150)")
+        self.list_payments.append(self.pay_gaz.btn_check)
+        self.list_payments_name.append(self.pay_gaz.btn_check.text())
         self.pay_gaz.commpay()
         self.v_layout_pay_group.addWidget(self.pay_gaz)
 
@@ -120,6 +129,8 @@ class UiWinPayment(object):
         self.v_layout_pay_group.addWidget(self.Line_razdel)
 
         self.pay_apartment = Widget_Payment("Квартира", "(209, 209, 217)")
+        self.list_payments.append(self.pay_apartment.btn_check)
+        self.list_payments_name.append(self.pay_apartment.btn_check.text())
         self.pay_apartment.commpay()
         self.pay_apartment.line_edit_sum.setStyleSheet(
             "border-radius: 2px; color: rgb(209, 209, 217); border: 1px solid rgba(50, 50, 50, 240); "
@@ -144,9 +155,13 @@ class UiWinPayment(object):
         self.v_layout_pay_group.addWidget(self.pay_apartment)
 
         self.pay_internet = Widget_Payment("Интернет", "(209, 209, 217)")
+        self.list_payments.append(self.pay_internet.btn_check)
+        self.list_payments_name.append(self.pay_internet.btn_check.text())
         self.v_layout_pay_group.addWidget(self.pay_internet)
 
         self.pay_phone = Widget_Payment("Телефон", "(209, 209, 217)")
+        self.list_payments.append(self.pay_phone.btn_check)
+        self.list_payments_name.append(self.pay_phone.btn_check.text())
         self.v_layout_pay_group.addWidget(self.pay_phone)
 
         # Frame Result
