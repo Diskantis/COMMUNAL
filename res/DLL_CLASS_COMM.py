@@ -51,7 +51,7 @@ def denomination(year, cash):
     if year_in <= 2016:  # and self.comboBox_month_KP.currentIndex() + 1 < 6:
         den_cash = text_convert(str(int(round(cash, 0))))
     else:
-        den_cash = text_convert(str('{:.2f}'.format(cash)))
+        den_cash = text_convert(str(float(round(cash, 2))))  # (str('{:.2f}'.format(float(cash))))
     return den_cash
 
 
@@ -68,12 +68,9 @@ def text_conv_to_num(string):
     return res
 
 
-def str_list(val):
-    if isinstance(val, str):
-        val = list(map(int, list(val.split())))
-    elif isinstance(val, list):
-        val = " ".join(map(str, val))
-    return val
+def num_conv_to_text(string):
+    res = re.sub(r'\d(?=(?:\d{3})+(?!\d))', r'\g<0> ', string)
+    return res
 
 
 # def center(a):
@@ -81,6 +78,22 @@ def str_list(val):
 #     cp = QDesktopWidget().availableGeometry().center()
 #     qr.moveCenter(cp)
 #     a.move(qr.topLeft())
+
+
+def str_list(val):  # функция для преобразования self.status
+    if isinstance(val, str):
+        val = list(map(int, list(val.split())))
+    elif isinstance(val, list):
+        val = " ".join(map(str, val))
+    return val
+
+
+def payment_checked(list_pay, list_status):
+    for j, a in zip(list_pay, list_status):
+        if a == 0:
+            j.setChecked(False)
+        else:
+            j.setChecked(True)
 
 
 def data_convert(data):

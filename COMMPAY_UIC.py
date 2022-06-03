@@ -15,7 +15,7 @@ class UiWinPayment(object):
         self.WinPayment.setObjectName("CommunalPayment")
         self.WinPayment.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinPayment.resize(800, 400)  # 365
-        self.WinPayment.setGeometry(QtCore.QRect(560+1920+450, 300, 800, 400))
+        self.WinPayment.setGeometry(QtCore.QRect(560, 300, 800, 400))  # +1920+450
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
