@@ -290,16 +290,7 @@ class SQLite3_Data_Base:
             data = new_data
             del new_data
 
-        res = ()
-        for line in data:
-            res += (line, '')
-
-        quantity = 'Количество записей в таблице составляет: ' + str(len(data))
-
-        cur.close()  # удаляем курсор
-        con.close()  # разрываем соединение с базой
-
-        return data, quantity
+        return data
 
     @staticmethod
     def sqlite3_read_sort(data_base, table, cols_name, sort_col):

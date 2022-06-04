@@ -201,7 +201,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         for i in self.win_pole:  # очищает поля окна ПОКАЗАНИЯ
             i.clear()
 
-        read_table = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_count)[0]
+        read_table = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_count)
 
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table)):
@@ -251,7 +251,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         print(self.data)
 
-        col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_tariff, col_name)[0]
+        col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_tariff, col_name)
 
         if row_record in col_id:
             self.label_error_PAY.show()

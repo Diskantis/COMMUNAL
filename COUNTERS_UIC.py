@@ -10,7 +10,7 @@ from res.UIC_CLASS_COMM import label_titul_f, lineEdit_pokaz_f, UiWinHeaderFoote
 class UiWinCounters(object):
     def setupUi_COU(self, WinCounters):
         self.WinCounters = WinCounters  # окно
-        self.WinCounters.setObjectName("PokazanyaSchet")
+        self.WinCounters.setObjectName("WinCounters")
         self.WinCounters.setWindowModality(Qt.ApplicationModal)
         self.WinCounters.resize(800, 400)
         self.WinCounters.setGeometry(QtCore.QRect(560+1920-450, 300, 800, 400))
@@ -286,5 +286,3 @@ class UiWinCounters(object):
         self.WinCounters.setTabOrder(self.label_month_ras_WH, self.label_month_ras_W)
         self.WinCounters.setTabOrder(self.label_month_ras_W, self.label_month_ras_G)
         self.WinCounters.setTabOrder(self.label_month_ras_G, self.comboBox_month_COU)
-
-        # self.WinPayment.setTabOrder(self.comboBox_year_CP, self.label_error_CP)

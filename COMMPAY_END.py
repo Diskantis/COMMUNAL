@@ -27,8 +27,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         # ВЫБОР ПЕРИОДА
         selected_period(self.comboBox_month_PAY, self.comboBox_year_PAY)
-        self.comboBox_month_PAY.activated.connect(self.label_period)  # месяц
-        self.comboBox_year_PAY.activated.connect(self.label_period)  # год
+        self.comboBox_month_PAY.activated.connect(self.combo_box_period_sel)  # месяц
+        self.comboBox_year_PAY.activated.connect(self.combo_box_period_sel)  # год
 
         # ТЕКУЩЕГО ПЕРИОДА
         self.current_month_index = month.index(convert_month(dt_month))  # Текущий месяц (int(0))
@@ -37,6 +37,10 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.label_month_year_PAY.setText(convert_month(dt_month) + " " + dt_year)  # заголовок ("Месяц Год")
         self.comboBox_month_PAY.setCurrentIndex(self.current_month_index)  # устанавливает текущий месяц ("Месяц")
         self.comboBox_year_PAY.setCurrentText(dt_year)  # устанавливает текущий год ("Год")
+
+        # self.label_month_year_PAY.setText("Июнь 2006")  # заголовок ("Месяц Год")
+        # self.comboBox_month_PAY.setCurrentIndex(5)  # устанавливает текущий месяц ("Месяц")
+        # self.comboBox_year_PAY.setCurrentText("2006")  # устанавливает текущий год ("Год")
 
         self.btn_Left_PAY.clicked.connect(self.btn_period_left)  # прокрутка в лево
         self.btn_Right_PAY.clicked.connect(self.btn_period_right)  # прокрутка в право
@@ -66,13 +70,32 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.btn_Cancel_PAY.clicked.connect(self.btn_cancel_PAY)
 
         # ЧИТАЕМ показания из базы данных
+        self.start_period()
         self.read_data_pay()
 
         self.show()
 
+# TODO разобраться со стартовым периодом
+
+    def start_period(self):
+        pass
+
+    # def start_period(self):
+    #     list_start = []
+    #     for i in month[5:12]:
+    #         list_start.append(i + " 2006")
+    #
+    #     if self.label_month_year_PAY.text() in list_start:
+    #         print(self.label_month_year_PAY.text())
+    #         self.comboBox_month_PAY.clear()
+    #         self.comboBox_month_PAY.addItems(month[5:12])
+    #
+    #         self.current_month_index = self.period_PAY.label_sel_period()
+    #         self.read_data_pay()
+
     # def start_period(self):
     #     if self.label_month_year_PAY.text() == 'Декабрь 2006' and self.comboBox_month_PAY.count() == 12 \
-    #             or int(self.comboBox_year_PAY.currentText()) == 2006 and self.comboBox_month_PAY.currentIndex() <= 11 \
+    #             or int(self.comboBox_year_PAY.currentText()) == 2006 and self.comboBox_month_PAY.currentIndex() <= 11\
     #             and self.comboBox_month_PAY.count() == 12:
     #         self.comboBox_month_PAY.clear()
     #         self.comboBox_month_PAY.addItems(month[5:12])
@@ -81,14 +104,17 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
     #             and self.comboBox_month_PAY.count() == 7:
     #         self.comboBox_month_PAY.clear()
     #         self.comboBox_month_PAY.addItems(month)
+    #
+    #     self.current_month_index = self.period_PAY.label_sel_period()
+    #     self.read_data_pay()
 
-    def label_period(self):
-        # self.start_period()
+    def combo_box_period_sel(self):
+        self.start_period()
         self.current_month_index = self.period_PAY.label_sel_period()
         self.read_data_pay()
 
     def btn_period_left(self):
-        # self.start_period()
+        self.start_period()
         if self.label_month_year_PAY.text() == "Июнь 2006":
             self.btn_Left_PAY.setEnabled(False)
         else:
@@ -96,7 +122,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.read_data_pay()
 
     def btn_period_right(self):
-        # self.start_period()
+        self.start_period()
         if self.label_month_year_PAY.text() != "Май 2006":
             self.btn_Left_PAY.setEnabled(True)
             self.current_month_index = self.period_PAY.click_btn_right(self.current_month_index)
@@ -129,11 +155,14 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         for i in self.win_pole:  # очищает поля окна
             i.clear()
 
-        for _ in self.list_payments:
-            _.setChecked(False)
+        for i in self.list_payments:
+            i.setChecked(False)
+
+        self.status = "0 0 0 0 0 0"
+        self.quantity = 0
 
         # читаем таблицу с ПОКАЗАНИЯМИ СЧЕТЧИКОВ
-        read_table_counters = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_counters)[0]
+        read_table_counters = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_counters)
 
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table_counters)):
@@ -154,8 +183,19 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 self.quantity = (counter[5] - counter[4]) + (counter[7] - counter[6]) + \
                                 (counter[9] - counter[8]) + (counter[11] - counter[10])
 
+        # проверят не является ли выбранный месяц январем (если да то передает таблицу за предыдущий год)
+        if SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_counters) and \
+                month[self.comboBox_month_PAY.currentIndex()] == "Январь":
+            table_counters = 'Counters_year_' + str(int(self.comboBox_year_PAY.currentText()) - 1)
+
+            read_table_counters = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_counters)
+
+            counter = read_table_counters[-1]  # показания сохраненного периода
+            self.quantity = (counter[5] - counter[4]) + (counter[7] - counter[6]) + \
+                            (counter[9] - counter[8]) + (counter[11] - counter[10])
+
         # читаем таблицу с ТАРИФАМИ
-        read_table_tariff = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_tariff)[0]
+        read_table_tariff = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_tariff)
 
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table_tariff)):
@@ -172,26 +212,34 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                     self.data_mult.append(self.multiplication(0))
                     self.data_mult.append(self.multiplication(3))
                     self.data_mult.append(self.multiplication(6))
-                break
-            else:  # если значения нет (берем значение из предыдущего месяца)
-                if self.pay_power.line_edit_quantity.text():
-                    previous_month = month[self.comboBox_month_PAY.currentIndex() - 1]
-                    if previous_month in tariff[1]:
-                        self.pay_power.line_edit_tariff.setText(str(tariff[2]))
-                        self.pay_water.line_edit_tariff.setText(str(tariff[3]))
-                        self.pay_gaz.line_edit_tariff.setText(str(tariff[4]))
+            elif self.pay_power.line_edit_quantity.text():  # если значения нет (берем значение из предыдущего месяца)
+                previous_month = month[self.comboBox_month_PAY.currentIndex() - 1]
+                if previous_month in tariff[1]:
+                    self.pay_power.line_edit_tariff.setText(str(tariff[2]))
+                    self.pay_water.line_edit_tariff.setText(str(tariff[3]))
+                    self.pay_gaz.line_edit_tariff.setText(str(tariff[4]))
 
-                        if float(self.pay_power.line_edit_tariff.text()) != 0:
-                            self.data_mult.append(self.multiplication(0))
-                            self.data_mult.append(self.multiplication(3))
-                            self.data_mult.append(self.multiplication(6))
+                    if float(self.pay_power.line_edit_tariff.text()) != 0:
+                        self.data_mult.append(self.multiplication(0))
+                        self.data_mult.append(self.multiplication(3))
+                        self.data_mult.append(self.multiplication(6))
 
             previous_month = month[self.comboBox_month_PAY.currentIndex() - 1]
             if previous_month in tariff[1]:
                 self.tariff_water = tariff[3]
 
+            # проверят не является ли выбранный месяц январем (если да то передает таблицу за предыдущий год)
+            if SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_tariff) and \
+                    month[self.comboBox_month_PAY.currentIndex()] == "Январь":
+                table_tariff = 'Tariff_year_' + str(int(self.comboBox_year_PAY.currentText()) - 1)
+
+                read_table_tariff = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_tariff)
+
+                tariff = read_table_tariff[-1]  # показания сохраненного периода
+                self.tariff_water = tariff[3]
+
         # читаем таблицу с ПЛАТЕЖАМИ
-        read_table_payments = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_payments)[0]
+        read_table_payments = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_payments)
 
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table_payments)):
@@ -212,6 +260,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 self.status = str_list(self.status)
                 payment_checked(self.list_payments, self.status)
                 self.status = str_list(self.status)
+
+# TODO: Написать проверку на галочку
 
         self.pay_power.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(0))
         self.pay_water.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(3))
@@ -257,6 +307,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                     multi = denomination(int(self.comboBox_year_PAY.currentText()), multi)
                     self.win_pole[n].setText(multi)
 
+            self.final_summa()
+
             self.data_mult = []  # формируем список сумм за тарифные платежи
             for i in self.win_pole[0:7:3]:
                 self.data_mult.append(float(text_convert(i.text())))
@@ -270,53 +322,20 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.label_error_PAY.show()
             self.label_error_PAY.setText('Должно быть значение!')
 
-    # def apart_summa(self):
-    #     self.pay_apartment.line_edit_sum.returnPressed.connect(self.apart)
-    #
-    # def apart(self):
-    #     apart = self.pay_apartment.line_edit_sum.text()
-    #     self.pay_apartment.line_edit_sum.setText(text_convert(apart))
-    #     print(apart)
-
-        # if self.pay_apartment.line_edit_sum:
-        #     multi = self.quantity * self.tariff_water
-        #     apart = float(self.win_pole[9].text()) - multi
-            # self.pay_apartment.line_edit_ostat_sum.setText(str('{:.2f}'.format(apart)))
-            # self.pay_apartment.line_edit_minus_water.setText(
-            #     str('{:.2f}'.format(multi) + " (" + str(self.quantity) + ") " +
-            #         month[self.comboBox_month_PAY.currentIndex() - 1]))
-    #     self.url_input.editingFinished.connect(self.url_redactor)  # +++
-    #     # или так
-    #     # self.url_input.returnPressed.connect(self.url_redactor)           # +++
-    #
-    # def url_redactor(self):
-    #     print(self.url_input.text())
-
-        # if self.pay_apartment.line_edit_sum:
-        #     apart = self.win_pole[9].text()
-        #     self.pay_apartment.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()), float(apart)))
-        #
-        #     # apart = denomination(int(self.comboBox_year_PAY.currentText()),
-        #     #                      float(text_conv_to_num(self.win_pole[9].text())))
-        #     # self.pay_apartment.line_edit_sum.setText(str(apart))
-        #     # print(apart)
-        #
-        #     ost = float(apart) - self.water_sum
-        #     self.pay_apartment.line_edit_ostat_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()), ost))
-
     def apart_summa(self):
         try:
             if self.pay_apartment.line_edit_sum:
                 apart = self.win_pole[9].text()
+                apart = text_conv_to_num(apart)
                 self.pay_apartment.line_edit_sum.setText(num_conv_to_text(apart))
-                print(apart)
 
                 ost = float(text_conv_to_num(apart)) - self.water_sum
-                self.pay_apartment.line_edit_ostat_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()), ost))
+                self.pay_apartment.line_edit_ostat_sum.setText(
+                    denomination(int(self.comboBox_year_PAY.currentText()), ost))
 
                 self.pay_apartment.line_edit_minus_water.setText(
-                    denomination(int(self.comboBox_year_PAY.currentText()), self.water_sum) + " (" + str(self.quantity) + ") "
-                    + month[self.comboBox_month_PAY.currentIndex() - 1])
+                    denomination(int(self.comboBox_year_PAY.currentText()), self.water_sum) +
+                    " (" + str(self.quantity) + ") " + month[self.comboBox_month_PAY.currentIndex() - 1])
         except ValueError:
             self.label_error_PAY.show()
             self.label_error_PAY.setText('Должно быть значение!')
@@ -368,6 +387,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.save_payment(list_data_tariff, list_data_payments)
 
     def save_payment(self, *args):
+        self.next_period()
         for list_data in args:
             if len(list_data) > 3:
                 data = list_data  # создает список значений
@@ -375,7 +395,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 col_name = 'id'  # Имя колонки
                 row_record = data[0]  # Имя записи ("1")
 
-                col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)[0]
+                col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)
 
                 if row_record in col_id:
                     self.label_error_PAY.show()
@@ -384,7 +404,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 else:
                     data.remove(data[2])
                     SQLite3_Data_Base.sqlite3_insert_data(self.data_base, name_table, data)
-                    self.next_period()
+                    self.read_data_pay()
 
     def next_period(self):
         if self.comboBox_month_PAY.currentIndex() + 2 != 13:
@@ -397,8 +417,6 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.label_month_year_PAY.setText(b + " " + c)  # устанавливает заголовок ("Месяц Год")
         self.comboBox_month_PAY.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
         self.comboBox_year_PAY.setCurrentText(c)  # устанавливает текущий год ("Год")
-
-        self.read_data_pay()
 
     def save_yes_or_not(self, data_base, date, label_error):
         self.save_or_PAY = Save_OR()

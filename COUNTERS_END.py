@@ -112,7 +112,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         if event.key() == Qt.Key_Escape:
             if month.index(self.label_month_year_COU.text().split()[0]) + 1 in \
                     SQLite3_Data_Base.sqlite3_read_data(
-                        self.data_base, 'Counters_year_' + str(self.comboBox_year_COU.currentText()), 'id')[0]:
+                        self.data_base, 'Counters_year_' + str(self.comboBox_year_COU.currentText()), 'id'):
                 for a in self.win_pole[:17]:
                     a.setReadOnly(True)
             else:
@@ -145,7 +145,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
 
         # проверят есть ли в таблице запись на такой месяц, если есть то отмечает галочкой
         if month.index(self.label_month_year_COU.text().split()[0]) + 1 in \
-                SQLite3_Data_Base.sqlite3_read_data(self.data_base, table, col_name)[0]:
+                SQLite3_Data_Base.sqlite3_read_data(self.data_base, table, col_name):
             self.label_GL_V_1_COU.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
             self.label_GL_V_2_COU.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
             for n in self.win_pole[:17]:
@@ -155,12 +155,12 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
                 n.setReadOnly(False)
 
         # проверят не является ли выбранный месяц январем (если да то читает таблицу за предыдущий год)
-        if not SQLite3_Data_Base.sqlite3_read_data(self.data_base, table)[0] and \
+        if not SQLite3_Data_Base.sqlite3_read_data(self.data_base, table) and \
                 month[self.comboBox_month_COU.currentIndex()] == "Январь":
             table = 'Counters_year_' + str(int(self.comboBox_year_COU.currentText()) - 1)
 
         # читаем таблицу, получаем список строк значений
-        read_table = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table)[0]
+        read_table = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table)
 
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table)):
@@ -242,7 +242,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         col_name = 'id'  # Имя колонки
         row_record = self.data[0]  # Имя записи ("1")
 
-        col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table, col_name)[0]
+        col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table, col_name)
 
         if row_record in col_id:
             self.label_error_COU.show()
