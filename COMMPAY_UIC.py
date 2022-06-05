@@ -15,7 +15,7 @@ class UiWinPayment(object):
         self.WinPayment.setObjectName("CommunalPayment")
         self.WinPayment.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinPayment.resize(800, 400)  # 365
-        self.WinPayment.setGeometry(QtCore.QRect(560+1920, 300, 800, 400))  # +1920+450
+        self.WinPayment.setGeometry(QtCore.QRect(560, 300, 800, 400))  # +1920+450
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
@@ -77,9 +77,9 @@ class UiWinPayment(object):
 
         self.v_layout_pay_group.addWidget(self.frame_title)
 
-        self.label_pust = label_titul_f("", self.frame_title)
-        self.label_pust.setFixedSize(QtCore.QSize(185, 18))
-        self.h_layout_frame_title.addWidget(self.label_pust)
+        self.label_dummy = label_titul_f("", self.frame_title)
+        self.label_dummy.setFixedSize(QtCore.QSize(185, 18))
+        self.h_layout_frame_title.addWidget(self.label_dummy)
 
         self.label_sum = label_titul_f("сумма", self.frame_title)
         self.label_sum.setMinimumSize(QtCore.QSize(50, 18))
@@ -114,19 +114,17 @@ class UiWinPayment(object):
         self.pay_gaz.commpay()
         self.v_layout_pay_group.addWidget(self.pay_gaz)
 
-        # РАЗДЕЛИТЕЛЬ между основными и дополнительными платежами
-        self.Line_razdel = QtWidgets.QFrame()
-        self.Line_razdel.setMinimumSize(QtCore.QSize(750, 2))
-        self.Line_razdel.setMaximumSize(QtCore.QSize(780, 2))
-
-        self.Line_razdel.setAutoFillBackground(False)
-        self.Line_razdel.setContentsMargins(0, 0, 0, 0)
-        self.Line_razdel.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.Line_razdel.setLineWidth(1)
-        self.Line_razdel.setMidLineWidth(1)
-        self.Line_razdel.setFrameShape(QtWidgets.QFrame.HLine)
-        self.Line_razdel.setObjectName("LINE_RAZDEL")
-        self.v_layout_pay_group.addWidget(self.Line_razdel)
+        self.separator = QtWidgets.QFrame()
+        self.separator.setMinimumSize(QtCore.QSize(750, 2))
+        self.separator.setMaximumSize(QtCore.QSize(780, 2))
+        self.separator.setAutoFillBackground(False)
+        self.separator.setContentsMargins(0, 0, 0, 0)
+        self.separator.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.separator.setLineWidth(1)
+        self.separator.setMidLineWidth(1)
+        self.separator.setFrameShape(QtWidgets.QFrame.HLine)
+        self.separator.setObjectName("separator")
+        self.v_layout_pay_group.addWidget(self.separator)
 
         self.pay_apartment = Widget_Payment("Квартира", "(209, 209, 217)")
         self.list_payments.append(self.pay_apartment.btn_check)
@@ -138,8 +136,8 @@ class UiWinPayment(object):
             "stop:0 rgba(125, 126, 131, 255), stop:0.02 rgba(108, 109, 114, 255), stop:0.98 rgba(91, 92, 96, 255),"
             "stop:1 rgba(125, 126, 131, 255));")
         self.pay_apartment.line_edit_sum.setReadOnly(False)
-        self.pay_apartment.line_edit_ostat_sum = self.pay_apartment.line_edit_quantity
-        self.pay_apartment.line_edit_ostat_sum.setStyleSheet(
+        self.pay_apartment.line_edit_balance_sum = self.pay_apartment.line_edit_quantity
+        self.pay_apartment.line_edit_balance_sum.setStyleSheet(
             "border-radius: 2px; color: rgb(255, 163, 24); border: 1px solid rgba(50, 50, 50, 240); "
             "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
             "stop:0 rgba(125, 126, 131, 255), stop:0.02 rgba(91, 92, 96, 255), stop:0.98 rgba(108, 109, 114, 255),"

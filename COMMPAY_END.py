@@ -3,7 +3,7 @@
 import sys
 import win32api
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication
 
 from res.DLL_CLASS_COMM import dt_month, dt_year, month, convert_month, selected_period, \
@@ -20,7 +20,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.setupUi_PAY(self)
         self.data_base = 'COMMPAY_DAT.db'  # имя базы данных
 
-        self.data_mult = []
+        self.data_multi = []
         self.status = "0 0 0 0 0 0"
 
         self.period_PAY = Period(self.comboBox_month_PAY, self.comboBox_year_PAY, self.label_month_year_PAY)
@@ -54,7 +54,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                          self.pay_apartment.line_edit_sum,
                          self.pay_internet.line_edit_sum,
                          self.pay_phone.line_edit_sum,
-                         self.pay_apartment.line_edit_minus_water, self.pay_apartment.line_edit_ostat_sum,
+                         self.pay_apartment.line_edit_minus_water, self.pay_apartment.line_edit_balance_sum,
                          self.lineEdit_result,
                          self.label_GL_V_1_PAY, self.label_GL_V_2_PAY, self.label_error_PAY]
 
@@ -209,9 +209,9 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 self.pay_gaz.line_edit_tariff.setText(str(tariff[4]))
 
                 if float(self.win_pole[2].text()) != 0:
-                    self.data_mult.append(self.multiplication(0))
-                    self.data_mult.append(self.multiplication(3))
-                    self.data_mult.append(self.multiplication(6))
+                    self.data_multi.append(self.multiplication(0))
+                    self.data_multi.append(self.multiplication(3))
+                    self.data_multi.append(self.multiplication(6))
             elif self.pay_power.line_edit_quantity.text():  # если значения нет (берем значение из предыдущего месяца)
                 previous_month = month[self.comboBox_month_PAY.currentIndex() - 1]
                 if previous_month in tariff[1]:
@@ -220,9 +220,9 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                     self.pay_gaz.line_edit_tariff.setText(str(tariff[4]))
 
                     if float(self.pay_power.line_edit_tariff.text()) != 0:
-                        self.data_mult.append(self.multiplication(0))
-                        self.data_mult.append(self.multiplication(3))
-                        self.data_mult.append(self.multiplication(6))
+                        self.data_multi.append(self.multiplication(0))
+                        self.data_multi.append(self.multiplication(3))
+                        self.data_multi.append(self.multiplication(6))
 
             previous_month = month[self.comboBox_month_PAY.currentIndex() - 1]
             if previous_month in tariff[1]:
@@ -261,7 +261,9 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 payment_checked(self.list_payments, self.status)
                 self.status = str_list(self.status)
 
-# TODO: Написать проверку на галочку
+                if self.status == "1 1 1 1 1 1":
+                    self.label_GL_V_1_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
+                    self.label_GL_V_2_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
 
         self.pay_power.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(0))
         self.pay_water.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(3))
@@ -309,9 +311,9 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
             self.final_summa()
 
-            self.data_mult = []  # формируем список сумм за тарифные платежи
+            self.data_multi = []  # формируем список сумм за тарифные платежи
             for i in self.win_pole[0:7:3]:
-                self.data_mult.append(float(text_convert(i.text())))
+                self.data_multi.append(float(text_convert(i.text())))
 
             self.water_sum = self.quantity * self.tariff_water
             self.pay_apartment.line_edit_minus_water.setText(
@@ -330,7 +332,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 self.pay_apartment.line_edit_sum.setText(num_conv_to_text(apart))
 
                 ost = float(text_conv_to_num(apart)) - self.water_sum
-                self.pay_apartment.line_edit_ostat_sum.setText(
+                self.pay_apartment.line_edit_balance_sum.setText(
                     denomination(int(self.comboBox_year_PAY.currentText()), ost))
 
                 self.pay_apartment.line_edit_minus_water.setText(
@@ -365,7 +367,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         try:
             if win_pole == self.win_pole[9:12]:
                 if self.pay_apartment.line_edit_sum.text():
-                    data.extend(self.data_mult)  # добавляем список с суммами за тарифные платежи
+                    data.extend(self.data_multi)  # добавляем список с суммами за тарифные платежи
                     for field in win_pole:  # добавляем суммами за остальные платежи
                         data.append(float(text_convert(field.text())))
                     data.append(self.status)

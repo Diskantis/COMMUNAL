@@ -125,7 +125,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
 
-        file_db = open('LAST/COMMPAY_DAT_2.db', 'a')  # открывает файл базы данных
+        file_db = open('COMMPAY_DAT.db', 'a')  # открывает файл базы данных
         file_db.close()  # закрывает файл базы данных
         table = 'Counters_year_' + str(self.comboBox_year_COU.currentText())  # имя таблицы
         col_name = 'id'  # Имя колонки
@@ -262,7 +262,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
 
         self.label_month_year_COU.setText(b + " " + c)  # устанавливает заголовок ("Месяц Год")
         self.comboBox_month_COU.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
-        self.comboBox_year_COY.setCurrentText(c)  # устанавливает текущий год ("Год")
+        self.comboBox_year_COU.setCurrentText(c)  # устанавливает текущий год ("Год")
 
         self.read_data_counters()
 
