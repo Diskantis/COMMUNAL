@@ -51,7 +51,7 @@ def denomination(year, cash):
     if year_in <= 2016:  # and self.comboBox_month_KP.currentIndex() + 1 < 6:
         den_cash = text_convert(str(int(round(cash, 0))))
     else:
-        den_cash = text_convert(str(float(round(cash, 2))))  # (str('{:.2f}'.format(float(cash))))
+        den_cash = text_convert(str('{:.2f}'.format(float(cash))))  # (str(float(round(cash, 2))))
     return den_cash
 
 

@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
 from res.DLL_CLASS_COMM import Widget_Payment
-from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, lineEdit_pokaz_f, style_scrollbar
+from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, lineEdit_pokaz_f, style_scrollbar, btn_check_payment
 
 
 # окно приложения "ПЛАТЕЖИ"
@@ -15,7 +15,7 @@ class UiWinPayment(object):
         self.WinPayment.setObjectName("CommunalPayment")
         self.WinPayment.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinPayment.resize(800, 400)  # 365
-        self.WinPayment.setGeometry(QtCore.QRect(560, 300, 800, 400))  # +1920+450
+        self.WinPayment.setGeometry(QtCore.QRect(560+1920, 300, 800, 400))  # +1920+450
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
@@ -92,6 +92,11 @@ class UiWinPayment(object):
         self.label_tariff = label_titul_f("тариф", self.frame_title)
         self.label_tariff.setMinimumSize(QtCore.QSize(50, 18))
         self.h_layout_frame_title.addWidget(self.label_tariff)
+
+        self.btn_check_all = btn_check_payment(self.payments_group, 186, 28)
+        self.btn_check_all.move(QtCore.QPoint(8, 8))
+        self.btn_check_all.setStyleSheet("color: rgb(209, 209, 217); background-color: rgba(255, 255, 255, 0); "
+                                         "border: 0px solid rgba(50, 50, 50, 240); padding: 0px; text-align: left;")
 
         self.list_payments = []
         self.list_payments_name = []
