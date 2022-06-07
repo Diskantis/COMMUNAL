@@ -198,7 +198,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         self.lineEdit_post_W4.textEdited[str].connect(lambda: self.summa_month_ras(14))
         self.lineEdit_post_G.textEdited[str].connect(lambda: self.summa_month_ras(16))
 
-        self.data = self.create_list_date_counters()  # создает список значений
+        self.data = self.create_list_date_counters("Counters")  # создает список значений
 
     def summa_month_ras(self, n):
         try:
@@ -225,9 +225,9 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             self.label_error_COU.setText('Должно быть значение!')
 
     # создает список значений полей для записи в таблицу
-    def create_list_date_counters(self):  # список показаний за месяц
+    def create_list_date_counters(self, name_table):  # список показаний за месяц
         data = [self.comboBox_month_COU.currentIndex() + 1,
-                self.comboBox_month_COU.currentText() + " " + self.comboBox_year_COU.currentText()]
+                self.comboBox_month_COU.currentText() + " " + self.comboBox_year_COU.currentText(), name_table]
         try:
             for field in self.win_pole[0:12]:
                 data.append(int(field.text()))
@@ -237,7 +237,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         return data
 
     def btn_save_COU(self):
-        data = self.create_list_date_counters()  # создает список значений
+        data = self.create_list_date_counters("Counters")  # создает список значений
         table = 'Counters_year_' + self.data[1].split()[1]  # Имя таблицы ("1")
         col_name = 'id'  # Имя колонки
         row_record = self.data[0]  # Имя записи ("1")
@@ -249,8 +249,10 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
             self.label_error_COU.setText('Такая запись уже существует!')
             self.save_yes_or_not(self.data_base, data, self.label_error_COU)
         else:
+            data.remove(data[2])
             SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, data)
             self.next_period()
+            self.read_data_counters()
 
     def next_period(self):
         if self.comboBox_month_COU.currentIndex() + 2 != 13:
@@ -264,7 +266,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         self.comboBox_month_COU.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
         self.comboBox_year_COU.setCurrentText(c)  # устанавливает текущий год ("Год")
 
-        self.read_data_counters()
+        self.current_month_index = self.period_PAY.label_sel_period()
 
     def save_yes_or_not(self, data_base, date, label_error):
         self.save_or_COU = Save_OR()

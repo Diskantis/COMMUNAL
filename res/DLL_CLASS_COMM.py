@@ -5,6 +5,7 @@ import sqlite3
 import datetime
 
 from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtWidgets import QDesktopWidget
 
 from res.UIC_CLASS_COMM import UiWinAdd, Ui_Widget_Payment
 
@@ -46,13 +47,14 @@ def clear_layout(layout):
                 clear_layout(child.layout())
 
 
-def denomination(year, cash):
-    year_in = int(year)
-    if year_in <= 2016:  # and self.comboBox_month_KP.currentIndex() + 1 < 6:
-        den_cash = text_convert(str(int(round(cash, 0))))
-    else:
-        den_cash = text_convert(str('{:.2f}'.format(float(cash))))  # (str(float(round(cash, 2))))
-    return den_cash
+def denomination(year_in, month_in, cash):
+    year_in = int(year_in)
+    if year_in <= 2016:  # and  < 6:
+        if month_in + 2 <= 6:
+            den_cash = text_convert(str(int(round(cash, 0))))
+        else:
+            den_cash = text_convert(str('{:.2f}'.format(float(cash))))  # (str(float(round(cash, 2))))
+        return den_cash
 
 
 def text_convert(string):
@@ -73,11 +75,11 @@ def num_conv_to_text(string):
     return res
 
 
-# def center(a):
-#     qr = a.geometry()
-#     cp = QDesktopWidget().availableGeometry().center()
-#     qr.moveCenter(cp)
-#     a.move(qr.topLeft())
+def center(a):
+    qr = a.geometry()
+    cp = QDesktopWidget().availableGeometry().center()
+    qr.moveCenter(cp)
+    a.move(qr.topLeft())
 
 
 def str_list(val):  # функция для преобразования self.status
@@ -163,7 +165,9 @@ class Save_OR:
         self.save_yn.setWindowTitle("Перезапись")
 
         self.save_yn.lineEdit.deleteLater()
-        if data[2] == "Tariff":
+        if data[2] == "Counters":
+            self.name_table = "Показаниями счетчиков"
+        elif data[2] == "Tariff":
             self.name_table = "Тарифами"
         elif data[2] == "Payments":
             self.name_table = "Платежами"
