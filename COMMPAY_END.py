@@ -6,7 +6,7 @@ import win32api
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication
 
-from res.DLL_CLASS_COMM import dt_month, dt_year, month, convert_month, selected_period, \
+from res.DLL_CLASS_COMM import dt_day, dt_month, dt_year, month, convert_month, selected_period, \
     Period, Save_OR, SQLite3_Data_Base, text_convert, denomination, text_conv_to_num, str_list, payment_checked, \
     num_conv_to_text
 from COMMPAY_UIC import UiWinPayment
@@ -34,13 +34,14 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.current_month_index = month.index(convert_month(dt_month))  # Текущий месяц (int(0))
 
         # установка ТЕКУЩЕГО ПЕРИОДА
-        self.label_month_year_PAY.setText(convert_month(dt_month) + " " + dt_year)  # заголовок ("Месяц Год")
-        self.comboBox_month_PAY.setCurrentIndex(self.current_month_index)  # устанавливает текущий месяц ("Месяц")
-        self.comboBox_year_PAY.setCurrentText(dt_year)  # устанавливает текущий год ("Год")
-
-        # self.label_month_year_PAY.setText("Март 2008")  # заголовок ("Месяц Год")
-        # self.comboBox_month_PAY.setCurrentIndex(2)  # устанавливает текущий месяц ("Месяц")
-        # self.comboBox_year_PAY.setCurrentText("2008")  # устанавливает текущий год ("Год")
+        if int(dt_day) == 11:
+            self.label_month_year_PAY.setText(convert_month(dt_month) + " " + dt_year)  # заголовок ("Месяц Год")
+            self.comboBox_month_PAY.setCurrentIndex(self.current_month_index)  # устанавливает текущий месяц ("Месяц")
+            self.comboBox_year_PAY.setCurrentText(dt_year)  # устанавливает текущий год ("Год")
+        else:
+            self.label_month_year_PAY.setText(convert_month(int(dt_month) - 1) + " " + dt_year)
+            self.comboBox_month_PAY.setCurrentIndex(self.current_month_index - 1)
+            self.comboBox_year_PAY.setCurrentText(dt_year)
 
         self.btn_Left_PAY.clicked.connect(self.btn_period_left)  # прокрутка в лево
         self.btn_Right_PAY.clicked.connect(self.btn_period_right)  # прокрутка в право
@@ -236,6 +237,9 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             previous_month = month[self.comboBox_month_PAY.currentIndex() - 1]
             if previous_month in tariff[1]:
                 self.tariff_water = tariff[3]
+                if int(self.comboBox_year_PAY.currentText()) == 2016:
+                    if self.comboBox_month_PAY.currentIndex() + 1 == 6:
+                        self.tariff_water = self.tariff_water / 10000
 
         if self.pay_water.line_edit_sum.text():
             self.water_sum = self.quantity * self.tariff_water
@@ -243,15 +247,6 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                                                                           self.comboBox_month_PAY.currentIndex(),
                                                                           self.water_sum) + " (" + str(self.quantity) +
                                                              ") " + month[self.comboBox_month_PAY.currentIndex() - 1])
-
-            # if int(self.comboBox_year_PAY.currentText()) == 2016:
-            #     if self.comboBox_month_PAY.currentIndex() + 2 == 6:
-            #         self.water_sum = self.quantity * self.tariff_water / 10000
-            #         self.pay_apartment.line_edit_minus_water.setText(
-            #             denomination(int(self.comboBox_year_PAY.currentText()),
-            #                          self.comboBox_month_PAY.currentIndex(),
-            #                          self.water_sum) + " (" + str(self.quantity) +
-            #             ") " + month[self.comboBox_month_PAY.currentIndex() - 1])
 
         # читаем таблицу с ПЛАТЕЖАМИ
         read_table_payments = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_payments)
@@ -279,16 +274,10 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 payment_checked(self.list_payments, self.status)
                 self.status = str_list(self.status)
 
-                # TODO проверку для галочки
                 if self.status == "1 1 1 1 1 1":
                     self.btn_check_all.setChecked(True)
                     self.label_GL_V_1_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
                     self.label_GL_V_2_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
-            # else:
-            #     if self.pay_power.line_edit_sum.text():
-            #         self.pay_apartment.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()), 0))
-            #         self.pay_internet.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()), 0))
-            #         self.pay_phone.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()), 0))
 
         self.pay_power.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(0))
         self.pay_water.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(3))
@@ -326,13 +315,16 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.label_GL_V_2_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
         else:
             self.btn_check_all.setChecked(False)
+            self.label_GL_V_1_PAY.clear()
+            self.label_GL_V_2_PAY.clear()
 
     def check_btn_status_all(self):
         if self.btn_check_all.isChecked():
             for i in self.list_payments:
                 i.setChecked(True)
             self.status = "1 1 1 1 1 1"
-
+            self.label_GL_V_1_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
+            self.label_GL_V_2_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
         elif not self.btn_check_all.isChecked():
             read_table_payments = SQLite3_Data_Base.sqlite3_read_data(
                 self.data_base, 'Payments_year_' + str(self.comboBox_year_PAY.currentText()))
@@ -352,6 +344,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                     for _ in self.list_payments:
                         _.setChecked(False)
                     self.status = "0 0 0 0 0 0"
+            self.label_GL_V_1_PAY.clear()
+            self.label_GL_V_2_PAY.clear()
 
     def multiplication(self, n):
         try:

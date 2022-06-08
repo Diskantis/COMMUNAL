@@ -49,12 +49,11 @@ def clear_layout(layout):
 
 def denomination(year_in, month_in, cash):
     year_in = int(year_in)
-    if year_in <= 2016:  # and  < 6:
-        if month_in + 2 <= 6:
-            den_cash = text_convert(str(int(round(cash, 0))))
-        else:
-            den_cash = text_convert(str('{:.2f}'.format(float(cash))))  # (str(float(round(cash, 2))))
-        return den_cash
+    if year_in <= 2016 and month_in + 1 < 6:
+        den_cash = text_convert(str(int(round(cash, 0))))
+    else:
+        den_cash = text_convert(str('{:.2f}'.format(float(cash))))  # (str(float(round(cash, 2))))
+    return den_cash
 
 
 def text_convert(string):
