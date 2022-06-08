@@ -4,6 +4,7 @@ import sys
 import win32api
 
 from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtCore import QEvent, QTimer
 from PyQt5.QtWidgets import QApplication
 
 from res.DLL_CLASS_COMM import dt_day, dt_month, dt_year, month, convert_month, selected_period, \
@@ -34,7 +35,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.current_month_index = month.index(convert_month(dt_month))  # Текущий месяц (int(0))
 
         # установка ТЕКУЩЕГО ПЕРИОДА
-        if int(dt_day) == 11:
+        if dt_day >= "11":
             self.label_month_year_PAY.setText(convert_month(dt_month) + " " + dt_year)  # заголовок ("Месяц Год")
             self.comboBox_month_PAY.setCurrentIndex(self.current_month_index)  # устанавливает текущий месяц ("Месяц")
             self.comboBox_year_PAY.setCurrentText(dt_year)  # устанавливает текущий год ("Год")
@@ -69,55 +70,45 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.pay_internet.btn_check.clicked.connect(self.check_btn_status)  # check_status
         self.pay_phone.btn_check.clicked.connect(self.check_btn_status)  # check_status
 
+        self.pay_power.line_edit_tariff.installEventFilter(self)
+        self.pay_water.line_edit_tariff.installEventFilter(self)
+        self.pay_gaz.line_edit_tariff.installEventFilter(self)
+        self.pay_apartment.line_edit_sum.installEventFilter(self)
+        self.pay_internet.line_edit_sum.installEventFilter(self)
+        self.pay_phone.line_edit_sum.installEventFilter(self)
+
+        self.pay_apartment.line_edit_sum.selectAll()
+
         self.btn_Save_PAY.clicked.connect(self.btn_save_PAY)
         self.btn_Cancel_PAY.clicked.connect(self.btn_cancel_PAY)
 
         # ЧИТАЕМ показания из базы данных
-        self.start_period()
         self.read_data_pay()
 
         self.show()
 
-    # TODO разобраться со стартовым периодом
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.FocusIn:
+            pay_sum = obj
 
-    def start_period(self):
-        pass
+            def summa(pay):
+                pay.selectAll()
 
-    # def start_period(self):
-    #     list_start = []
-    #     for i in month[5:12]:
-    #         list_start.append(i + " 2006")
-    #
-    #     if self.label_month_year_PAY.text() in list_start:
-    #         print(self.label_month_year_PAY.text())
-    #         self.comboBox_month_PAY.clear()
-    #         self.comboBox_month_PAY.addItems(month[5:12])
-    #
-    #         self.current_month_index = self.period_PAY.label_sel_period()
-    #         self.read_data_pay()
-
-    # def start_period(self):
-    #     if self.label_month_year_PAY.text() == 'Декабрь 2006' and self.comboBox_month_PAY.count() == 12 \
-    #             or int(self.comboBox_year_PAY.currentText()) == 2006 and self.comboBox_month_PAY.currentIndex() <= 11\
-    #             and self.comboBox_month_PAY.count() == 12:
-    #         self.comboBox_month_PAY.clear()
-    #         self.comboBox_month_PAY.addItems(month[5:12])
-    #     elif self.label_month_year_PAY.text() == 'Декабрь 2006' and self.comboBox_month_PAY.count() == 7 \
-    #             or int(self.comboBox_year_PAY.currentText()) >= 2007 and self.comboBox_month_PAY.currentIndex() >= 0 \
-    #             and self.comboBox_month_PAY.count() == 7:
-    #         self.comboBox_month_PAY.clear()
-    #         self.comboBox_month_PAY.addItems(month)
-    #
-    #     self.current_month_index = self.period_PAY.label_sel_period()
-    #     self.read_data_pay()
+            if obj == pay_sum:
+                QTimer.singleShot(10, lambda: summa(pay_sum))
+        return super(CommunalPayment, self).eventFilter(obj, event)
 
     def combo_box_period_sel(self):
-        self.start_period()
         self.current_month_index = self.period_PAY.label_sel_period()
+        if self.comboBox_year_PAY.currentText() == "2006":
+            if self.comboBox_month_PAY.currentIndex() <= 5:
+                self.comboBox_month_PAY.setCurrentIndex(5)
+                self.label_month_year_PAY.setText("Июнь 2006")
+                self.current_month_index = 5
         self.read_data_pay()
 
     def btn_period_left(self):
-        self.start_period()
+        self.combo_box_period_sel()
         if self.label_month_year_PAY.text() == "Июнь 2006":
             self.btn_Left_PAY.setEnabled(False)
         else:
@@ -125,7 +116,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.read_data_pay()
 
     def btn_period_right(self):
-        self.start_period()
+        self.combo_box_period_sel()
         if self.label_month_year_PAY.text() != "Май 2006":
             self.btn_Left_PAY.setEnabled(True)
             self.current_month_index = self.period_PAY.click_btn_right(self.current_month_index)

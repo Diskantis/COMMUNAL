@@ -30,7 +30,7 @@ def selected_period(combo_m, combo_y):
     combo_m.addItems(month)  # Выбор месяц в comboBox_month_KP
 
     combo_y.clear()
-    last_year = 2026
+    last_year = 2023
     if dt_month == "12":
         last_year += 1
     for year_num in range(2006, last_year):  # Выбор года в comboBox_year_KP
@@ -164,6 +164,7 @@ class Save_OR:
         self.save_yn.setWindowTitle("Перезапись")
 
         self.save_yn.lineEdit.deleteLater()
+
         if data[2] == "Counters":
             self.name_table = "Показаниями счетчиков"
         elif data[2] == "Tariff":
