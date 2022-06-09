@@ -13,7 +13,7 @@ class UiWinExpenses(object):
         self.WinExpenses.setObjectName("Income and Expenses")
         self.WinExpenses.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinExpenses.resize(800, 400)
-        self.WinExpenses.setGeometry(QtCore.QRect(560 + 1920+400, 300, 800, 400))
+        self.WinExpenses.setGeometry(QtCore.QRect(560 + 1920+395, 300, 800, 400))
         self.WinExpenses.setMinimumSize(QtCore.QSize(800, 400))
         self.WinExpenses.setFixedWidth(800)
         self.WinExpenses.setWindowTitle('ДОХОДЫ И РАСХОДЫ')
