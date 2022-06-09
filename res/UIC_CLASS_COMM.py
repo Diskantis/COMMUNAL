@@ -127,6 +127,20 @@ def comboBox_f(group, xl, yl):  # выбор месяца или года
     return comboBox
 
 
+def scrollArea_f(app, xl, yl):
+    scrollArea = QtWidgets.QScrollArea(app)
+    scrollArea.setMaximumSize(QtCore.QSize(xl, yl))
+    scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
+    scrollArea.setFrameShadow(QtWidgets.QFrame.Plain)
+    scrollArea.setLineWidth(0)
+    scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+    scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+    scrollArea.setStyleSheet("background-color: rgb(100, 100, 100); padding: 0, 5, 0, 0;")
+    scrollArea.setWidgetResizable(True)
+    scrollArea.setObjectName("scrollArea")
+    return scrollArea
+
+
 class UiWinHeaderFooter(object):
     def ui_win_header(self, Win_app):
         self.frame_ui_header = QtWidgets.QFrame(Win_app)
@@ -341,7 +355,7 @@ class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛ
         self.frame_btn.setObjectName("frame_title")
 
         self.h_layout_btn = QtWidgets.QHBoxLayout(self.frame_btn)
-        self.h_layout_btn.setContentsMargins(8, 0, 0, 0)
+        self.h_layout_btn.setContentsMargins(0, 0, 0, 0)
         self.h_layout_btn.setSpacing(5)
         self.h_layout_btn.setObjectName("h_layout_btn")
 

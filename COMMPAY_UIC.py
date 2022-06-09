@@ -18,6 +18,8 @@ class UiWinPayment(object):
         self.WinPayment.setGeometry(QtCore.QRect(560 + 1920-415, 300, 800, 400))  # +1920+450
         self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
         self.WinPayment.setFixedWidth(800)
+        # self.WinPayment.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.WinPayment.activateWindow()
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
         self.WinPayment.setWindowIcon(QIcon('res/img/Payments-icon.png'))
         self.WinPayment.setStyleSheet("background-color: rgb(78, 79, 84);")
@@ -32,9 +34,6 @@ class UiWinPayment(object):
         self.v_Layout_centralwidget.setContentsMargins(10, 10, 10, 10)
         self.v_Layout_centralwidget.setSpacing(8)
         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
-
-        grad_1 = "(91, 92, 96, 255)"
-        grad_2 = "(108, 109, 114, 255)"
 
         # Frame Header
 
@@ -168,6 +167,9 @@ class UiWinPayment(object):
         self.v_layout_pay_group.addWidget(self.pay_phone)
 
         # Frame Result
+
+        grad_1 = "(91, 92, 96, 255)"
+        grad_2 = "(108, 109, 114, 255)"
 
         self.frame_result = QtWidgets.QFrame(self.centralwidget)
         self.frame_result.setFixedSize(QtCore.QSize(780, 40))

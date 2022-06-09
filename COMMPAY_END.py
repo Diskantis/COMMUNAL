@@ -389,10 +389,6 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.pay_apartment.line_edit_balance_sum.setText(
             denomination(int(self.comboBox_year_PAY.currentText()), self.comboBox_month_PAY.currentIndex(), ost))
 
-    # def sel_payment(self, line_edit_sum):
-    #     line_edit_sum.setFocus()
-    #     line_edit_sum.selectAll()
-
     def final_summa(self):
         try:
             self.lineEdit_result.clear()
@@ -437,8 +433,6 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
     def btn_save_PAY(self):
         self.list_data_tariff = self.create_list_date("Tariff", self.win_pole[2:9:3])
         self.list_data_payments = self.create_list_date("Payments", self.win_pole[9:12])
-        # print(self.list_data_tariff)
-        # print(self.list_data_payments)
         self.save_payment(self.list_data_tariff, self.list_data_payments)
 
     def save_payment(self, *args):
