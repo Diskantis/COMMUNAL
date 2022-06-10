@@ -7,15 +7,16 @@ from PyQt5.QtGui import QIcon
 from res.UIC_CLASS_COMM import label_titul_f, lineEdit_pokaz_f, UiWinHeaderFooter, UiWinGrouper
 
 
+# окно приложения "ПОКАЗАНИЯ СЧЕТЧИКОВ"
 class UiWinCounters(object):
     def setupUi_COU(self, WinCounters):
         self.WinCounters = WinCounters  # окно
         self.WinCounters.setObjectName("WinCounters")
-        self.WinCounters.setWindowModality(Qt.ApplicationModal)
+        self.WinCounters.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinCounters.resize(800, 400)
         self.WinCounters.setGeometry(QtCore.QRect(560, 300, 800, 400))
-        self.WinCounters.setMinimumSize(QtCore.QSize(800, 400))
-        self.WinCounters.setMaximumSize(QtCore.QSize(800, 400))
+        self.WinCounters.setFixedSize(QtCore.QSize(800, 400))
+        self.WinCounters.activateWindow()
         self.WinCounters.setWindowTitle('ПОКАЗАНИЯ СЧЕТЧИКОВ')
         self.WinCounters.setWindowIcon(QIcon('res/img/Counters-icon.png'))
         self.WinCounters.setStyleSheet("background-color: rgb(78, 79, 84);")

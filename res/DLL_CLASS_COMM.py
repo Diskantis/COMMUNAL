@@ -4,10 +4,11 @@ import re
 import sqlite3
 import datetime
 
+import win32api
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QDesktopWidget
 
-from res.UIC_CLASS_COMM import UiWinAdd, Ui_Widget_Payment
+from res.UIC_CLASS_COMM import UiWinDialog, Ui_Widget_Payment
 
 dt_day = datetime.datetime.now().strftime("%d")  # Текущий день (str "30")
 dt_month = datetime.datetime.now().strftime("%m")  # Текущий месяц (str "01")
@@ -158,12 +159,11 @@ class Period:
 
 
 class Save_OR:
-    def save_yes_or_not(self, data_base, data, label_error):
-        self.save_yn = UiWinAdd()
-        self.save_yn.name_payment()
-        self.save_yn.setWindowTitle("Перезапись")
+    def save_yes_or_not(self, data_base, data, pos, label_error):
+        self.save_yn = UiWinDialog(pos)
+        self.save_yn.show()
 
-        self.save_yn.lineEdit.deleteLater()
+        self.save_yn.setWindowTitle("Перезапись")
 
         if data[2] == "Counters":
             self.name_table = "Показаниями счетчиков"
@@ -198,6 +198,76 @@ class Save_OR:
     def save_yn_btn_cancel(self, label_error):
         label_error.hide()
         self.save_yn.close()
+
+
+class IAENewRecord:
+    def win_sel_type_rec(self, win_pos):
+        self.record = []
+        self.win_new_rec = UiWinDialog(win_pos)
+        self.win_new_rec.radio_btn()
+        self.win_new_rec.show()
+
+        self.win_new_rec.add_pay_btn_OK.clicked.connect(lambda: self.win_rec_name(self.win_new_rec))  # OK
+        self.win_new_rec.add_pay_btn_OK.setAutoDefault(True)
+        self.win_new_rec.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_new_rec))  # CANCEL
+
+    def win_rec_name(self, win):
+        win.frame_btn.deleteLater()
+        win.add_record()
+        # if win32api.GetKeyboardLayout() == 67699721:  # 67699721 - английский 00000409
+        #     win32api.LoadKeyboardLayout("00000419", 1)  # 68748313 - русский  00000419
+
+        win.add_pay_btn_OK.clicked.connect(lambda: self.win_rec_summa(win))  # OK
+        win.add_pay_btn_OK.setAutoDefault(True)
+        # print(win.self.lineEdit)
+        # win.lineEdit.returnPressed.connect(win.add_pay_btn_OK.click)
+        # win.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(win))  # CANCEL
+
+    def win_rec_summa(self, win):
+        # self.name_pay = self.win_new_rec.lineEdit.text()
+        # win.lineEdit.clear()
+        # win.close()
+
+        # self.win_summa_pay = UiWinDialog(self.win_pos)
+        # self.win_summa_pay.setupUi_Dialog()
+        # win.label.setText("Сумма платежа")
+
+        # if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
+        #     win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
+
+        # self.win_summa_pay.lineEdit.returnPressed.connect(self.win_summa_pay.add_pay_btn_OK.click)
+        # self.win_summa_pay.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_summa_pay))
+
+        self.record.append(win.lineEdit.text())
+        print(self.record)
+        # win.lineEdit.clear()
+
+
+        # win.label.setText("Сумма платежа")
+
+    #     win.add_pay_btn_OK.clicked.connect(lambda: self.list_record(self.record))  # кнопка OK окна СУММА
+    #     win.add_pay_btn_OK.setAutoDefault(True)
+    #     win.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(win))  # CANCEL
+    #
+    # def list_record(self, rec):
+    #     return self.record
+
+    # def add_payment(self):
+    #     self.summa_pay = self.win_summa_pay.lineEdit.text()
+    #     self.summa_pay_text = text_convert(self.summa_pay)
+    #
+    #     self.payment = Widget_Payment(self.name_pay, "(209, 209, 217)")
+    #     self.payment.line_edit_sum.setText(self.summa_pay_text + " руб")
+    #     self.win_pole.append(self.payment.line_edit_sum)
+    #     self.v_layout_scrollArea_inc.addWidget(self.payment)
+    #
+    #     self.win_summa_pay.lineEdit.clear()
+    #     self.win_summa_pay.close()
+
+    @staticmethod
+    def win_add_cancel(app_win):
+        # app_win.lineEdit.clear()
+        app_win.close()
 
 
 class SQLite3_Data_Base:

@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon
 from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, btn_f, lineEdit_pokaz_f, style_scrollbar, scrollArea_f
 
 
-# окно приложения "ПЛАТЕЖИ"
+# окно приложения "ДОХОДЫ И РАСХОДЫ"
 class UiWinIncomeExpenses(object):
     def setupUi_IAE(self, WinIncomeExpenses):
         self.WinIncomeExpenses = WinIncomeExpenses  # окно
@@ -14,8 +14,7 @@ class UiWinIncomeExpenses(object):
         self.WinIncomeExpenses.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinIncomeExpenses.resize(800, 400)
         self.WinIncomeExpenses.setGeometry(QtCore.QRect(560 + 1920 + 395, 300, 800, 400))  #
-        self.WinIncomeExpenses.setMinimumSize(QtCore.QSize(800, 400))
-        self.WinIncomeExpenses.setFixedWidth(800)
+        self.WinIncomeExpenses.setFixedSize(QtCore.QSize(800, 400))
         self.WinIncomeExpenses.activateWindow()
         self.WinIncomeExpenses.setWindowTitle('ДОХОДЫ И РАСХОДЫ')
         self.WinIncomeExpenses.setWindowIcon(QIcon('res/img/Payments-icon.png'))
@@ -98,7 +97,7 @@ class UiWinIncomeExpenses(object):
         self.expenses_group.setFont(font)
         self.expenses_group.setStyleSheet("QGroupBox{font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
                                           "background-color: rgb(100, 100, 100);"
-                                          "border: 1px solid rgba(209, 209, 217, 240);};padding: 0, 0, 0, 0;")
+                                          "border: 1px solid rgba(209, 209, 217, 240);}; padding: 0, 0, 0, 0;")
         self.expenses_group.setAlignment(QtCore.Qt.AlignCenter)
         self.expenses_group.setObjectName("payments_group")
 
@@ -127,7 +126,7 @@ class UiWinIncomeExpenses(object):
 
         # Button Add Payment
 
-        self.btn_add_iae = btn_f("Добавить платеж", self.WinIncomeExpenses, 780, 30, 11)
+        self.btn_add_iae = btn_f("Добавить запись", self.WinIncomeExpenses, 780, 30, 11)
         self.v_Layout_centralwidget.addWidget(self.btn_add_iae)
 
         # Frame Result
@@ -135,36 +134,82 @@ class UiWinIncomeExpenses(object):
         grad_1 = "(91, 92, 96, 255)"
         grad_2 = "(108, 109, 114, 255)"
 
-        self.frame_result = QtWidgets.QFrame(self.centralwidget)
-        self.frame_result.setFixedSize(QtCore.QSize(780, 40))
-        self.frame_result.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_result.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.frame_result.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
-                                        "background-color: rgb(100, 100, 100); "
-                                        "border: 1px solid rgba(209, 209, 217, 240);")
-        self.frame_result.setObjectName("frame_result")
+        self.frame_group_result = QtWidgets.QFrame(self.centralwidget)
+        self.frame_group_result.setMinimumSize(QtCore.QSize(780, 40))
+        self.frame_group_result.setMaximumSize(QtCore.QSize(780, 300))
+        self.frame_group_result.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_group_result.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.frame_group_result.setStyleSheet("background-color: rgb(78, 79, 84); border: 0px solid; padding: 0px;")
+        self.frame_group_result.setObjectName("frame_title")
 
-        self.h_layout_frame_result = QtWidgets.QHBoxLayout(self.frame_result)
-        self.h_layout_frame_result.setContentsMargins(0, 0, 0, 0)
-        self.h_layout_frame_result.setSpacing(5)
-        self.h_layout_frame_result.setObjectName("h_layout_frame_result")
+        self.h_layout_frame_group_result = QtWidgets.QHBoxLayout(self.frame_group_result)
+        self.h_layout_frame_group_result.setContentsMargins(0, 0, 0, 0)
+        self.h_layout_frame_group_result.setSpacing(8)
+        self.h_layout_frame_group_result.setObjectName("h_layout_frame_title")
 
-        self.spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_frame_result.addItem(self.spacerItem)
+        self.frame_result_inc = QtWidgets.QFrame(self.frame_group_result)
+        self.frame_result_inc.setFixedSize(QtCore.QSize(386, 40))
+        self.frame_result_inc.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_result_inc.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.frame_result_inc.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
+                                            "background-color: rgb(100, 100, 100); "
+                                            "border: 1px solid rgba(209, 209, 217, 240);")
+        self.frame_result_inc.setObjectName("frame_result")
 
-        self.label_result = label_titul_f("Итого:", self.frame_result, 14)
-        self.label_result.setFixedSize(QtCore.QSize(80, 30))
-        self.label_result.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.h_layout_frame_result.addWidget(self.label_result)
+        self.h_layout_frame_result_inc = QtWidgets.QHBoxLayout(self.frame_result_inc)
+        self.h_layout_frame_result_inc.setContentsMargins(0, 0, 0, 0)
+        self.h_layout_frame_result_inc.setSpacing(5)
+        self.h_layout_frame_result_inc.setObjectName("h_layout_frame_result")
 
-        self.lineEdit_result = lineEdit_pokaz_f("000.00", self.frame_result, "(255, 255, 216, 200)", grad_1, grad_2)
-        self.lineEdit_result.setFixedSize(QtCore.QSize(400, 30))
-        self.h_layout_frame_result.addWidget(self.lineEdit_result)
+        self.h_layout_frame_group_result.addWidget(self.frame_result_inc)
 
-        self.spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_frame_result.addItem(self.spacerItem)
+        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_layout_frame_result_inc.addItem(self.spacerItem)
 
-        self.v_Layout_centralwidget.addWidget(self.frame_result)
+        self.label_result_inc = label_titul_f("ДОХОДОВ:", self.frame_result_inc, 12)
+        self.label_result_inc.setFixedSize(QtCore.QSize(110, 30))
+        self.label_result_inc.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.h_layout_frame_result_inc.addWidget(self.label_result_inc)
+
+        self.lineEdit_result_inc = lineEdit_pokaz_f("0", self.frame_result_inc, "(255, 255, 216, 200)", grad_1, grad_2)
+        self.lineEdit_result_inc.setFixedSize(QtCore.QSize(250, 30))
+        self.h_layout_frame_result_inc.addWidget(self.lineEdit_result_inc)
+
+        self.spacerItem = QtWidgets.QSpacerItem(25, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_layout_frame_result_inc.addItem(self.spacerItem)
+
+        self.frame_result_exp = QtWidgets.QFrame(self.frame_group_result)
+        self.frame_result_exp.setFixedSize(QtCore.QSize(386, 40))
+        self.frame_result_exp.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_result_exp.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.frame_result_exp.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); border-radius: 5px; "
+                                            "background-color: rgb(100, 100, 100); "
+                                            "border: 1px solid rgba(209, 209, 217, 240);")
+        self.frame_result_exp.setObjectName("frame_result")
+
+        self.h_layout_frame_result_exp = QtWidgets.QHBoxLayout(self.frame_result_exp)
+        self.h_layout_frame_result_exp.setContentsMargins(0, 0, 0, 0)
+        self.h_layout_frame_result_exp.setSpacing(5)
+        self.h_layout_frame_result_exp.setObjectName("h_layout_frame_result")
+
+        self.h_layout_frame_group_result.addWidget(self.frame_result_exp)
+
+        self.spacerItem = QtWidgets.QSpacerItem(25, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_layout_frame_result_exp.addItem(self.spacerItem)
+
+        self.lineEdit_result_exp = lineEdit_pokaz_f("0", self.frame_result_exp, "(255, 255, 216, 200)", grad_1, grad_2)
+        self.lineEdit_result_exp.setFixedSize(QtCore.QSize(250, 30))
+        self.h_layout_frame_result_exp.addWidget(self.lineEdit_result_exp)
+
+        self.label_result_exp = label_titul_f(":РАСХОДОВ", self.frame_result_exp, 12)
+        self.label_result_exp.setFixedSize(QtCore.QSize(110, 30))
+        self.label_result_exp.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.h_layout_frame_result_exp.addWidget(self.label_result_exp)
+
+        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_layout_frame_result_exp.addItem(self.spacerItem)
+
+        self.v_Layout_centralwidget.addWidget(self.frame_group_result)
 
         # Frame Footer
 
@@ -173,11 +218,10 @@ class UiWinIncomeExpenses(object):
         self.v_Layout_centralwidget.addWidget(self.frame_ui_footer)
 
         QtCore.QMetaObject.connectSlotsByName(self.WinIncomeExpenses)
-        # self.WinExpenses.setTabOrder(self.btn_Right_EXP, self.btn_add_exp)
-        # self.WinExpenses.setTabOrder(self.btn_add_exp, self.comboBox_month_EXP)
-        # self.WinExpenses.setTabOrder(self.comboBox_month_EXP, self.comboBox_year_EXP)
-        # self.WinExpenses.setTabOrder(self.comboBox_year_EXP, self.btn_Save_EXP)
-        # # self.WinPayment.setTabOrder(self.comboBox_year_EXP, self.label_error_EXP)
-        # self.WinExpenses.setTabOrder(self.btn_Save_EXP, self.btn_Cancel_EXP)
-        # self.WinExpenses.setTabOrder(self.btn_Cancel_EXP, self.btn_Left_EXP)
-        # self.WinExpenses.setTabOrder(self.btn_Left_EXP, self.btn_Right_EXP)
+        self.WinIncomeExpenses.setTabOrder(self.btn_Right_IAE, self.btn_add_iae)
+        self.WinIncomeExpenses.setTabOrder(self.btn_add_iae, self.comboBox_month_IAE)
+        self.WinIncomeExpenses.setTabOrder(self.comboBox_month_IAE, self.comboBox_year_IAE)
+        self.WinIncomeExpenses.setTabOrder(self.comboBox_year_IAE, self.btn_Save_IAE)
+        self.WinIncomeExpenses.setTabOrder(self.btn_Save_IAE, self.btn_Cancel_IAE)
+        self.WinIncomeExpenses.setTabOrder(self.btn_Cancel_IAE, self.btn_Left_IAE)
+        self.WinIncomeExpenses.setTabOrder(self.btn_Left_IAE, self.btn_Right_IAE)

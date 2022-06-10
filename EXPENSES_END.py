@@ -2,12 +2,12 @@
 
 import sys
 import win32api
-from PyQt5 import QtCore
+from PyQt5.QtCore import QEvent
 
 from PyQt5.QtWidgets import QApplication
 
 from res.DLL_CLASS_COMM import *
-from res.UIC_CLASS_COMM import UiWinAdd
+from res.UIC_CLASS_COMM import UiWinDialog
 
 from EXPENSES_UIC import UiWinIncomeExpenses
 
@@ -18,9 +18,8 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         super(IncomeExpenses, self).__init__()
 
         self.setupUi_IAE(self)
-        self.save_yn = UiWinAdd()
-
         self.data_base = 'COMMPAY_DAT.db'  # имя базы данных
+        self.record = []
 
         self.period_IAE = Period(self.comboBox_month_IAE, self.comboBox_year_IAE, self.label_month_year_IAE)
         self.save_or_IAE = Save_OR()
@@ -40,7 +39,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
         self.btn_Left_IAE.clicked.connect(self.btn_period_left)  # прокрутка в лево
         self.btn_Right_IAE.clicked.connect(self.btn_period_right)  # прокрутка в право
-        self.btn_add_iae.clicked.connect(self.win_add_name_pay)
+        self.btn_add_iae.clicked.connect(self.add_payment)
 
         self.win_pole = [self.label_GL_V_1_IAE, self.label_GL_V_2_IAE, self.label_error_IAE]
 
@@ -104,9 +103,15 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         self.btn_Cancel_IAE.clicked.connect(self.btn_cancel_IAE)
 
         # ЧИТАЕМ показания из базы данных
-        self.read_date()
+        self.read_date_income_expenses()
 
         self.show()
+
+    def moveEvent(self, event):
+        if event.type() == QEvent.Move:
+            self.win_pos = [int(self.WinIncomeExpenses.geometry().x() + 400),
+                            int(self.WinIncomeExpenses.geometry().y() + 200)]
+        return super(IncomeExpenses, self).moveEvent(event)
 
     def combo_box_period_sel(self):
         self.current_month_index = self.period_IAE.label_sel_period()
@@ -123,66 +128,74 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
             self.btn_Left_IAE.setEnabled(False)
         else:
             self.current_month_index = self.period_IAE.click_btn_left(self.current_month_index)
-            self.read_date()
+            self.read_date_income_expenses()
 
     def btn_period_right(self):
         self.combo_box_period_sel()
         if self.label_month_year_IAE.text() != "Май 2006":
             self.btn_Left_IAE.setEnabled(True)
             self.current_month_index = self.period_IAE.click_btn_right(self.current_month_index)
-            self.read_date()
-
-    # добавление нового платежа
-    def win_add_name_pay(self):
-        self.win_name_pay = UiWinAdd()
-        self.win_name_pay.name_payment()
-
-        if win32api.GetKeyboardLayout() == 67699721:  # 67699721 - английский 00000409
-            win32api.LoadKeyboardLayout("00000419", 1)  # 68748313 - русский  00000419
-
-        # КНОПКИ окна ДОБАВЛЕНИЕ ПЛАТЕЖА
-        self.win_name_pay.add_pay_btn_OK.clicked.connect(self.win_add_summa_pay)  # OK
-        self.win_name_pay.add_pay_btn_OK.setAutoDefault(True)
-        self.win_name_pay.lineEdit.returnPressed.connect(self.win_name_pay.add_pay_btn_OK.click)
-
-        self.win_name_pay.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_name_pay))  # CANCEL
-
-    def win_add_summa_pay(self):
-        self.name_pay = self.win_name_pay.lineEdit.text()
-        self.win_name_pay.lineEdit.clear()
-        self.win_name_pay.close()
-
-        self.win_summa_pay = UiWinAdd()
-        self.win_summa_pay.name_payment()
-        self.win_summa_pay.label.setText("Сумма платежа")
-
-        if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
-            win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
-
-        self.win_summa_pay.add_pay_btn_OK.clicked.connect(self.add_payment)  # кнопка OK окна СУММА
-        self.win_summa_pay.add_pay_btn_OK.setAutoDefault(True)
-        self.win_summa_pay.lineEdit.returnPressed.connect(self.win_summa_pay.add_pay_btn_OK.click)
-
-        self.win_summa_pay.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_summa_pay))
+            self.read_date_income_expenses()
 
     def add_payment(self):
-        self.summa_pay = self.win_summa_pay.lineEdit.text()
-        self.summa_pay_text = text_convert(self.summa_pay)
+        self.new_record = IAENewRecord()
+        self.new_record.win_sel_type_rec(self.win_pos)
 
-        self.payment = Widget_Payment(self.name_pay, "(209, 209, 217)")
-        self.payment.line_edit_sum.setText(self.summa_pay_text + " руб")
-        self.win_pole.append(self.payment.line_edit_sum)
-        self.v_layout_scrollArea_inc.addWidget(self.payment)
+    # # добавление нового платежа
+    # def win_add_name_pay(self):
+    #     self.win_name_pay = UiWinDialog()
+    #     self.win_name_pay.setupUi_Dialog()
+    #
+    #     if win32api.GetKeyboardLayout() == 67699721:  # 67699721 - английский 00000409
+    #         win32api.LoadKeyboardLayout("00000419", 1)  # 68748313 - русский  00000419
+    #
+    #     # КНОПКИ окна ДОБАВЛЕНИЕ ПЛАТЕЖА
+    #     self.win_name_pay.add_pay_btn_OK.clicked.connect(self.win_add_summa_pay)  # OK
+    #     self.win_name_pay.add_pay_btn_OK.setAutoDefault(True)
+    #     self.win_name_pay.lineEdit.returnPressed.connect(self.win_name_pay.add_pay_btn_OK.click)
+    #
+    #     self.win_name_pay.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_name_pay))  # CANCEL
+    #
+    # def win_add_summa_pay(self):
+    #     self.name_pay = self.win_name_pay.lineEdit.text()
+    #     self.win_name_pay.lineEdit.clear()
+    #     self.win_name_pay.close()
+    #
+    #     self.win_summa_pay = UiWinDialog()
+    #     self.win_summa_pay.setupUi_Dialog()
+    #     self.win_summa_pay.label.setText("Сумма платежа")
+    #
+    #     if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
+    #         win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
+    #
+    #     self.win_summa_pay.add_pay_btn_OK.clicked.connect(self.add_payment)  # кнопка OK окна СУММА
+    #     self.win_summa_pay.add_pay_btn_OK.setAutoDefault(True)
+    #     self.win_summa_pay.lineEdit.returnPressed.connect(self.win_summa_pay.add_pay_btn_OK.click)
+    #
+    #     self.win_summa_pay.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_summa_pay))
+    #
+    # def add_payment(self):
+    #     self.summa_pay = self.win_summa_pay.lineEdit.text()
+    #     self.summa_pay_text = text_convert(self.summa_pay)
+    #
+    #     self.payment = Widget_Payment(self.name_pay, "(209, 209, 217)")
+    #     self.payment.line_edit_sum.setText(self.summa_pay_text + " руб")
+    #     self.win_pole.append(self.payment.line_edit_sum)
+    #     self.v_layout_scrollArea.addWidget(self.payment)
+    #
+    #     # # возможно удаление после того как был создан доп. плат.
+    #     # self.new_p.btn_del_Plat.clicked.connect(self.new_p.deleteLater)
+    #     # self.new_p.btn_del_Plat.clicked.connect(self.btn_del_plateg)
+    #
+    #     self.win_summa_pay.lineEdit.clear()
+    #     self.win_summa_pay.close()
+    #
+    # @staticmethod
+    # def win_add_cancel(app_win):
+    #     app_win.lineEdit.clear()
+    #     app_win.close()
 
-        self.win_summa_pay.lineEdit.clear()
-        self.win_summa_pay.close()
-
-    @staticmethod
-    def win_add_cancel(app_win):
-        app_win.lineEdit.clear()
-        app_win.close()
-
-    def read_date(self):
+    def read_date_income_expenses(self):
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
 

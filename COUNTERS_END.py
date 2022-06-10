@@ -4,7 +4,7 @@ import sys
 import win32api
 
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QEvent
 from PyQt5.QtWidgets import QApplication, QAction
 
 from res.DLL_CLASS_COMM import dt_month, dt_year, month, convert_month, selected_period, \
@@ -24,8 +24,8 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
 
         # ВЫБОР ПЕРИОДА
         selected_period(self.comboBox_month_COU, self.comboBox_year_COU)
-        self.comboBox_month_COU.activated.connect(self.label_period)  # месяц
-        self.comboBox_year_COU.activated.connect(self.label_period)  # год
+        self.comboBox_month_COU.activated.connect(self.combo_box_period_sel)  # месяц
+        self.comboBox_year_COU.activated.connect(self.combo_box_period_sel)  # год
 
         # ТЕКУЩЕГО ПЕРИОДА
         self.current_month_index = month.index(convert_month(dt_month))  # Текущий месяц (int(0))
@@ -76,38 +76,6 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         for a in self.win_pole[:12]:
             a.setReadOnly(False)
 
-    def start_period(self):
-        if self.label_month_year_COU.text() == 'Декабрь 2006' and self.comboBox_month_COU.count() == 12 \
-                or int(self.comboBox_year_COU.currentText()) == 2006 and self.comboBox_month_COU.currentIndex() <= 11 \
-                and self.comboBox_month_COU.count() == 12:
-            self.comboBox_month_COU.clear()
-            self.comboBox_month_COU.addItems(month[5:12])
-        elif self.label_month_year_COU.text() == 'Декабрь 2006' and self.comboBox_month_COU.count() == 7 \
-                or int(self.comboBox_year_COU.currentText()) >= 2007 and self.comboBox_month_COU.currentIndex() >= 0 \
-                and self.comboBox_month_COU.count() == 7:
-            self.comboBox_month_COU.clear()
-            self.comboBox_month_COU.addItems(month)
-
-    def label_period(self):
-        self.start_period()
-        self.current_month_index = self.period_COU.label_sel_period()
-        self.read_data_counters()
-
-    def btn_period_left(self):
-        self.start_period()
-        if self.label_month_year_COU.text() == "Июнь 2006":
-            self.btn_Left_COU.setEnabled(False)
-        else:
-            self.current_month_index = self.period_COU.click_btn_left(self.current_month_index)
-            self.read_data_counters()
-
-    def btn_period_right(self):
-        self.start_period()
-        if self.label_month_year_COU.text() != "Май 2006":
-            self.btn_Left_COU.setEnabled(True)
-            self.current_month_index = self.period_COU.click_btn_right(self.current_month_index)
-            self.read_data_counters()
-
     def keyPressEvent(self, event):  # отключает режим редактирования по нажатию клавиши Esc
         if event.key() == Qt.Key_Escape:
             if month.index(self.label_month_year_COU.text().split()[0]) + 1 in \
@@ -119,6 +87,36 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
                 for a in self.win_pole[:12:2]:
                     a.setReadOnly(True)
         event.accept()
+
+    def moveEvent(self, event):
+        if event.type() == QEvent.Move:
+            self.win_pos = [int(self.WinCounters.geometry().x() + 400),
+                            int(self.WinCounters.geometry().y() + 200)]
+        return super(Counters, self).moveEvent(event)
+
+    def combo_box_period_sel(self):
+        self.current_month_index = self.period_COU.label_sel_period()
+        if self.comboBox_year_COU.currentText() == "2006":
+            if self.comboBox_month_COU.currentIndex() <= 5:
+                self.comboBox_month_COU.setCurrentIndex(5)
+                self.label_month_year_COU.setText("Июнь 2006")
+                self.current_month_index = 5
+        self.read_data_counters()
+
+    def btn_period_left(self):
+        self.combo_box_period_sel()
+        if self.label_month_year_COU.text() == "Июнь 2006":
+            self.btn_Left_COU.setEnabled(False)
+        else:
+            self.current_month_index = self.period_COU.click_btn_left(self.current_month_index)
+            self.read_data_counters()
+
+    def btn_period_right(self):
+        self.combo_box_period_sel()
+        if self.label_month_year_COU.text() != "Май 2006":
+            self.btn_Left_COU.setEnabled(True)
+            self.current_month_index = self.period_COU.click_btn_right(self.current_month_index)
+            self.read_data_counters()
 
     # читает сохраненные данные из базы данных
     def read_data_counters(self):
@@ -247,7 +245,7 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
         if row_record in col_id:
             self.label_error_COU.show()
             self.label_error_COU.setText('Такая запись уже существует!')
-            self.save_yes_or_not(self.data_base, data, self.label_error_COU)
+            self.save_yes_or_not(self.data_base, data, self.win_pos, self.label_error_COU)
         else:
             data.remove(data[2])
             SQLite3_Data_Base.sqlite3_insert_data(self.data_base, table, data)
@@ -268,9 +266,9 @@ class Counters(QtWidgets.QWidget, UiWinCounters):
 
         self.current_month_index = self.period_PAY.label_sel_period()
 
-    def save_yes_or_not(self, data_base, date, label_error):
+    def save_yes_or_not(self, data_base, date, pos, label_error):
         self.save_or_COU = Save_OR()
-        self.save_or_COU.save_yes_or_not(data_base, date, label_error)
+        self.save_or_COU.save_yes_or_not(data_base, date, pos, label_error)
 
     def btn_cancel_COU(self):
         self.close()

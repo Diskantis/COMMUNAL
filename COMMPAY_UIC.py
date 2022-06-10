@@ -8,17 +8,15 @@ from res.DLL_CLASS_COMM import Widget_Payment
 from res.UIC_CLASS_COMM import UiWinHeaderFooter, label_titul_f, lineEdit_pokaz_f, style_scrollbar, btn_check_payment
 
 
-# окно приложения "ПЛАТЕЖИ"
+# окно приложения "КОМУНАЛЬНЫЕ ПЛАТЕЖИ"
 class UiWinPayment(object):
     def setupUi_PAY(self, WinPayment):
         self.WinPayment = WinPayment  # окно
         self.WinPayment.setObjectName("CommunalPayment")
         self.WinPayment.setWindowModality(QtCore.Qt.ApplicationModal)
-        self.WinPayment.resize(800, 400)  # 365
-        self.WinPayment.setGeometry(QtCore.QRect(560 + 1920-415, 300, 800, 400))  # +1920+450
-        self.WinPayment.setMinimumSize(QtCore.QSize(800, 400))
-        self.WinPayment.setFixedWidth(800)
-        # self.WinPayment.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.WinPayment.resize(800, 400)
+        self.WinPayment.setGeometry(QtCore.QRect(560 + 1920-415, 300, 800, 400))
+        self.WinPayment.setFixedSize(QtCore.QSize(800, 400))
         self.WinPayment.activateWindow()
         self.WinPayment.setWindowTitle('КОМУНАЛЬНЫЕ ПЛАТЕЖИ')
         self.WinPayment.setWindowIcon(QIcon('res/img/Payments-icon.png'))

@@ -3,8 +3,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QCompleter
-
+from PyQt5.QtWidgets import QCompleter, QGroupBox
 
 style_scrollbar = "/* VERTICAL SCROLLBAR */ " \
         "QScrollBar:vertical {border: none; background: rgb(78, 79, 84); width: 14px; max-height: 210px;" \
@@ -63,6 +62,16 @@ def btn_check_payment(group, xl, yl):
     btn_check.setCheckable(True)
     btn_check.setObjectName("btn_check")
     return btn_check
+
+
+def radio_btn_f(name, group, xl, yl, font_s):
+    rad_btn = QtWidgets.QRadioButton(name, group)
+    rad_btn.setFixedSize(QtCore.QSize(xl, yl))
+    font = QtGui.QFont("Times", font_s, 75)
+    rad_btn.setFont(font)
+    rad_btn.setStyleSheet("border: 0px solid rgb(255, 255, 255); font-weight: 700; color: rgb(209, 209, 217);")
+    rad_btn.setObjectName("radioButton")
+    return rad_btn
 
 
 def label_f(name, group, xl, yl, font_s):  # заголовки
@@ -314,14 +323,14 @@ class Ui_Widget_Payment(object):
         self.h_Layout_widget_Team.addWidget(self.line_edit_tariff)
 
 
-class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛЬНЫХ ПЛАТЕЖЕЙ
-    def __init__(self):
+class UiWinDialog(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛЬНЫХ ПЛАТЕЖЕЙ
+    def __init__(self, pos):
         super().__init__()
 
-    def name_payment(self):
         self.setWindowModality(Qt.ApplicationModal)
-        self.setWindowTitle("Добавление платежа")
+        self.setWindowTitle("Добавление записи")
         self.resize(300, 120)
+        self.move(pos[0] - 150, pos[1] - 110)
         self.setStyleSheet("background-color: rgb(78, 79, 84);")
         self.setObjectName("Form")
 
@@ -331,21 +340,7 @@ class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛ
         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
 
         self.label = label_titul_f("Имя платежа", self, 12)
-        self.v_Layout_centralwidget.addWidget(self.label)
-
-        self.lineEdit = lineEdit_pokaz_f("", self, "(209, 209, 217)", "(108, 109, 114, 255)", "(91, 92, 96, 255)")
-        self.lineEdit.setReadOnly(False)
-        self.v_Layout_centralwidget.addWidget(self.lineEdit)
-
-        strList = ['Квартира', 'Телефон', 'Интернет', 'Гимназия пит.', 'Гимназия кру.', 'R-ED.', 'Зарплата МИША (ОНТ)',
-                   'Зарплата ОЛЯ (ОНТ)']
-
-        completer = QCompleter(strList, self.lineEdit)
-        self.lineEdit.setCompleter(completer)
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        completer.popup().setFont(font)
-        completer.popup().setStyleSheet("font-weight: 600; color:rgb(209, 209, 217); background-color:rgb(78, 79, 84);")
+        self.v_Layout_centralwidget.insertWidget(0, self.label)
 
         self.frame_btn = QtWidgets.QFrame(self)
         self.frame_btn.setMinimumSize(QtCore.QSize(0, 0))
@@ -365,11 +360,118 @@ class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛ
         self.add_pay_btn_Cancel = btn_f("Отмена", self, 110, 30, 10)
         self.h_layout_btn.addWidget(self.add_pay_btn_Cancel)
 
-        self.v_Layout_centralwidget.addWidget(self.frame_btn)
+        self.v_Layout_centralwidget.insertWidget(2, self.frame_btn)
 
-        self.show()
+    def add_record(self):
+        self.label = label_titul_f("Имя платежа", self, 12)
+        self.v_Layout_centralwidget.insertWidget(0, self.label)
+
+        self.lineEdit = lineEdit_pokaz_f("", self, "(209, 209, 217)", "(108, 109, 114, 255)", "(91, 92, 96, 255)")
+        self.lineEdit.setReadOnly(False)
+        self.v_Layout_centralwidget.insertWidget(1, self.lineEdit)
+
+        strList = ['Квартира', 'Телефон', 'Интернет', 'Гимназия пит.', 'Гимназия кру.', 'R-ED.', 'Зарплата МИША (ОНТ)',
+                   'Зарплата ОЛЯ (ОНТ)']
+
+        completer = QCompleter(strList, self.lineEdit)
+        self.lineEdit.setCompleter(completer)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        completer.popup().setFont(font)
+        completer.popup().setStyleSheet("font-weight: 600; color:rgb(209, 209, 217); background-color:rgb(78, 79, 84);")
 
         return strList
+
+    def radio_btn(self):
+        self.setWindowTitle("Выбор раздела")
+        self.label.deleteLater()
+
+        self.frame_btn = QtWidgets.QFrame(self)
+        self.frame_btn.setMinimumSize(QtCore.QSize(0, 0))
+        self.frame_btn.setMaximumSize(QtCore.QSize(300, 30))
+        self.frame_btn.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_btn.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.frame_btn.setObjectName("frame_title")
+
+        self.h_layout_btn = QtWidgets.QHBoxLayout(self.frame_btn)
+        self.h_layout_btn.setContentsMargins(0, 0, 0, 0)
+        self.h_layout_btn.setSpacing(5)
+        self.h_layout_btn.setObjectName("h_layout_btn")
+
+        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_layout_btn.addItem(self.spacerItem)
+
+        self.rad_btn_inc = radio_btn_f("Доходы", self, 90, 30, 12)
+        self.h_layout_btn.addWidget(self.rad_btn_inc)
+
+        self.spacerItem = QtWidgets.QSpacerItem(35, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_layout_btn.addItem(self.spacerItem)
+
+        self.rad_btn_exp = radio_btn_f("Расходы", self, 95, 30, 12)
+        self.rad_btn_exp.setChecked(True)
+        self.h_layout_btn.addWidget(self.rad_btn_exp)
+
+        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_layout_btn.addItem(self.spacerItem)
+
+        self.v_Layout_centralwidget.insertWidget(1, self.frame_btn)
+
+# class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛЬНЫХ ПЛАТЕЖЕЙ
+#     def __init__(self):
+#         super().__init__()
+#
+#     def name_payment(self):
+#         self.setWindowModality(Qt.ApplicationModal)
+#         self.setWindowTitle("Добавление записи")
+#         self.resize(300, 120)
+#         self.setStyleSheet("background-color: rgb(78, 79, 84);")
+#         self.setObjectName("Form")
+#
+#         self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self)
+#         self.v_Layout_centralwidget.setContentsMargins(10, 10, 10, 10)
+#         self.v_Layout_centralwidget.setSpacing(8)
+#         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
+#
+#         self.label = label_titul_f("Имя платежа", self, 12)
+#         self.v_Layout_centralwidget.addWidget(self.label)
+#
+#         self.lineEdit = lineEdit_pokaz_f("", self, "(209, 209, 217)", "(108, 109, 114, 255)", "(91, 92, 96, 255)")
+#         self.lineEdit.setReadOnly(False)
+#         self.v_Layout_centralwidget.addWidget(self.lineEdit)
+#
+#         strList = ['Квартира', 'Телефон', 'Интернет', 'Гимназия пит.', 'Гимназия кру.', 'R-ED.', 'Зарплата МИША (ОНТ)',
+#                    'Зарплата ОЛЯ (ОНТ)']
+#
+#         completer = QCompleter(strList, self.lineEdit)
+#         self.lineEdit.setCompleter(completer)
+#         font = QtGui.QFont()
+#         font.setPointSize(11)
+#         completer.popup().setFont(font)
+#         completer.popup().setStyleSheet("font-weight: 600; color:rgb(209, 209, 217); background-color:rgb(78, 79, 84);")
+#
+#         self.frame_btn = QtWidgets.QFrame(self)
+#         self.frame_btn.setMinimumSize(QtCore.QSize(0, 0))
+#         self.frame_btn.setMaximumSize(QtCore.QSize(300, 30))
+#         self.frame_btn.setFrameShape(QtWidgets.QFrame.NoFrame)
+#         self.frame_btn.setFrameShadow(QtWidgets.QFrame.Plain)
+#         self.frame_btn.setObjectName("frame_title")
+#
+#         self.h_layout_btn = QtWidgets.QHBoxLayout(self.frame_btn)
+#         self.h_layout_btn.setContentsMargins(0, 0, 0, 0)
+#         self.h_layout_btn.setSpacing(5)
+#         self.h_layout_btn.setObjectName("h_layout_btn")
+#
+#         self.add_pay_btn_OK = btn_f("OK", self, 110, 30, 10)
+#         self.h_layout_btn.addWidget(self.add_pay_btn_OK)
+#
+#         self.add_pay_btn_Cancel = btn_f("Отмена", self, 110, 30, 10)
+#         self.h_layout_btn.addWidget(self.add_pay_btn_Cancel)
+#
+#         self.v_Layout_centralwidget.addWidget(self.frame_btn)
+#
+#         self.show()
+#
+#         return strList
 
 # def btn_check_plateg(name, group, x, y, xl, yl):
 #     btn_check = QtWidgets.QPushButton(name, group)

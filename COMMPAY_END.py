@@ -83,7 +83,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.btn_Cancel_PAY.clicked.connect(self.btn_cancel_PAY)
 
         # ЧИТАЕМ показания из базы данных
-        self.read_data_pay()
+        self.read_data_payments()
 
         self.show()
 
@@ -98,6 +98,12 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 QTimer.singleShot(10, lambda: summa(pay_sum))
         return super(CommunalPayment, self).eventFilter(obj, event)
 
+    def moveEvent(self, event):
+        if event.type() == QEvent.Move:
+            self.win_pos = [int(self.WinPayment.geometry().x() + 400),
+                            int(self.WinPayment.geometry().y() + 200)]
+        return super(CommunalPayment, self).moveEvent(event)
+
     def combo_box_period_sel(self):
         self.current_month_index = self.period_PAY.label_sel_period()
         if self.comboBox_year_PAY.currentText() == "2006":
@@ -105,7 +111,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 self.comboBox_month_PAY.setCurrentIndex(5)
                 self.label_month_year_PAY.setText("Июнь 2006")
                 self.current_month_index = 5
-        self.read_data_pay()
+        self.read_data_payments()
 
     def btn_period_left(self):
         self.combo_box_period_sel()
@@ -113,16 +119,16 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.btn_Left_PAY.setEnabled(False)
         else:
             self.current_month_index = self.period_PAY.click_btn_left(self.current_month_index)
-            self.read_data_pay()
+            self.read_data_payments()
 
     def btn_period_right(self):
         self.combo_box_period_sel()
         if self.label_month_year_PAY.text() != "Май 2006":
             self.btn_Left_PAY.setEnabled(True)
             self.current_month_index = self.period_PAY.click_btn_right(self.current_month_index)
-            self.read_data_pay()
+            self.read_data_payments()
 
-    def read_data_pay(self):
+    def read_data_payments(self):
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
 
@@ -446,13 +452,13 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)
 
                 if row_record in col_id:
-                    self.save_yes_or_not(self.data_base, data, self.label_error_PAY)
+                    self.save_yes_or_not(self.data_base, data, self.win_pos, self.label_error_PAY)
                 else:
                     if data[2] == "Payments":
                         self.next_period()
                     data.remove(data[2])
                     SQLite3_Data_Base.sqlite3_insert_data(self.data_base, name_table, data)
-                    self.read_data_pay()
+                    self.read_data_payments()
 
     def next_period(self):
         if self.comboBox_month_PAY.currentIndex() + 2 != 13:
@@ -468,9 +474,9 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         self.current_month_index = self.period_PAY.label_sel_period()
 
-    def save_yes_or_not(self, data_base, date, label_error):
+    def save_yes_or_not(self, data_base, date, pos, label_error):
         self.save_or_PAY = Save_OR()
-        self.save_or_PAY.save_yes_or_not(data_base, date, label_error)
+        self.save_or_PAY.save_yes_or_not(data_base, date, pos, label_error)
 
     def btn_cancel_PAY(self):
         self.close()
