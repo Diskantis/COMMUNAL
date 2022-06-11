@@ -13,7 +13,7 @@ class UiWinIncomeExpenses(object):
         self.WinIncomeExpenses.setObjectName("Income and Expenses")
         self.WinIncomeExpenses.setWindowModality(QtCore.Qt.ApplicationModal)
         self.WinIncomeExpenses.resize(800, 400)
-        self.WinIncomeExpenses.setGeometry(QtCore.QRect(560 + 1920 + 395, 300, 800, 400))  #
+        self.WinIncomeExpenses.setGeometry(QtCore.QRect(560, 300, 800, 400))  # + 1920 + 395
         self.WinIncomeExpenses.setFixedSize(QtCore.QSize(800, 400))
         self.WinIncomeExpenses.activateWindow()
         self.WinIncomeExpenses.setWindowTitle('ДОХОДЫ И РАСХОДЫ')
@@ -163,20 +163,22 @@ class UiWinIncomeExpenses(object):
 
         self.h_layout_frame_group_result.addWidget(self.frame_result_inc)
 
-        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_frame_result_inc.addItem(self.spacerItem)
+        # self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding,
+        #                                         QtWidgets.QSizePolicy.Minimum)
+        # self.h_layout_frame_result_inc.addItem(self.spacerItem)
 
-        self.label_result_inc = label_titul_f("ДОХОДОВ:", self.frame_result_inc, 12)
-        self.label_result_inc.setFixedSize(QtCore.QSize(110, 30))
-        self.label_result_inc.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.h_layout_frame_result_inc.addWidget(self.label_result_inc)
+        # self.label_result_inc = label_titul_f("ИТОГО:", self.frame_result_inc, 12)
+        # self.label_result_inc.setFixedSize(QtCore.QSize(110, 30))
+        # self.label_result_inc.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        # self.h_layout_frame_result_inc.addWidget(self.label_result_inc)
 
         self.lineEdit_result_inc = lineEdit_pokaz_f("0", self.frame_result_inc, "(255, 255, 216, 200)", grad_1, grad_2)
-        self.lineEdit_result_inc.setFixedSize(QtCore.QSize(250, 30))
+        self.lineEdit_result_inc.setFixedSize(QtCore.QSize(366, 30))
         self.h_layout_frame_result_inc.addWidget(self.lineEdit_result_inc)
 
-        self.spacerItem = QtWidgets.QSpacerItem(25, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_frame_result_inc.addItem(self.spacerItem)
+        # self.spacerItem = QtWidgets.QSpacerItem(25, 20, QtWidgets.QSizePolicy.Expanding,
+        #                                         QtWidgets.QSizePolicy.Minimum)
+        # self.h_layout_frame_result_inc.addItem(self.spacerItem)
 
         self.frame_result_exp = QtWidgets.QFrame(self.frame_group_result)
         self.frame_result_exp.setFixedSize(QtCore.QSize(386, 40))
@@ -194,20 +196,22 @@ class UiWinIncomeExpenses(object):
 
         self.h_layout_frame_group_result.addWidget(self.frame_result_exp)
 
-        self.spacerItem = QtWidgets.QSpacerItem(25, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_frame_result_exp.addItem(self.spacerItem)
+        # self.spacerItem = QtWidgets.QSpacerItem(25, 20, QtWidgets.QSizePolicy.Expanding,
+        #                                         QtWidgets.QSizePolicy.Minimum)
+        # self.h_layout_frame_result_exp.addItem(self.spacerItem)
 
         self.lineEdit_result_exp = lineEdit_pokaz_f("0", self.frame_result_exp, "(255, 255, 216, 200)", grad_1, grad_2)
-        self.lineEdit_result_exp.setFixedSize(QtCore.QSize(250, 30))
+        self.lineEdit_result_exp.setFixedSize(QtCore.QSize(366, 30))
         self.h_layout_frame_result_exp.addWidget(self.lineEdit_result_exp)
 
-        self.label_result_exp = label_titul_f(":РАСХОДОВ", self.frame_result_exp, 12)
-        self.label_result_exp.setFixedSize(QtCore.QSize(110, 30))
-        self.label_result_exp.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.h_layout_frame_result_exp.addWidget(self.label_result_exp)
+        # self.label_result_exp = label_titul_f(":ИТОГО", self.frame_result_exp, 12)
+        # self.label_result_exp.setFixedSize(QtCore.QSize(110, 30))
+        # self.label_result_exp.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        # self.h_layout_frame_result_exp.addWidget(self.label_result_exp)
 
-        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_frame_result_exp.addItem(self.spacerItem)
+        # self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding,
+        #                                         QtWidgets.QSizePolicy.Minimum)
+        # self.h_layout_frame_result_exp.addItem(self.spacerItem)
 
         self.v_Layout_centralwidget.addWidget(self.frame_group_result)
 

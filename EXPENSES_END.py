@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import win32api
+# import win32api
 from PyQt5.QtCore import QEvent
 
 from PyQt5.QtWidgets import QApplication
@@ -39,7 +39,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
         self.btn_Left_IAE.clicked.connect(self.btn_period_left)  # прокрутка в лево
         self.btn_Right_IAE.clicked.connect(self.btn_period_right)  # прокрутка в право
-        self.btn_add_iae.clicked.connect(self.add_payment)
+        self.btn_add_iae.clicked.connect(self.win_sel_type_rec)
 
         self.win_pole = [self.label_GL_V_1_IAE, self.label_GL_V_2_IAE, self.label_error_IAE]
 
@@ -120,7 +120,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
                 self.comboBox_month_IAE.setCurrentIndex(5)
                 self.label_month_year_IAE.setText("Июнь 2006")
                 self.current_month_index = 5
-        self.read_data_pay()
+        # self.read_data_pay()
 
     def btn_period_left(self):
         self.combo_box_period_sel()
@@ -137,9 +137,71 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
             self.current_month_index = self.period_IAE.click_btn_right(self.current_month_index)
             self.read_date_income_expenses()
 
-    def add_payment(self):
-        self.new_record = IAENewRecord()
-        self.new_record.win_sel_type_rec(self.win_pos)
+    def win_sel_type_rec(self):
+        self.win_new_rec = UiWinDialog(self.win_pos)
+        self.win_new_rec.radio_btn()
+        self.win_new_rec.show()
+
+        self.win_new_rec.add_pay_btn_OK.clicked.connect(self.win_rec_name)  # OK
+        self.win_new_rec.add_pay_btn_OK.setAutoDefault(True)
+        self.win_new_rec.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_new_rec))  # CANCEL
+
+    def win_rec_name(self):
+        self.win_new_rec.close()
+
+        self.record = []
+        self.win_rec_name = UiWinDialog(self.win_pos)
+        self.win_rec_name.add_record()
+        self.win_rec_name.show()
+
+        if win32api.GetKeyboardLayout() == 67699721:  # 67699721 - английский 00000409
+            win32api.LoadKeyboardLayout("00000419", 1)  # 68748313 - русский  00000419
+
+        self.win_rec_name.add_pay_btn_OK.clicked.connect(self.win_rec_summa)  # OK
+        self.win_rec_name.add_pay_btn_OK.setAutoDefault(True)
+        self.win_rec_name.lineEdit.returnPressed.connect(self.win_rec_name.add_pay_btn_OK.click)
+
+        self.win_rec_name.add_pay_btn_Cancel.clicked.connect(
+            lambda: self.win_add_cancel(self.win_rec_name))  # CANCEL
+
+    def win_rec_summa(self):
+        self.record.append(self.win_rec_name.lineEdit.text())
+        self.win_rec_name.lineEdit.clear()
+        self.win_rec_name.close()
+
+        if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
+            win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
+
+        self.win_rec_summa = UiWinDialog(self.win_pos)
+        self.win_rec_summa.add_record()
+
+        reg_ex = QRegExp("[0-9]{1,5}[.][0-9]{2}")
+        label_validator = QRegExpValidator(reg_ex, self.win_rec_summa.lineEdit)
+        self.win_rec_summa.lineEdit.setValidator(label_validator)
+
+        self.win_rec_summa.label.setText("Сумма платежа")
+        self.win_rec_summa.show()
+
+        self.win_rec_summa.add_pay_btn_OK.clicked.connect(self.add_record)  # OK
+        self.win_rec_summa.add_pay_btn_OK.setAutoDefault(True)
+        self.win_rec_summa.lineEdit.returnPressed.connect(self.win_rec_summa.add_pay_btn_OK.click)
+
+        self.win_rec_summa.add_pay_btn_Cancel.clicked.connect(
+            lambda: self.win_add_cancel(self.win_rec_summa))  # CANCEL
+
+    def add_record(self):
+        self.record.append(float(self.win_rec_summa.lineEdit.text()))
+        self.win_rec_summa.lineEdit.clear()
+        self.win_rec_summa.close()
+
+        self.payment = Widget_Payment(self.record[0], "(209, 209, 217)")
+        self.payment.line_edit_sum.setText(str(self.record[1]) + " руб")
+        self.win_pole.append(self.payment.line_edit_sum)
+        self.v_layout_scrollArea_exp.addWidget(self.payment)
+
+    @staticmethod
+    def win_add_cancel(app_win):
+        app_win.close()
 
     # # добавление нового платежа
     # def win_add_name_pay(self):

@@ -363,9 +363,6 @@ class UiWinDialog(QtWidgets.QDialog):  # окно создания ДОЛНИТ�
         self.v_Layout_centralwidget.insertWidget(2, self.frame_btn)
 
     def add_record(self):
-        self.label = label_titul_f("Имя платежа", self, 12)
-        self.v_Layout_centralwidget.insertWidget(0, self.label)
-
         self.lineEdit = lineEdit_pokaz_f("", self, "(209, 209, 217)", "(108, 109, 114, 255)", "(91, 92, 96, 255)")
         self.lineEdit.setReadOnly(False)
         self.v_Layout_centralwidget.insertWidget(1, self.lineEdit)
