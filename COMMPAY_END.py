@@ -276,6 +276,12 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                     self.label_GL_V_1_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
                     self.label_GL_V_2_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
 
+            else:
+                if self.pay_power.line_edit_quantity.text():
+                    self.pay_apartment.line_edit_sum.setText("0.00")
+                    self.pay_internet.line_edit_sum.setText("0.00")
+                    self.pay_phone.line_edit_sum.setText("0.00")
+
         self.pay_power.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(0))
         self.pay_water.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(3))
         self.pay_gaz.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(6))
@@ -422,7 +428,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         try:
             if win_pole == self.win_pole[9:12]:
                 data.extend(self.data_multi)  # добавляем список с суммами за тарифные платежи
-                if self.pay_apartment.line_edit_sum.text():
+                if self.pay_apartment.line_edit_sum.text() or self.pay_internet.line_edit_sum.text() \
+                        or self.pay_phone.line_edit_sum.text():
                     for field in win_pole:  # добавляем суммами за остальные платежи
                         data.append(float(text_convert(field.text())))
                     data.append(self.status)
