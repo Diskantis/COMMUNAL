@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCompleter, QGroupBox
 
@@ -383,228 +383,22 @@ class UiWinDialog(QtWidgets.QDialog):  # окно создания ДОЛНИТ�
         self.setWindowTitle("Выбор раздела")
         self.label.deleteLater()
 
-        self.frame_btn = QtWidgets.QFrame(self)
-        self.frame_btn.setMinimumSize(QtCore.QSize(0, 0))
-        self.frame_btn.setMaximumSize(QtCore.QSize(300, 30))
-        self.frame_btn.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_btn.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.frame_btn.setObjectName("frame_title")
+        self.group_sel_btn = QtWidgets.QGroupBox()
+        self.group_sel_btn.setMinimumSize(QtCore.QSize(0, 0))
+        self.group_sel_btn.setMaximumSize(QtCore.QSize(300, 300))
+        self.group_sel_btn.setStyleSheet("QGroupBox{font-weight: 700; color: rgb(209, 209, 217); "
+                                         "border: 0px; padding: 0, 0, 0, 0;}")
 
-        self.h_layout_btn = QtWidgets.QHBoxLayout(self.frame_btn)
+        self.h_layout_btn = QtWidgets.QHBoxLayout(self.group_sel_btn)
         self.h_layout_btn.setContentsMargins(0, 0, 0, 0)
         self.h_layout_btn.setSpacing(5)
         self.h_layout_btn.setObjectName("h_layout_btn")
 
-        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_btn.addItem(self.spacerItem)
-
-        self.rad_btn_inc = radio_btn_f("Доходы", self, 90, 30, 12)
+        self.rad_btn_inc = radio_btn_f("Доходы", self.group_sel_btn, 90, 30, 12)
         self.h_layout_btn.addWidget(self.rad_btn_inc)
 
-        self.spacerItem = QtWidgets.QSpacerItem(35, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_btn.addItem(self.spacerItem)
-
-        self.rad_btn_exp = radio_btn_f("Расходы", self, 95, 30, 12)
+        self.rad_btn_exp = radio_btn_f("Расходы", self.group_sel_btn, 95, 30, 12)
         self.rad_btn_exp.setChecked(True)
         self.h_layout_btn.addWidget(self.rad_btn_exp)
 
-        self.spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.h_layout_btn.addItem(self.spacerItem)
-
-        self.v_Layout_centralwidget.insertWidget(1, self.frame_btn)
-
-# class UiWinAdd(QtWidgets.QDialog):  # окно создания ДОЛНИТЕЛЬНЫХ ПЛАТЕЖЕЙ
-#     def __init__(self):
-#         super().__init__()
-#
-#     def name_payment(self):
-#         self.setWindowModality(Qt.ApplicationModal)
-#         self.setWindowTitle("Добавление записи")
-#         self.resize(300, 120)
-#         self.setStyleSheet("background-color: rgb(78, 79, 84);")
-#         self.setObjectName("Form")
-#
-#         self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self)
-#         self.v_Layout_centralwidget.setContentsMargins(10, 10, 10, 10)
-#         self.v_Layout_centralwidget.setSpacing(8)
-#         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
-#
-#         self.label = label_titul_f("Имя платежа", self, 12)
-#         self.v_Layout_centralwidget.addWidget(self.label)
-#
-#         self.lineEdit = lineEdit_pokaz_f("", self, "(209, 209, 217)", "(108, 109, 114, 255)", "(91, 92, 96, 255)")
-#         self.lineEdit.setReadOnly(False)
-#         self.v_Layout_centralwidget.addWidget(self.lineEdit)
-#
-#         strList = ['Квартира', 'Телефон', 'Интернет', 'Гимназия пит.', 'Гимназия кру.', 'R-ED.', 'Зарплата МИША (ОНТ)',
-#                    'Зарплата ОЛЯ (ОНТ)']
-#
-#         completer = QCompleter(strList, self.lineEdit)
-#         self.lineEdit.setCompleter(completer)
-#         font = QtGui.QFont()
-#         font.setPointSize(11)
-#         completer.popup().setFont(font)
-#         completer.popup().setStyleSheet("font-weight: 600; color:rgb(209, 209, 217); background-color:rgb(78, 79, 84);")
-#
-#         self.frame_btn = QtWidgets.QFrame(self)
-#         self.frame_btn.setMinimumSize(QtCore.QSize(0, 0))
-#         self.frame_btn.setMaximumSize(QtCore.QSize(300, 30))
-#         self.frame_btn.setFrameShape(QtWidgets.QFrame.NoFrame)
-#         self.frame_btn.setFrameShadow(QtWidgets.QFrame.Plain)
-#         self.frame_btn.setObjectName("frame_title")
-#
-#         self.h_layout_btn = QtWidgets.QHBoxLayout(self.frame_btn)
-#         self.h_layout_btn.setContentsMargins(0, 0, 0, 0)
-#         self.h_layout_btn.setSpacing(5)
-#         self.h_layout_btn.setObjectName("h_layout_btn")
-#
-#         self.add_pay_btn_OK = btn_f("OK", self, 110, 30, 10)
-#         self.h_layout_btn.addWidget(self.add_pay_btn_OK)
-#
-#         self.add_pay_btn_Cancel = btn_f("Отмена", self, 110, 30, 10)
-#         self.h_layout_btn.addWidget(self.add_pay_btn_Cancel)
-#
-#         self.v_Layout_centralwidget.addWidget(self.frame_btn)
-#
-#         self.show()
-#
-#         return strList
-
-# def btn_check_plateg(name, group, x, y, xl, yl):
-#     btn_check = QtWidgets.QPushButton(name, group)
-#     btn_check.setGeometry(QtCore.QRect(x, y, xl, yl))
-#     btn_check.setStyleSheet("border: 0px solid;")
-#     icon = QtGui.QIcon()
-#     icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_n.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-#     icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_o.png"), QtGui.QIcon.Active, QtGui.QIcon.On)
-#     btn_check.setIcon(icon)
-#     btn_check.setIconSize(QtCore.QSize(30, 30))
-#     btn_check.setCheckable(True)
-#     btn_check.setObjectName("btn_check")
-#     return btn_check
-#
-# def radio_btn(name, group, x, y, xl, yl):
-#     rad_btn = QtWidgets.QRadioButton(name, group)
-#     rad_btn.setGeometry(QtCore.QRect(x, y, xl, yl))
-#     font = QtGui.QFont()
-#     font.setPointSize(12)
-#     rad_btn.setFont(font)
-#     rad_btn.setStyleSheet("font-weight: 700; \n color: rgb(209, 209, 217); \n padding: .1em; \n border: 1px;")
-#     rad_btn.setObjectName("radioButton")
-#     return rad_btn
-#
-#
-# class UiWinAdd_1(QtWidgets.QDialog):  # метод создания ДОЛНИТЕЛЬНЫХ ПЛАТЕЖЕЙ
-#     def __init__(self):
-#         super().__init__()
-#
-#     def name_plateg(self):
-#         self.setObjectName("Form")
-#         self.setWindowModality(QtCore.Qt.ApplicationModal)
-#         self.resize(290, 120)
-#         self.setStyleSheet("background-color: rgb(78, 79, 84);")
-#         self.setWindowTitle("Добавление платежа")
-#
-#         self.label = label_plateg("Имя платежа", self, 10, 5, 270, 30)
-#         self.label.setStyleSheet("font-weight: 700; \n color: rgb(209, 209, 217); \n padding: .1em; \n border: 1px;")
-#         self.label.setAlignment(QtCore.Qt.AlignCenter)
-#
-#         self.lineEdit = QtWidgets.QLineEdit(self)
-#         self.lineEdit.setGeometry(QtCore.QRect(10, 40, 270, 30))
-#         font = QtGui.QFont()
-#         font.setPointSize(12)
-#         font.setWeight(75)
-#         self.lineEdit.setFont(font)
-#         self.lineEdit.setStyleSheet("border-radius: 4px; \n color: rgb(209, 209, 217); \n "
-#                                     "border: 1px solid rgba(50, 50, 50, 240); \n "
-#                                     "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-#                                     "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
-#                                     "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
-#         self.lineEdit.setAlignment(QtCore.Qt.AlignCenter)
-#         self.lineEdit.setFocus()
-#         self.lineEdit.setObjectName("lineEdit")
-#
-#         strList = ['Квартира', 'Телефон', 'Интернет', 'Детский сад', 'Космос ТВ', 'Зарплата МИША (ОНТ)',
-#                    'Зарплата МИША (БелМУЗ)', 'Зарплата ОЛЯ (ОНТ)']
-#         completer = QCompleter(strList, self.lineEdit)
-#         self.lineEdit.setCompleter(completer)
-#         font = QtGui.QFont()
-#         font.setPointSize(11)
-#         completer.popup().setFont(font)
-#         completer.popup().setStyleSheet("font-weight: 600; \n color: rgb(209, 209, 217); \n "
-#                                         "background-color: rgb(78, 79, 84); ")
-#
-#         self.btn_OK = btn_f("OK", self, 30, 80, 110, 30)
-#         self.btn_OK.setAutoDefault(True)
-#         self.btn_OK.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .5em 1em;")
-#
-#         self.btn_Cancel = btn_f("Отмена", self, 150, 80, 110, 30)
-#         self.btn_Cancel.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .5em 1em;")
-#
-#         self.show()
-#
-#         return strList
-#
-#     def radio_btn(self):
-#         self.setObjectName("Form")
-#         self.setWindowModality(QtCore.Qt.ApplicationModal)
-#         self.resize(290, 120)
-#         self.setStyleSheet("background-color: rgb(78, 79, 84);")
-#         self.setWindowTitle("Выбор раздела")
-#
-#         self.rad_btn_1 = radio_btn("Доходы", self, 35, 25, 110, 30)
-#         self.rad_btn_2 = radio_btn("Расходы", self, 155, 25, 110, 30)
-#
-#         self.btn_OK = btn_f("OK", self, 30, 80, 110, 30)
-#         self.btn_OK.setAutoDefault(True)
-#         self.btn_OK.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .5em 1em;")
-#
-#         self.btn_Cancel = btn_f("Отмена", self, 150, 80, 110, 30)
-#         self.btn_Cancel.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .5em 1em;")
-#
-#         self.show()
-
-
-# def label_plateg(label_name, group, x, y, xl, yl):
-#     label_plat = QtWidgets.QLabel(label_name, group)
-#     label_plat.setGeometry(QtCore.QRect(x, y, xl, yl))
-#     font = QtGui.QFont()
-#     font.setPointSize(12)
-#     font.setBold(True)
-#     font.setWeight(87)
-#     label_plat.setFont(font)
-#     label_plat.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .0em;\n border: 0px solid;")
-#     label_plat.setObjectName("label_plat")
-#     return label_plat
-#
-#
-# def line_edit_pokaz(group, x, y, xl, yl, color, grad_1, grad_2):
-#     lineEdit_pokaz = QtWidgets.QLineEdit(group)
-#     lineEdit_pokaz.setGeometry(QtCore.QRect(x, y, xl, yl))
-#     font = QtGui.QFont()
-#     font.setPointSize(12)
-#     font.setWeight(75)
-#     lineEdit_pokaz.setFont(font)
-#     lineEdit_pokaz.setStyleSheet("border-radius: 4px; \n color: rgb" + color
-#                                  + "; \n border: 1px solid rgba(50, 50, 50, 240); \n "
-#                                    "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-#                                    "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba" + grad_1 + ", stop:0.99 rgba"
-#                                  + grad_2 + ", stop:1 rgba(125, 126, 131, 255));")
-#     lineEdit_pokaz.setAlignment(QtCore.Qt.AlignCenter)
-#     lineEdit_pokaz.setReadOnly(True)
-#     lineEdit_pokaz.setObjectName("lineEdit_pokaz")
-#     return lineEdit_pokaz
-#
-#
-# def btn_check_plateg(name, group, x, y, xl, yl):
-#     btn_check = QtWidgets.QPushButton(name, group)
-#     btn_check.setGeometry(QtCore.QRect(x, y, xl, yl))
-#     btn_check.setStyleSheet("border: 0px solid;")
-#     icon = QtGui.QIcon()
-#     icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_n.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-#     icon.addPixmap(QtGui.QPixmap("./Resource/img/icon_checked_o.png"), QtGui.QIcon.Active, QtGui.QIcon.On)
-#     btn_check.setIcon(icon)
-#     btn_check.setIconSize(QtCore.QSize(30, 30))
-#     btn_check.setCheckable(True)
-#     btn_check.setObjectName("btn_check")
-#     return btn_check
+        self.v_Layout_centralwidget.insertWidget(1, self.group_sel_btn)

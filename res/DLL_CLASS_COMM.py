@@ -6,8 +6,8 @@ import datetime
 
 import win32api
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtCore import QLocale, QRegExp
-from PyQt5.QtGui import QDoubleValidator, QRegularExpressionValidator, QRegExpValidator
+from PyQt5.QtCore import QRegExp, pyqtSlot
+from PyQt5.QtGui import QRegExpValidator
 from PyQt5.QtWidgets import QDesktopWidget
 
 from res.UIC_CLASS_COMM import UiWinDialog, Ui_Widget_Payment
@@ -205,21 +205,42 @@ class Save_OR:
 class IAENewRecord:
     def __init__(self, win_pos):
         self.win_pos = win_pos
-        self.win_sel_type_rec()
 
     def win_sel_type_rec(self):
+        self.record = []
         self.win_new_rec = UiWinDialog(self.win_pos)
         self.win_new_rec.radio_btn()
         self.win_new_rec.show()
 
-        self.win_new_rec.add_pay_btn_OK.clicked.connect(self.win_rec_name)  # OK
-        self.win_new_rec.add_pay_btn_OK.setAutoDefault(True)
-        self.win_new_rec.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_new_rec))  # CANCEL
+        self.record.append(1)
+
+        self.group_btn = QtWidgets.QButtonGroup()
+        self.group_btn.addButton(self.win_new_rec.rad_btn_inc)
+        self.group_btn.addButton(self.win_new_rec.rad_btn_exp)
+        self.record = self.group_btn.buttonClicked['int'].connect(self.group_btn_Clicked)
+
+        # print(self.record)
+
+        return self.record
+
+    def group_btn_Clicked(self):
+        try:
+            if self.win_new_rec.rad_btn_inc.isChecked():
+                self.record.remove(1)
+                self.record.insert(0, 0)
+            elif self.win_new_rec.rad_btn_exp.isChecked():
+                self.record.remove(0)
+                self.record.insert(0, 1)
+            # print(self.record)
+        except ValueError:
+            pass
+
+        return self.record
+
 
     def win_rec_name(self):
         self.win_new_rec.close()
 
-        self.record = []
         self.win_rec_name = UiWinDialog(self.win_pos)
         self.win_rec_name.add_record()
         self.win_rec_name.show()
@@ -235,6 +256,7 @@ class IAENewRecord:
 
     def win_rec_summa(self):
         self.record.append(self.win_rec_name.lineEdit.text())
+        print(self.record)
         self.win_rec_name.lineEdit.clear()
         self.win_rec_name.close()
 
@@ -261,8 +283,13 @@ class IAENewRecord:
         self.record.append(float(self.win_rec_summa.lineEdit.text()))
         self.win_rec_summa.lineEdit.clear()
         self.win_rec_summa.close()
+        print(self.record)
 
-        return self.record
+        self.ret_rec(self.record)
+
+    @staticmethod
+    def ret_rec(list_rec):
+        return list_rec
 
     @staticmethod
     def win_add_cancel(app_win):
