@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import win32api
 
+from PyQt5 import QtCore
 from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QApplication
 
 from res.DLL_CLASS_COMM import *
-from res.UIC_CLASS_COMM import UiWinDialog
+from res.UIC_CLASS_COMM import label_titul_f
 
 from EXPENSES_UIC import UiWinIncomeExpenses
 
@@ -19,7 +19,9 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
         self.setupUi_IAE(self)
         self.data_base = 'COMMPAY_DAT.db'  # имя базы данных
-        self.record = []
+        self.records_income = []
+        self.records_expense = []
+        self.status = ""
 
         self.period_IAE = Period(self.comboBox_month_IAE, self.comboBox_year_IAE, self.label_month_year_IAE)
         self.save_or_IAE = Save_OR()
@@ -47,7 +49,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         self.btn_Cancel_IAE.clicked.connect(self.btn_cancel_IAE)
 
         # ЧИТАЕМ показания из базы данных
-        self.read_date_income_expenses()
+        # self.read_date_income_expenses()
 
         self.show()
 
@@ -64,7 +66,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
                 self.comboBox_month_IAE.setCurrentIndex(5)
                 self.label_month_year_IAE.setText("Июнь 2006")
                 self.current_month_index = 5
-        # self.read_data_pay()
+        # self.read_date_income_expenses()
 
     def btn_period_left(self):
         self.combo_box_period_sel()
@@ -72,172 +74,127 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
             self.btn_Left_IAE.setEnabled(False)
         else:
             self.current_month_index = self.period_IAE.click_btn_left(self.current_month_index)
-            self.read_date_income_expenses()
+            # self.read_date_income_expenses()
 
     def btn_period_right(self):
         self.combo_box_period_sel()
         if self.label_month_year_IAE.text() != "Май 2006":
             self.btn_Left_IAE.setEnabled(True)
             self.current_month_index = self.period_IAE.click_btn_right(self.current_month_index)
-            self.read_date_income_expenses()
+            # self.read_date_income_expenses()
 
     def win_sel_type_rec(self):
-        new_rec = IAENewRecord(self.win_pos)
-        asd = new_rec.win_sel_type_rec()
-        print(asd)
+        self.records = [1]
+        self.new_rec = IAENewRecord(self.win_pos)
+        self.records = self.new_rec.win_sel_type_rec()
 
-    # # TODO: версия на функциях
-    # def win_sel_type_rec(self):
-    #     self.record = []
-    #     self.win_new_rec = UiWinDialog(self.win_pos)
-    #     self.win_new_rec.radio_btn()
-    #     self.win_new_rec.show()
-    #
-    #     self.record.append(1)
-    #     print(self.record)
-    #
-    #     self.group_btn = QtWidgets.QButtonGroup()
-    #     self.group_btn.addButton(self.win_new_rec.rad_btn_inc)
-    #     self.group_btn.addButton(self.win_new_rec.rad_btn_exp)
-    #     self.group_btn.buttonClicked['int'].connect(self.group_btn_Clicked)
-    #
-    #     self.win_new_rec.add_pay_btn_OK.clicked.connect(self.win_rec_name)  # OK
-    #     self.win_new_rec.add_pay_btn_OK.setAutoDefault(True)
-    #     self.win_new_rec.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_new_rec))  # CANCEL
-    #
-    # def group_btn_Clicked(self):
-    #     if self.sender().checkedButton().text() == "Доходы":
-    #         self.record.remove(1)
-    #         self.record.insert(0, 0)
-    #     elif self.sender().checkedButton().text() == "Расходы":
-    #         self.record.remove(0)
-    #         self.record.insert(0, 1)
-    #     print(self.record)
-    #
-    # def win_rec_name(self):
-    #     self.win_new_rec.close()
-    #
-    #     self.win_rec_name = UiWinDialog(self.win_pos)
-    #     self.win_rec_name.add_record()
-    #     self.win_rec_name.show()
-    #
-    #     if win32api.GetKeyboardLayout() == 67699721:  # 67699721 - английский 00000409
-    #         win32api.LoadKeyboardLayout("00000419", 1)  # 68748313 - русский  00000419
-    #
-    #     self.win_rec_name.add_pay_btn_OK.clicked.connect(self.win_rec_summa)  # OK
-    #     self.win_rec_name.add_pay_btn_OK.setAutoDefault(True)
-    #     self.win_rec_name.lineEdit.returnPressed.connect(self.win_rec_name.add_pay_btn_OK.click)
-    #
-    #     self.win_rec_name.add_pay_btn_Cancel.clicked.connect(
-    #         lambda: self.win_add_cancel(self.win_rec_name))  # CANCEL
-    #
-    # def win_rec_summa(self):
-    #     self.record.append(self.win_rec_name.lineEdit.text())
-    #     self.win_rec_name.lineEdit.clear()
-    #     self.win_rec_name.close()
-    #
-    #     print(self.record)
-    #
-    #     if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
-    #         win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
-    #
-    #     self.win_rec_summa = UiWinDialog(self.win_pos)
-    #     self.win_rec_summa.add_record()
-    #
-    #     reg_ex = QRegExp("[0-9]{1,5}[.][0-9]{2}")
-    #     label_validator = QRegExpValidator(reg_ex, self.win_rec_summa.lineEdit)
-    #     self.win_rec_summa.lineEdit.setValidator(label_validator)
-    #
-    #     self.win_rec_summa.label.setText("Сумма платежа")
-    #     self.win_rec_summa.show()
-    #
-    #     self.win_rec_summa.add_pay_btn_OK.clicked.connect(self.add_record)  # OK
-    #     self.win_rec_summa.add_pay_btn_OK.setAutoDefault(True)
-    #     self.win_rec_summa.lineEdit.returnPressed.connect(self.win_rec_summa.add_pay_btn_OK.click)
-    #
-    #     self.win_rec_summa.add_pay_btn_Cancel.clicked.connect(
-    #         lambda: self.win_add_cancel(self.win_rec_summa))  # CANCEL
-    #
-    # def add_record(self):
-    #     self.record.append(float(self.win_rec_summa.lineEdit.text()))
-    #     self.win_rec_summa.lineEdit.clear()
-    #     self.win_rec_summa.close()
-    #
-    #     print(self.record)
-    #
-    #     self.payment = Widget_Payment(self.record[1], "(209, 209, 217)")
-    #     self.payment.line_edit_sum.setText(str(self.record[2]) + " руб")
-    #
-    #     if self.record[0] == 0:
-    #         self.v_layout_scrollArea_inc.addWidget(self.payment)
-    #     elif self.record[0] == 1:
-    #         self.v_layout_scrollArea_exp.addWidget(self.payment)
-    #
-    #     self.record.clear()
+        self.new_rec.win_new_rec.add_pay_btn_OK.clicked.connect(self.win_rec_name)  # OK
+        self.new_rec.win_new_rec.add_pay_btn_OK.setAutoDefault(True)
 
+        self.new_rec.win_new_rec.add_pay_btn_Cancel.clicked.connect(
+            lambda: self.win_add_cancel(self.new_rec.win_new_rec))  # CANCEL
 
-    @staticmethod
-    def win_add_cancel(app_win):
-        app_win.close()
+    def win_rec_name(self):
+        self.new_rec.win_new_rec.close()
+        self.new_rec = IAENewRecord(self.win_pos)
+        self.new_rec.win_rec_name()
+
+        self.new_rec.win_rec_name.add_pay_btn_OK.clicked.connect(self.win_rec_summa)  # OK
+        self.new_rec.win_rec_name.add_pay_btn_OK.setAutoDefault(True)
+        self.new_rec.win_rec_name.lineEdit.returnPressed.connect(self.new_rec.win_rec_name.add_pay_btn_OK.click)
+
+        self.new_rec.win_rec_name.add_pay_btn_Cancel.clicked.connect(
+            lambda: self.win_add_cancel(self.new_rec.win_rec_name))  # CANCEL
+
+    def win_rec_summa(self):
+        self.records.append(self.new_rec.win_rec_name.lineEdit.text())
+        self.new_rec.win_rec_name.lineEdit.clear()
+        self.new_rec.win_rec_name.close()
+
+        self.new_rec = IAENewRecord(self.win_pos)
+        self.new_rec.win_rec_summa()
+
+        self.new_rec.win_rec_summa.add_pay_btn_OK.clicked.connect(self.add_record)  # OK
+        self.new_rec.win_rec_summa.add_pay_btn_OK.setAutoDefault(True)
+        self.new_rec.win_rec_summa.lineEdit.returnPressed.connect(self.new_rec.win_rec_summa.add_pay_btn_OK.click)
+
+        self.new_rec.win_rec_summa.add_pay_btn_Cancel.clicked.connect(
+            lambda: self.win_add_cancel(self.new_rec.win_rec_summa))  # CANCEL
+
+    def add_record(self):
+        self.records.append(float(self.new_rec.win_rec_summa.lineEdit.text()))
+        self.new_rec.win_rec_summa.lineEdit.clear()
+        self.new_rec.win_rec_summa.close()
+
+        self.new_record = Widget_Payment(self.records[1], "(209, 209, 217)")
+        self.new_record.btn_check.setFixedSize(QtCore.QSize(247, 28))
+        self.new_record.line_edit_sum.setFixedSize(QtCore.QSize(100, 28))
+        self.new_record.line_edit_sum.setText(str(self.records[2]))
+
+        if self.records[0] == 0:
+            rec_name = self.new_record.btn_check.text()
+            self.new_record.btn_check.deleteLater()
+            self.label = label_titul_f(rec_name, self.new_record, 12)
+            self.label.setFixedSize(QtCore.QSize(247, 28))
+            self.label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+            self.new_record.h_Layout_widget_Team.insertWidget(0, self.label)
+
+            self.v_layout_scrollArea_inc.addWidget(self.new_record)
+
+            record_income = [self.records[1], self.records[2]]
+            self.records_income.append(record_income)
+        elif self.records[0] == 1:
+            self.v_layout_scrollArea_exp.addWidget(self.new_record)
+
+            print(self.new_record.btn_check.isChecked())
+            record_expense = [self.records[1], self.records[2]]
+            self.records_expense.append(record_expense)
+
+        self.records.clear()
 
     def read_date_income_expenses(self):
-        if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
-            win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
-
         file_db = open('COMMPAY_DAT.db', 'a')  # открывает файл базы данных
         file_db.close()  # закрывает файл базы данных
 
-        table_count = 'Counters_year_' + str(self.comboBox_year_IAE.currentText())  # имя таблицы
-        table_tariff = 'Tariff_year_' + str(self.comboBox_year_IAE.currentText())  # имя таблицы
-        table_payments = 'Payments_year_' + str(self.comboBox_year_IAE.currentText())  # имя таблицы
+        table_incomes = 'Income_year_' + str(self.comboBox_year_IAE.currentText())  # имя таблицы
+        table_expenses = 'Expenses_year_' + str(self.comboBox_year_IAE.currentText())  # имя таблицы
 
-        # col_name = 'id'  # Имя колонки
+        # заголовок атрибутов таблицы Income
+        heading_incomes = 'id integer primary key , month_year text, Income_name text, Income_summa integer'
 
-        # заголовок атрибутов таблицы Tariff
-        heading_tariff = 'id integer primary key , month_year text, ' \
-                         'Tariff_PW integer, Tariff_WA integer, Tariff_GZ integer'
-
-        # создает таблицу в базе данных, это нужно если таблица отсутствуют
-        SQLite3_Data_Base.sqlite3_create_tbl(self.data_base, table_tariff, heading_tariff)
-        
-        # заголовок атрибутов таблицы Payments
-        heading_payments = 'id integer primary key , month_year text, name_payment text, summa integer'
+        # заголовок атрибутов таблицы Expenses
+        heading_expenses = 'id integer primary key , month_year text, Expense_name text, Expense_summa integer, ' \
+                           'Status text'
 
         # создает таблицу в базе данных, это нужно если таблица отсутствуют
-        SQLite3_Data_Base.sqlite3_create_tbl(self.data_base, table_payments, heading_payments)
+        SQLite3_Data_Base.sqlite3_create_tbl(self.data_base, table_incomes, heading_incomes)
+        SQLite3_Data_Base.sqlite3_create_tbl(self.data_base, table_expenses, heading_expenses)
 
-        for i in self.win_pole:  # очищает поля окна ПОКАЗАНИЯ
-            i.clear()
+        # очищает поля окна ПОКАЗАНИЯ
+        clear_layout(self.v_layout_scrollArea_inc)
+        clear_layout(self.v_layout_scrollArea_exp)
 
-        read_table = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_count)
+        read_table = SQLite3_Data_Base.sqlite3_read_data(self.data_base, table_incomes)
 
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table)):
-            pred_pokaz = read_table[i]  # показания сохраненного периода
-            # print(pred_pokaz)
+            rec_incomes = read_table[i]  # показания сохраненного периода
+            # print(rec_incomes)
 
-            # если лейбл "Январь 2021" совпадает со значением в таблице "Январь 2021"
-            if self.label_month_year_IAE.text() == pred_pokaz[1]:
-                self.pay_power.line_edit_quantity.setText(str(pred_pokaz[3] - pred_pokaz[2]))
-                self.pay_water.line_edit_quantity.setText(str((pred_pokaz[5] - pred_pokaz[4]) +
-                                                              (pred_pokaz[7] - pred_pokaz[6]) +
-                                                              (pred_pokaz[9] - pred_pokaz[8]) +
-                                                              (pred_pokaz[11] - pred_pokaz[10])))
-                self.pay_gaz.line_edit_quantity.setText(str(pred_pokaz[13] - pred_pokaz[12]))
-
-                # присваиваем полям значения выбранного периода из сохраненной таблицы
-            #     for a, b in zip(self.win_pole[:12], range(2, 14)):  # range = heading поля с 2 по 13
-            #         a.setText(str(pred_pokaz[b]))
-            #     break
-            # else:  # если значения не совпадают (берем значение "ПОСЛЕДНЕЕ" из предыдущего месяца)
-            #     pred_month = month[self.comboBox_month_COU.currentIndex() - 1]
-            #     if pred_month in pred_pokaz[1]:
-            #         # присваиваем полям "ПРЕДЫДУЩИЕ", значения из сохраненной таблицы
-            #         for c, d in zip(self.win_pole[:11:2], range(3, 14, 2)):
-            #             c.setText(str(pred_pokaz[d]))
-            #         # а полям "ПОСЛЕДНЕЕ" и "месячный расход" присваиваем значения "0"
-            #         for j in self.win_pole[1: 12: 2] + self.win_pole[12: 17]:
-            #             j.setText("0")
+            # # если лейбл "Месяц Год" совпадает со значением в таблице "Месяц Год"
+            # if self.label_month_year_IAE.text() == rec_incomes[1]:
+            #     self.new_record = Widget_Payment(self.records[1], "(209, 209, 217)")
+            #     rec_name = self.new_record.btn_check.text()
+            #     self.new_record.btn_check.deleteLater()
+            #     self.label = label_titul_f(rec_name, self.new_record, 12)
+            #     self.label.setFixedSize(QtCore.QSize(247, 28))
+            #     self.label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+            #     self.new_record.h_Layout_widget_Team.insertWidget(0, self.label)
+            #
+            #     self.new_record.line_edit_sum.setFixedSize(QtCore.QSize(100, 28))
+            #     self.new_record.line_edit_sum.setText(str(self.records[2]))
+            #
+            #     self.v_layout_scrollArea_inc.addWidget(self.new_record)
 
     # создает список значений полей для записи в таблицу
     def create_list_date(self):  # список показаний за месяц
@@ -254,17 +211,21 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
     def btn_save_IAE(self):
         pass
 
-    def btn_cancel_IAE(self):
-        self.close()
-
     def save_yes_or_not(self):
         pass
 
     def save_yn_btn_ok(self):
         pass
 
+    @staticmethod
+    def win_add_cancel(app_win):
+        app_win.close()
+
     def save_yn_btn_cancel(self):
         pass
+
+    def btn_cancel_IAE(self):
+        self.close()
 
 
 if __name__ == '__main__':

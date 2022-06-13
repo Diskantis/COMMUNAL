@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import win32api
+# import win32api
 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import QEvent, QTimer
@@ -129,8 +129,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.read_data_payments()
 
     def read_data_payments(self):
-        if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
-            win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
+        # if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
+        #     win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
 
         file_db = open('COMMPAY_DAT.db', 'a')  # открывает файл базы данных
         file_db.close()  # закрывает файл базы данных

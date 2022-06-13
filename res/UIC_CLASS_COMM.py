@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QCompleter, QGroupBox
+from PyQt5.QtWidgets import QCompleter
 
 style_scrollbar = "/* VERTICAL SCROLLBAR */ " \
         "QScrollBar:vertical {border: none; background: rgb(78, 79, 84); width: 14px; max-height: 210px;" \
@@ -371,9 +371,10 @@ class UiWinDialog(QtWidgets.QDialog):  # окно создания ДОЛНИТ�
                    'Зарплата ОЛЯ (ОНТ)']
 
         completer = QCompleter(strList, self.lineEdit)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
         self.lineEdit.setCompleter(completer)
         font = QtGui.QFont()
-        font.setPointSize(11)
+        font.setPointSize(10)
         completer.popup().setFont(font)
         completer.popup().setStyleSheet("font-weight: 600; color:rgb(209, 209, 217); background-color:rgb(78, 79, 84);")
 
@@ -402,3 +403,7 @@ class UiWinDialog(QtWidgets.QDialog):  # окно создания ДОЛНИТ�
         self.h_layout_btn.addWidget(self.rad_btn_exp)
 
         self.v_Layout_centralwidget.insertWidget(1, self.group_sel_btn)
+
+        self.group_btn = QtWidgets.QButtonGroup()
+        self.group_btn.addButton(self.rad_btn_inc, 0)
+        self.group_btn.addButton(self.rad_btn_exp, 1)

@@ -6,7 +6,7 @@ import datetime
 
 import win32api
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtCore import QRegExp, pyqtSlot
+from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from PyQt5.QtWidgets import QDesktopWidget
 
@@ -207,93 +207,46 @@ class IAENewRecord:
         self.win_pos = win_pos
 
     def win_sel_type_rec(self):
-        self.record = []
+        self.record = [1]
         self.win_new_rec = UiWinDialog(self.win_pos)
         self.win_new_rec.radio_btn()
         self.win_new_rec.show()
 
-        self.record.append(1)
-
-        self.group_btn = QtWidgets.QButtonGroup()
-        self.group_btn.addButton(self.win_new_rec.rad_btn_inc)
-        self.group_btn.addButton(self.win_new_rec.rad_btn_exp)
-        self.record = self.group_btn.buttonClicked['int'].connect(self.group_btn_Clicked)
-
-        # print(self.record)
-
-        return self.record
-
-    def group_btn_Clicked(self):
-        try:
-            if self.win_new_rec.rad_btn_inc.isChecked():
+        def slot(btn):
+            if self.record[0] == 1:
                 self.record.remove(1)
-                self.record.insert(0, 0)
-            elif self.win_new_rec.rad_btn_exp.isChecked():
+                self.record.insert(0, self.win_new_rec.group_btn.id(btn))
+            elif self.record[0] == 0:
                 self.record.remove(0)
-                self.record.insert(0, 1)
-            # print(self.record)
-        except ValueError:
-            pass
+                self.record.insert(0, self.win_new_rec.group_btn.id(btn))
 
+        self.win_new_rec.group_btn.buttonClicked.connect(slot)
         return self.record
-
 
     def win_rec_name(self):
-        self.win_new_rec.close()
-
         self.win_rec_name = UiWinDialog(self.win_pos)
         self.win_rec_name.add_record()
         self.win_rec_name.show()
 
+        self.win_rec_name.lineEdit.setFocus()
+
         if win32api.GetKeyboardLayout() == 67699721:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000419", 1)  # 68748313 - русский  00000419
 
-        self.win_rec_name.add_pay_btn_OK.clicked.connect(self.win_rec_summa)  # OK
-        self.win_rec_name.add_pay_btn_OK.setAutoDefault(True)
-        self.win_rec_name.lineEdit.returnPressed.connect(self.win_rec_name.add_pay_btn_OK.click)
-
-        self.win_rec_name.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_rec_name))  # CANCEL
-
     def win_rec_summa(self):
-        self.record.append(self.win_rec_name.lineEdit.text())
-        print(self.record)
-        self.win_rec_name.lineEdit.clear()
-        self.win_rec_name.close()
+        self.win_rec_summa = UiWinDialog(self.win_pos)
+        self.win_rec_summa.add_record()
+        self.win_rec_summa.label.setText("Сумма платежа")
+        self.win_rec_summa.show()
+
+        self.win_rec_summa.lineEdit.setFocus()
 
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
 
-        self.win_rec_summa = UiWinDialog(self.win_pos)
-        self.win_rec_summa.add_record()
-
         reg_ex = QRegExp("[0-9]{1,5}[.][0-9]{2}")
         label_validator = QRegExpValidator(reg_ex, self.win_rec_summa.lineEdit)
         self.win_rec_summa.lineEdit.setValidator(label_validator)
-
-        self.win_rec_summa.label.setText("Сумма платежа")
-        self.win_rec_summa.show()
-
-        self.win_rec_summa.add_pay_btn_OK.clicked.connect(self.add_record)  # OK
-        self.win_rec_summa.add_pay_btn_OK.setAutoDefault(True)
-        self.win_rec_summa.lineEdit.returnPressed.connect(self.win_rec_summa.add_pay_btn_OK.click)
-
-        self.win_rec_summa.add_pay_btn_Cancel.clicked.connect(lambda: self.win_add_cancel(self.win_rec_summa))  # CANCEL
-
-    def add_record(self):
-        self.record.append(float(self.win_rec_summa.lineEdit.text()))
-        self.win_rec_summa.lineEdit.clear()
-        self.win_rec_summa.close()
-        print(self.record)
-
-        self.ret_rec(self.record)
-
-    @staticmethod
-    def ret_rec(list_rec):
-        return list_rec
-
-    @staticmethod
-    def win_add_cancel(app_win):
-        app_win.close()
 
 
 class SQLite3_Data_Base:
