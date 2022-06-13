@@ -101,7 +101,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
         self.new_rec.win_rec_name.add_pay_btn_OK.clicked.connect(self.win_rec_summa)  # OK
         self.new_rec.win_rec_name.add_pay_btn_OK.setAutoDefault(True)
-        self.new_rec.win_rec_name.lineEdit.returnPressed.connect(self.new_rec.win_rec_name.add_pay_btn_OK.click)
+        # self.new_rec.win_rec_name.lineEdit.returnPressed.connect(self.new_rec.win_rec_name.add_pay_btn_OK.click)
 
         self.new_rec.win_rec_name.add_pay_btn_Cancel.clicked.connect(
             lambda: self.win_add_cancel(self.new_rec.win_rec_name))  # CANCEL
@@ -116,7 +116,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
         self.new_rec.win_rec_summa.add_pay_btn_OK.clicked.connect(self.add_record)  # OK
         self.new_rec.win_rec_summa.add_pay_btn_OK.setAutoDefault(True)
-        self.new_rec.win_rec_summa.lineEdit.returnPressed.connect(self.new_rec.win_rec_summa.add_pay_btn_OK.click)
+        # self.new_rec.win_rec_summa.lineEdit.returnPressed.connect(self.new_rec.win_rec_summa.add_pay_btn_OK.click)
 
         self.new_rec.win_rec_summa.add_pay_btn_Cancel.clicked.connect(
             lambda: self.win_add_cancel(self.new_rec.win_rec_summa))  # CANCEL
@@ -143,10 +143,10 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
             record_income = [self.records[1], self.records[2]]
             self.records_income.append(record_income)
+
         elif self.records[0] == 1:
             self.v_layout_scrollArea_exp.addWidget(self.new_record)
 
-            print(self.new_record.btn_check.isChecked())
             record_expense = [self.records[1], self.records[2]]
             self.records_expense.append(record_expense)
 
@@ -197,19 +197,23 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
             #     self.v_layout_scrollArea_inc.addWidget(self.new_record)
 
     # создает список значений полей для записи в таблицу
-    def create_list_date(self):  # список показаний за месяц
+    def create_list_date(self, name_table, list_rec):  # список показаний за месяц
         data = [self.comboBox_month_IAE.currentIndex() + 1,
-                self.comboBox_month_IAE.currentText() + " " + self.comboBox_year_IAE.currentText()]
+                self.comboBox_month_IAE.currentText() + " " + self.comboBox_year_IAE.currentText(), name_table]
         try:
-            for field in self.win_pole[0:12]:
-                data.append(int(field.text()))
+            data.append(list_rec)
         except ValueError:
             self.label_error_IAE.show()
             self.label_error_IAE.setText('Нет значений для этого периода')
         return data
 
     def btn_save_IAE(self):
-        pass
+        self.list_data_tariff = self.create_list_date("Income", self.records_income)
+        self.list_data_payments = self.create_list_date("Expenses", self.records_expense)
+        print(self.list_data_tariff)
+        print(self.list_data_payments)
+
+        # self.save_payment(self.list_data_tariff, self.list_data_payments)
 
     def save_yes_or_not(self):
         pass

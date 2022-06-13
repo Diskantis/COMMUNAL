@@ -244,7 +244,7 @@ class IAENewRecord:
         if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
             win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский  00000419
 
-        reg_ex = QRegExp("[0-9]{1,5}[.][0-9]{2}")
+        reg_ex = QRegExp("[0-9]{1,10}[.][0-9]{2}")
         label_validator = QRegExpValidator(reg_ex, self.win_rec_summa.lineEdit)
         self.win_rec_summa.lineEdit.setValidator(label_validator)
 
