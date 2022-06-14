@@ -49,7 +49,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         self.btn_Cancel_IAE.clicked.connect(self.btn_cancel_IAE)
 
         # ЧИТАЕМ показания из базы данных
-        # self.read_date_income_expenses()
+        self.read_date_income_expenses()
 
         self.show()
 
@@ -101,7 +101,6 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
         self.new_rec.win_rec_name.add_pay_btn_OK.clicked.connect(self.win_rec_summa)  # OK
         self.new_rec.win_rec_name.add_pay_btn_OK.setAutoDefault(True)
-        # self.new_rec.win_rec_name.lineEdit.returnPressed.connect(self.new_rec.win_rec_name.add_pay_btn_OK.click)
 
         self.new_rec.win_rec_name.add_pay_btn_Cancel.clicked.connect(
             lambda: self.win_add_cancel(self.new_rec.win_rec_name))  # CANCEL
@@ -114,22 +113,33 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         self.new_rec = IAENewRecord(self.win_pos)
         self.new_rec.win_rec_summa()
 
+        self.new_rec.win_rec_summa.lineEdit.textEdited[str].connect(lambda: record_summa())
+
+        def record_summa():
+            summa = text_conv_to_num(self.new_rec.win_rec_summa.lineEdit.text())
+            self.new_rec.win_rec_summa.lineEdit.setText(num_conv_to_text(summa))
+
         self.new_rec.win_rec_summa.add_pay_btn_OK.clicked.connect(self.add_record)  # OK
         self.new_rec.win_rec_summa.add_pay_btn_OK.setAutoDefault(True)
-        # self.new_rec.win_rec_summa.lineEdit.returnPressed.connect(self.new_rec.win_rec_summa.add_pay_btn_OK.click)
 
         self.new_rec.win_rec_summa.add_pay_btn_Cancel.clicked.connect(
             lambda: self.win_add_cancel(self.new_rec.win_rec_summa))  # CANCEL
 
     def add_record(self):
-        self.records.append(float(self.new_rec.win_rec_summa.lineEdit.text()))
+        self.records.append(float(text_conv_to_num(self.new_rec.win_rec_summa.lineEdit.text())))
         self.new_rec.win_rec_summa.lineEdit.clear()
         self.new_rec.win_rec_summa.close()
+
+        print(self.records)
 
         self.new_record = Widget_Payment(self.records[1], "(209, 209, 217)")
         self.new_record.btn_check.setFixedSize(QtCore.QSize(247, 28))
         self.new_record.line_edit_sum.setFixedSize(QtCore.QSize(100, 28))
-        self.new_record.line_edit_sum.setText(str(self.records[2]))
+        # self.new_record.line_edit_sum.setText(str(self.records[2]))
+        print(self.comboBox_year_IAE.currentText())
+        print(self.comboBox_month_IAE.currentIndex())
+        self.new_record.line_edit_sum.setText(denomination(self.comboBox_year_IAE.currentText(),
+                                                           self.comboBox_month_IAE.currentIndex(), self.records[2]))
 
         if self.records[0] == 0:
             rec_name = self.new_record.btn_check.text()
@@ -179,7 +189,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table)):
             rec_incomes = read_table[i]  # показания сохраненного периода
-            # print(rec_incomes)
+            print(rec_incomes)
 
             # # если лейбл "Месяц Год" совпадает со значением в таблице "Месяц Год"
             # if self.label_month_year_IAE.text() == rec_incomes[1]:

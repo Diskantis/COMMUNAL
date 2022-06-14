@@ -77,8 +77,6 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
         self.pay_internet.line_edit_sum.installEventFilter(self)
         self.pay_phone.line_edit_sum.installEventFilter(self)
 
-        self.pay_apartment.line_edit_sum.selectAll()
-
         self.btn_Save_PAY.clicked.connect(self.btn_save_PAY)
         self.btn_Cancel_PAY.clicked.connect(self.btn_cancel_PAY)
 
@@ -264,7 +262,8 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 self.pay_phone.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()),
                                                                   self.comboBox_month_PAY.currentIndex(),
                                                                   payment[7]))
-                self.apart_summa(self.pay_apartment.line_edit_sum, 9)
+
+                self.apart_summa(self.pay_apartment.line_edit_sum, 9)  # данные для поля "line_edit_balance_sum"
 
                 self.status = payment[8]
                 self.status = str_list(self.status)
