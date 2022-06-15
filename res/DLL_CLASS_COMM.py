@@ -238,7 +238,7 @@ class IAENewRecord:
     def win_rec_summa(self):
         self.win_rec_summa = UiWinDialog(self.win_pos)
         self.win_rec_summa.add_record()
-        self.win_rec_summa.label.setText("Сумма платежа")
+        self.win_rec_summa.label.setText("Сумма записи")
         self.win_rec_summa.show()
 
         self.win_rec_summa.lineEdit.setFocus()

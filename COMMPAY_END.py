@@ -127,9 +127,6 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             self.read_data_payments()
 
     def read_data_payments(self):
-        # if win32api.GetKeyboardLayout() == 68748313:  # 67699721 - английский 00000409
-        #     win32api.LoadKeyboardLayout("00000409", 1)  # 68748313 - русский 00000419
-
         file_db = open('COMMPAY_DAT.db', 'a')  # открывает файл базы данных
         file_db.close()  # закрывает файл базы данных
 
@@ -458,7 +455,14 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)
 
                 if row_record in col_id:
-                    self.save_yes_or_not(self.data_base, data, self.win_pos, self.label_error_PAY)
+                    row_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table)
+                    data.remove(data[2])
+                    print(data)
+                    print(row_id[row_record - 1])
+                    # if data == row_id[row_record - 1]:
+                    #     pass
+                    # else:
+                    #     self.save_yes_or_not(self.data_base, data, self.win_pos, self.label_error_PAY)
                 else:
                     if data[2] == "Payments":
                         self.next_period()

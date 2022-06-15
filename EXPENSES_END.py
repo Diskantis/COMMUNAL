@@ -19,8 +19,8 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
         self.setupUi_IAE(self)
         self.data_base = 'COMMPAY_DAT.db'  # имя базы данных
-        self.records_income = []
-        self.records_expense = []
+        self.records_income = {}
+        self.records_expense = {}
         self.status = ""
 
         self.period_IAE = Period(self.comboBox_month_IAE, self.comboBox_year_IAE, self.label_month_year_IAE)
@@ -99,6 +99,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         self.new_rec = IAENewRecord(self.win_pos)
         self.new_rec.win_rec_name()
 
+        self.new_rec.win_rec_name.lineEdit.setMaxLength(20)
         self.new_rec.win_rec_name.add_pay_btn_OK.clicked.connect(self.win_rec_summa)  # OK
         self.new_rec.win_rec_name.add_pay_btn_OK.setAutoDefault(True)
 
@@ -130,14 +131,9 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         self.new_rec.win_rec_summa.lineEdit.clear()
         self.new_rec.win_rec_summa.close()
 
-        print(self.records)
-
         self.new_record = Widget_Payment(self.records[1], "(209, 209, 217)")
         self.new_record.btn_check.setFixedSize(QtCore.QSize(247, 28))
         self.new_record.line_edit_sum.setFixedSize(QtCore.QSize(100, 28))
-        # self.new_record.line_edit_sum.setText(str(self.records[2]))
-        print(self.comboBox_year_IAE.currentText())
-        print(self.comboBox_month_IAE.currentIndex())
         self.new_record.line_edit_sum.setText(denomination(self.comboBox_year_IAE.currentText(),
                                                            self.comboBox_month_IAE.currentIndex(), self.records[2]))
 
@@ -148,17 +144,14 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
             self.label.setFixedSize(QtCore.QSize(247, 28))
             self.label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
             self.new_record.h_Layout_widget_Team.insertWidget(0, self.label)
-
             self.v_layout_scrollArea_inc.addWidget(self.new_record)
 
-            record_income = [self.records[1], self.records[2]]
-            self.records_income.append(record_income)
+            self.records_income.update({self.records[1]: self.records[2]})
 
         elif self.records[0] == 1:
             self.v_layout_scrollArea_exp.addWidget(self.new_record)
 
-            record_expense = [self.records[1], self.records[2]]
-            self.records_expense.append(record_expense)
+            self.records_expense.update({self.records[1]: self.records[2]})
 
         self.records.clear()
 
@@ -173,8 +166,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         heading_incomes = 'id integer primary key , month_year text, Income_name text, Income_summa integer'
 
         # заголовок атрибутов таблицы Expenses
-        heading_expenses = 'id integer primary key , month_year text, Expense_name text, Expense_summa integer, ' \
-                           'Status text'
+        heading_expenses = 'id integer primary key , month_year text, Expense_name text, Expense_summa integer'
 
         # создает таблицу в базе данных, это нужно если таблица отсутствуют
         SQLite3_Data_Base.sqlite3_create_tbl(self.data_base, table_incomes, heading_incomes)
@@ -189,7 +181,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         # ищем если в таблице значение для выбранного периода (месяц, год)
         for i in range(len(read_table)):
             rec_incomes = read_table[i]  # показания сохраненного периода
-            print(rec_incomes)
+            # print(rec_incomes)
 
             # # если лейбл "Месяц Год" совпадает со значением в таблице "Месяц Год"
             # if self.label_month_year_IAE.text() == rec_incomes[1]:
@@ -208,8 +200,7 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
 
     # создает список значений полей для записи в таблицу
     def create_list_date(self, name_table, list_rec):  # список показаний за месяц
-        data = [self.comboBox_month_IAE.currentIndex() + 1,
-                self.comboBox_month_IAE.currentText() + " " + self.comboBox_year_IAE.currentText(), name_table]
+        data = [self.comboBox_month_IAE.currentText() + " " + self.comboBox_year_IAE.currentText(), name_table]
         try:
             data.append(list_rec)
         except ValueError:
@@ -218,18 +209,56 @@ class IncomeExpenses(QtWidgets.QWidget, UiWinIncomeExpenses):
         return data
 
     def btn_save_IAE(self):
-        self.list_data_tariff = self.create_list_date("Income", self.records_income)
-        self.list_data_payments = self.create_list_date("Expenses", self.records_expense)
-        print(self.list_data_tariff)
-        print(self.list_data_payments)
+        self.list_data_incomes = self.create_list_date("Income", self.records_income)
+        self.list_data_expenses = self.create_list_date("Expenses", self.records_expense)
+        print(self.list_data_incomes)
+        print(self.list_data_expenses)
 
-        # self.save_payment(self.list_data_tariff, self.list_data_payments)
+        self.save_payment(self.list_data_incomes, self.list_data_expenses)  #
 
-    def save_yes_or_not(self):
-        pass
+    def save_payment(self, *args):
+        for list_data in args:
+            if len(list_data) > 2:
+                data = list_data  # создает список значений
+                name_table = data[1] + '_year_' + data[0].split()[1]  # Имя таблицы ("1")
+                col_name = 'id'  # Имя колонки
+                self.row_record = 1  # Имя записи
 
-    def save_yn_btn_ok(self):
-        pass
+                col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)
+
+                if self.row_record in col_id:
+                    pass
+                    # self.save_yes_or_not(self.data_base, data, self.win_pos, self.label_error_PAY)
+                else:
+                    if data[1] == "Income":
+                        self.next_period()
+                    data.remove(data[1])
+                    dict_rec = data[1]
+                    for i in dict_rec.items():
+                        data_rec = list(i)
+                        data_rec.insert(0, data[0])
+                        data_rec.insert(0, self.row_record)
+                        self.row_record += 1
+                        SQLite3_Data_Base.sqlite3_insert_data(self.data_base, name_table, data_rec)
+                    # self.read_data_payments()
+
+    def next_period(self):
+        if self.comboBox_month_IAE.currentIndex() + 2 != 13:
+            b = month[self.comboBox_month_IAE.currentIndex() + 1]
+            c = self.comboBox_year_IAE.currentText()
+        else:
+            b = month[self.comboBox_month_IAE.currentIndex() - 11]
+            c = str(int(self.comboBox_year_IAE.currentText()) + 1)
+
+        self.label_month_year_IAE.setText(b + " " + c)  # устанавливает заголовок ("Месяц Год")
+        self.comboBox_month_IAE.setCurrentIndex(month.index(b))  # устанавливает текущий месяц ("Месяц")
+        self.comboBox_year_IAE.setCurrentText(c)  # устанавливает текущий год ("Год")
+
+        self.current_month_index = self.period_IAE.label_sel_period()
+
+    def save_yes_or_not(self, data_base, date, pos, label_error):
+        self.save_or_PAY = Save_OR()
+        self.save_or_PAY.save_yes_or_not(data_base, date, pos, label_error)
 
     @staticmethod
     def win_add_cancel(app_win):

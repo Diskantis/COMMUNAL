@@ -339,7 +339,7 @@ class UiWinDialog(QtWidgets.QDialog):  # окно создания ДОЛНИТ�
         self.v_Layout_centralwidget.setSpacing(8)
         self.v_Layout_centralwidget.setObjectName("v_Layout_centralwidget")
 
-        self.label = label_titul_f("Имя платежа", self, 12)
+        self.label = label_titul_f("Имя записи", self, 12)
         self.v_Layout_centralwidget.insertWidget(0, self.label)
 
         self.frame_btn = QtWidgets.QFrame(self)
