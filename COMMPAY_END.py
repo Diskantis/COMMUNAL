@@ -238,7 +238,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         if self.pay_water.line_edit_sum.text():
             self.water_sum = self.quantity * self.tariff_water
-            self.pay_apartment.line_edit_minus_water.setText(denomination(int(self.comboBox_year_PAY.currentText()),
+            self.pay_apartment.line_edit_minus_water.setText(denomination(self.comboBox_year_PAY.currentText(),
                                                                           self.comboBox_month_PAY.currentIndex(),
                                                                           self.water_sum) + " (" + str(self.quantity) +
                                                              ") " + month[self.comboBox_month_PAY.currentIndex() - 1])
@@ -253,13 +253,13 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
             # если есть сохраненные значения в таблице для данного периода
             current_month = month[self.comboBox_month_PAY.currentIndex()]
             if current_month in payment[1]:
-                self.pay_apartment.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()),
+                self.pay_apartment.line_edit_sum.setText(denomination(self.comboBox_year_PAY.currentText(),
                                                                       self.comboBox_month_PAY.currentIndex(),
                                                                       payment[5]))
-                self.pay_internet.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()),
+                self.pay_internet.line_edit_sum.setText(denomination(self.comboBox_year_PAY.currentText(),
                                                                      self.comboBox_month_PAY.currentIndex(),
                                                                      payment[6]))
-                self.pay_phone.line_edit_sum.setText(denomination(int(self.comboBox_year_PAY.currentText()),
+                self.pay_phone.line_edit_sum.setText(denomination(self.comboBox_year_PAY.currentText(),
                                                                   self.comboBox_month_PAY.currentIndex(),
                                                                   payment[7]))
 
@@ -275,11 +275,11 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                     self.label_GL_V_1_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
                     self.label_GL_V_2_PAY.setPixmap(QtGui.QPixmap("res/img/Galochka.png"))
 
-            else:
-                if self.pay_power.line_edit_quantity.text():
-                    self.pay_apartment.line_edit_sum.setText("0.00")
-                    self.pay_internet.line_edit_sum.setText("0.00")
-                    self.pay_phone.line_edit_sum.setText("0.00")
+            # else:
+            #     if self.pay_power.line_edit_quantity.text():
+            #         self.pay_apartment.line_edit_sum.setText("0.00")
+            #         self.pay_internet.line_edit_sum.setText("0.00")
+            #         self.pay_phone.line_edit_sum.setText("0.00")
 
         self.pay_power.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(0))
         self.pay_water.line_edit_tariff.textEdited[str].connect(lambda: self.multiplication(3))
@@ -355,20 +355,20 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
             if self.win_pole[n] == self.pay_power.line_edit_sum:
                 if float(self.win_pole[2].text()) >= 0:
-                    multi = float(self.win_pole[2].text()) * int(self.win_pole[1].text())
-                    multi = denomination(int(self.comboBox_year_PAY.currentText()),
+                    multi = int(self.win_pole[1].text()) * float(self.win_pole[2].text())
+                    multi = denomination(self.comboBox_year_PAY.currentText(),
                                          self.comboBox_month_PAY.currentIndex(), multi)
                     self.win_pole[n].setText(multi)
             elif self.win_pole[n] == self.pay_water.line_edit_sum:
                 if float(self.win_pole[5].text()) >= 0:
-                    multi = float(self.win_pole[5].text()) * int(self.win_pole[4].text())
-                    multi = denomination(int(self.comboBox_year_PAY.currentText()),
+                    multi = int(self.win_pole[4].text()) * float(self.win_pole[5].text())
+                    multi = denomination(self.comboBox_year_PAY.currentText(),
                                          self.comboBox_month_PAY.currentIndex(), multi)
                     self.win_pole[n].setText(multi)
             elif self.win_pole[n] == self.pay_gaz.line_edit_sum:
                 if float(self.win_pole[8].text()) >= 0:
-                    multi = float(self.win_pole[8].text()) * int(self.win_pole[7].text())
-                    multi = denomination(int(self.comboBox_year_PAY.currentText()),
+                    multi = int(self.win_pole[7].text()) * float(self.win_pole[8].text())
+                    multi = denomination(self.comboBox_year_PAY.currentText(),
                                          self.comboBox_month_PAY.currentIndex(), multi)
                     self.win_pole[n].setText(multi)
 
@@ -398,7 +398,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
 
         ost = float(text_conv_to_num(apart)) - self.water_sum
         self.pay_apartment.line_edit_balance_sum.setText(
-            denomination(int(self.comboBox_year_PAY.currentText()), self.comboBox_month_PAY.currentIndex(), ost))
+            denomination(self.comboBox_year_PAY.currentText(), self.comboBox_month_PAY.currentIndex(), ost))
 
     def final_summa(self):
         try:
@@ -415,7 +415,7 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 if self.pay_phone.line_edit_sum.text():
                     final_summa += float(text_convert(self.win_pole[11].text()))
 
-                self.lineEdit_result.setText(denomination(int(self.comboBox_year_PAY.currentText()),
+                self.lineEdit_result.setText(denomination(self.comboBox_year_PAY.currentText(),
                                                           self.comboBox_month_PAY.currentIndex(),
                                                           final_summa) + " руб.")
         except ValueError:
