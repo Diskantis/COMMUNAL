@@ -166,23 +166,28 @@ class Save_OR:
     def save_yes_or_not(self, data_base, data, pos, label_error):
         self.save_yn = UiWinDialog(pos)
         self.save_yn.show()
-
         self.save_yn.setWindowTitle("Перезапись")
 
-        if data[2] == "Counters":
-            self.name_table = "Показаниями счетчиков"
-        elif data[2] == "Tariff":
-            self.name_table = "Тарифами"
-        elif data[2] == "Payments":
-            self.name_table = "Платежами"
+        self.name = self.name_table_f(data[2])
 
         font = QtGui.QFont("Times", 10, 75)
         self.save_yn.label.setFont(font)
-        self.save_yn.label.setText("Вы действительно хотите \n перезаписать таблицу \n с " + self.name_table + " ?")
+        self.save_yn.label.setText("Вы действительно хотите \n перезаписать таблицу \n с " + self.name + " ?")
 
         self.save_yn.add_pay_btn_OK.clicked.connect(lambda: self.save_yn_btn_ok(data_base, data, label_error))
         self.save_yn.add_pay_btn_OK.setAutoDefault(True)
         self.save_yn.add_pay_btn_Cancel.clicked.connect(lambda: self.save_yn_btn_cancel(label_error))
+
+    @staticmethod
+    def name_table_f(data):
+        name = ''
+        if data == "Counters":
+            name = "Показаниями счетчиков"
+        elif data == "Tariff":
+            name = "Тарифами"
+        elif data == "Payments":
+            name = "Платежами"
+        return name
 
     def save_yn_btn_ok(self, data_base, data, label_error):
         data = data  # список данных для записи

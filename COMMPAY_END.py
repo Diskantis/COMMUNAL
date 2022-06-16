@@ -452,17 +452,23 @@ class CommunalPayment(QtWidgets.QWidget, UiWinPayment):
                 col_name = 'id'  # Имя колонки
                 row_record = data[0]  # Имя записи ("1")
 
+                name = Save_OR()
+                self.name_table = name.name_table_f(data[2])
+
                 col_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table, col_name)
 
                 if row_record in col_id:
                     row_id = SQLite3_Data_Base.sqlite3_read_data(self.data_base, name_table)
-                    data.remove(data[2])
-                    print(data)
-                    print(row_id[row_record - 1])
-                    # if data == row_id[row_record - 1]:
-                    #     pass
-                    # else:
-                    #     self.save_yes_or_not(self.data_base, data, self.win_pos, self.label_error_PAY)
+                    name_t = data.pop(2)  # вырезает имя таблицы из списка
+                    row_id = list(row_id[row_record - 1])
+                    if data == row_id:
+                        self.label_error_PAY.show()
+                        font = QtGui.QFont("Times", 10, 75)
+                        self.label_error_PAY.setFont(font)
+                        self.label_error_PAY.setText('В таблице c ' + self.name_table + ' нет изменений')
+                    else:
+                        data.insert(2, name_t)  # возвращает имя таблицы в список
+                        self.save_yes_or_not(self.data_base, data, self.win_pos, self.label_error_PAY)
                 else:
                     if data[2] == "Payments":
                         self.next_period()
